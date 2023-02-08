@@ -70,7 +70,7 @@ public class Server {
      * @param toClient (PrintWriter)
      */
     private void sendHello(PrintWriter toClient) {
-        String hello = "HELLO " + DEFAULT_SERVER_NAME + " " + RandomStringUtil.generateString(22) + "\r\n";
+        String hello = String.format(Queries.HELLO, DEFAULT_SERVER_NAME, RandomStringUtil.generateString(22));
         System.out.println(hello); //DEBUG
         toClient.print(hello);
 

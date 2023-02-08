@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +25,20 @@ public class JsonRepository implements DataInterface, AutoCloseable {
 
     private final Gson gson = new Gson();
 
-    private String jsonBooksPath;
+    private String jsonUsersPath;
 
     /**
      * Constructeur du repository (crée un dossier ue36 si pas existant)
      */
     public JsonRepository() throws IOException {
-        Files.createDirectories(Path.of(System.getProperty("user.home"), "murmur", "serverConfig.json")); //exception remontée
+        Path path = Path.of(Paths.get("").toString(), "data", "users.json").toAbsolutePath();
+
+        Files.createDirectories(path); //exception remontées
+        if(!Files.exists(path)) {
+            Files.createFile(path);
+        }
+
+        jsonUsersPath = path.toString();
     }
 
     /**
@@ -38,7 +46,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @param jsonBooksPath (Path) Chemin d'accès du fichier de sauvegarde
      */
     public JsonRepository(Path jsonBooksPath) {
-        this.jsonBooksPath = jsonBooksPath.toString();
+        this.jsonUsersPath = jsonBooksPath.toString();
     }
 
 
@@ -62,7 +70,6 @@ public class JsonRepository implements DataInterface, AutoCloseable {
         saveUsers(users);
     }
 
-
     /**
      * Récupère tous les utilisateurs stockés
      * @return (List<UserDTO>) Liste d'objet DTO User
@@ -70,7 +77,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
     private List<UserDTO> getUsers() {//throws IOException {
         List<UserDTO> users = new ArrayList<>();
 
-        try(Reader reader = new BufferedReader(new FileReader(jsonBooksPath))) {
+        try(Reader reader = new BufferedReader(new FileReader(jsonUsersPath))) {
             Type userDtoList = new TypeToken<ArrayList<UserDTO>>(){}.getType();
             users = gson.fromJson(reader, userDtoList);
         } catch (IOException ignored) {}
@@ -84,7 +91,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws IOException Impossible de sauvegarder les utilisateurs
      */
     private void saveUsers(List<UserDTO> users) throws NotSavedException {
-        try(FileWriter fw = new FileWriter(jsonBooksPath, StandardCharsets.UTF_8)) {
+        try(FileWriter fw = new FileWriter(jsonUsersPath, StandardCharsets.UTF_8)) {
             gson.toJson(users, fw);
         } catch (JsonIOException | IOException e) {
             throw new NotSavedException("Impossible de sauvegarder les utilisateurs", e);
