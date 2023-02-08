@@ -1,6 +1,7 @@
 package org.server;
 
 import org.thread.ClientRunnable;
+import org.utils.RandomStringUtil;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -16,7 +17,7 @@ import java.util.UUID;
  */
 public class Server {
     public static final int DEFAULT_PORT = 23502;
-    public static final String DEFAULT_SERVER_NAME = "server1.godswila.guru";
+    private final String DEFAULT_SERVER_NAME = "server1.godswila.guru";
     private List<ClientRunnable> clientsList;
     private boolean isStarted = false;
     private boolean isConnected = false;
@@ -69,7 +70,7 @@ public class Server {
      * @param toClient (PrintWriter)
      */
     private void sendHello(PrintWriter toClient) {
-        String hello = "HELLO " + DEFAULT_SERVER_NAME + " " + UUID.randomUUID().toString().replace("-", "").substring(0, 22) + "\r\n";
+        String hello = "HELLO " + DEFAULT_SERVER_NAME + " " + RandomStringUtil.generateString(22) + "\r\n";
         System.out.println(hello); //DEBUG
         toClient.print(hello);
 
