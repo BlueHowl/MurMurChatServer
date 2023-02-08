@@ -4,12 +4,15 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 /**
  * Created by lsw on 02-02-16.
  */
 public class Server {
-    public static final int DEFAULT_PORT=58000;
+    public static final int DEFAULT_PORT = 23502;
+
+    public static final String DEFAULT_SERVER_NAME = "server1.godswila.guru";
     private boolean stop = false;
     private boolean isStarted = false;
     private boolean isConnected = false;
@@ -31,8 +34,9 @@ public class Server {
                 PrintWriter toClient = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), Charset.forName("UTF-8")), true);
                 String ligne = readLine(fromClient);
                 System.out.println("Ligne reçue: " + (ligne==null?"":ligne));
-                toClient.print("Bonjour, tu vas bien ?\r\n");
-                toClient.flush();
+
+                sendHello(toClient);
+
                 client.close();
                 isConnected = false;
             }
@@ -48,6 +52,18 @@ public class Server {
                     ecoute.close();
             } catch(IOException ex) { }
         }
+    }
+
+    /**
+     * Envoi le message hello {addresse serveur} {22 caractères aléatoires}
+     * @param toClient (PrintWriter)
+     */
+    private void sendHello(PrintWriter toClient) {
+        String hello = "HELLO " + DEFAULT_SERVER_NAME + " " + UUID.randomUUID().toString().replace("-", "").substring(0, 22) + "\r\n";
+        System.out.println(hello); //DEBUG
+        toClient.print(hello);
+
+        toClient.flush();
     }
 
     private String readLine(BufferedReader reader) throws IOException {
