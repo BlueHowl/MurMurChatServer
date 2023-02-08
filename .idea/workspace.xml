@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Ajout serveur">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/MurMurExecutor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/MurMurTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/Task.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/MsgsMessageTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/SendMessageTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/Task.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +158,7 @@
       <workItem from="1675878852570" duration="1110000" />
       <workItem from="1675880152509" duration="2788000" />
       <workItem from="1675889009407" duration="4179000" />
-      <workItem from="1675893937599" duration="1112000" />
+      <workItem from="1675893937599" duration="1411000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -178,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675878612214</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Ajout de la liste de taches (TaskList) et du MurMurExecutor">
+      <created>1675895152326</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1675895152326</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,6 +202,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
     <MESSAGE value="Ajout serveur" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout serveur" />
+    <MESSAGE value="Ajout de la liste de taches (TaskList) et du MurMurExecutor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de la liste de taches (TaskList) et du MurMurExecutor" />
   </component>
 </project>
