@@ -1,4 +1,4 @@
-package org.server;
+package org.utils;
 
 /**
  * Requêtes

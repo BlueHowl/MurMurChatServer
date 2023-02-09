@@ -2,6 +2,7 @@ package org.infrastructure.json;
 
 import org.infrastructure.dto.UserDTO;
 import org.model.User;
+import org.model.exceptions.UserNotValidException;
 
 /**
  * Classe de mapping DTO
@@ -23,7 +24,7 @@ public class DtoMapper {
      * @param userDto (UserDTO) Utilisateur dto
      * @return (User) Utilisateur
      */
-    public static User dtoToUser(UserDTO userDto) {
+    public static User dtoToUser(UserDTO userDto) throws UserNotValidException {
         return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash());
     }
 

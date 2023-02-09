@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import org.infrastructure.dto.UserDTO;
 import org.model.User;
 import org.repository.DataInterface;
+import org.repository.exceptions.NotRetrievedException;
 import org.repository.exceptions.NotSavedException;
 
 import java.io.*;
@@ -56,9 +57,13 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws NotSavedException Impossible de sauvegarder les utilisateurs
      */
     @Override
-    public void saveUser(User user) throws NotSavedException {
+    public void saveUser(User user) throws NotSavedException { //TODO déterminer si sauvegarde d'un seul utilisateur à la fois ou toute la liste (si un seul à la fois, alors json getUsers en plus !)
         List<UserDTO> users;
-        users = getUsers();
+        try {
+            users = getUsers();
+        } catch (NotRetrievedException e) {
+            throw new NotSavedException(e.getMessage(), e);
+        }
 
         if(users != null) {
             users.add(DtoMapper.bookToDto(user));
@@ -73,14 +78,18 @@ public class JsonRepository implements DataInterface, AutoCloseable {
     /**
      * Récupère tous les utilisateurs stockés
      * @return (List<UserDTO>) Liste d'objet DTO User
+     * @throws NotRetrievedException Impossible de récupérer les utilisateurs
      */
-    private List<UserDTO> getUsers() {//throws IOException {
+    @Override
+    public List<UserDTO> getUsers() throws NotRetrievedException {
         List<UserDTO> users = new ArrayList<>();
 
         try(Reader reader = new BufferedReader(new FileReader(jsonUsersPath))) {
             Type userDtoList = new TypeToken<ArrayList<UserDTO>>(){}.getType();
             users = gson.fromJson(reader, userDtoList);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            throw new NotRetrievedException("Impossible de récupérer les utilisateurs existants", e);
+        }
 
         return users;
     }
@@ -88,7 +97,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
     /**
      * Sauvegarde tous les utilisateurs donnés
      * @param users (List<UserDTO>) Liste de tous les utilisateurs en Objet DTO
-     * @throws IOException Impossible de sauvegarder les utilisateurs
+     * @throws NotSavedException Impossible de sauvegarder les utilisateurs
      */
     private void saveUsers(List<UserDTO> users) throws NotSavedException {
         try(FileWriter fw = new FileWriter(jsonUsersPath, StandardCharsets.UTF_8)) {
