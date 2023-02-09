@@ -1,8 +1,15 @@
 package org.task;
 
+/**
+ * Cette classe permet de créer un thread qui va exécuter les taches
+ */
 public class MurMurExecutor implements Runnable{
     private final TaskList taskList;
 
+    /**
+     * Constructeur de la classe MurMurExecutor qui prend en paramètre une liste de taches
+     * @param taskList
+     */
     public MurMurExecutor(TaskList taskList) {
         this.taskList = taskList;
     }
