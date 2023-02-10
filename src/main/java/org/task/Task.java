@@ -9,8 +9,12 @@ public class Task {
     private String source;
     private String destination;
     private String status;
-    public Task() {
-
+    public Task(int id, String type, String source, String destination, String status) {
+        this.id = id;
+        this.type = type;
+        this.source = source;
+        this.destination = destination;
+        this.status = status;
     }
 
     /**

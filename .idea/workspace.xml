@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Multi-thread ?">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Task class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/MsgsMessageTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/SendMessageTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/task/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/Task.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675895391728</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Task class">
+      <created>1676024914576</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1676024914576</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,6 +220,7 @@
     <MESSAGE value="Ajout serveur" />
     <MESSAGE value="Ajout de la liste de taches (TaskList) et du MurMurExecutor" />
     <MESSAGE value="Ajout des taches MsgsMessageTask et SendMessageTask" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des taches MsgsMessageTask et SendMessageTask" />
+    <MESSAGE value="Task class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Task class" />
   </component>
 </project>

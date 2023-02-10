@@ -1,5 +1,6 @@
 package org.server;
 
+import org.task.TaskList;
 import org.thread.ClientRunnable;
 import org.utils.Queries;
 import org.utils.RandomStringUtil;
@@ -21,12 +22,14 @@ public class Server {
     private List<ClientRunnable> clientsList;
     private boolean isStarted = false;
     private boolean isConnected = false;
+    private TaskList taskList;
 
     public Server(int port) {
 
         clientsList = Collections.synchronizedList(new ArrayList<>());
         ServerSocket server = null;
         Socket client = null;
+        taskList = new TaskList();
 
         try {
 
