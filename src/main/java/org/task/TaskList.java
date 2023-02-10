@@ -1,5 +1,7 @@
 package org.task;
 
+import org.model.Task;
+
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 

@@ -1,5 +1,6 @@
 package org.server;
 
+import org.task.TaskFactory;
 import org.task.TaskList;
 import org.thread.ClientRunnable;
 import org.utils.Queries;
@@ -22,6 +23,7 @@ public class Server {
     private List<ClientRunnable> clientsList;
     private boolean isStarted = false;
     private boolean isConnected = false;
+    private TaskFactory taskFactory;
     private TaskList taskList;
 
     public Server(int port) {
@@ -29,6 +31,7 @@ public class Server {
         clientsList = Collections.synchronizedList(new ArrayList<>());
         ServerSocket server = null;
         Socket client = null;
+        TaskFactory taskFactory;
         taskList = new TaskList();
 
         try {

@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Task class">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Avancement tasks">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/task/TaskFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/MurMurExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/MurMurExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Task.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +28,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -101,6 +105,9 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alexi\OneDrive\Documents\HELMo\Reseau\Projet" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.model" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Server">
@@ -198,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676024914576</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Avancement tasks">
+      <created>1676025976616</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1676025976616</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +235,7 @@
     <MESSAGE value="Ajout de la liste de taches (TaskList) et du MurMurExecutor" />
     <MESSAGE value="Ajout des taches MsgsMessageTask et SendMessageTask" />
     <MESSAGE value="Task class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Task class" />
+    <MESSAGE value="Avancement tasks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Avancement tasks" />
   </component>
 </project>
