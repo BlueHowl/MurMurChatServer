@@ -3,8 +3,11 @@ package org.infrastructure.json;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
-import org.infrastructure.dto.UserDTO;
-import org.model.User;
+import org.infrastructure.dto.ServerDTO;
+import org.model.ServerSettings;
+import org.model.exceptions.InvalidServerSettingsException;
+import org.model.exceptions.InvalidTagException;
+import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotRetrievedException;
 import org.repository.exceptions.NotSavedException;
@@ -15,8 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Classe Repository Json
@@ -32,7 +33,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * Constructeur du repository (crée un dossier ue36 si pas existant)
      */
     public JsonRepository() throws IOException {
-        Path path = Path.of(Paths.get("").toString(), "data", "users.json").toAbsolutePath();
+        Path path = Path.of(Paths.get("").toString(), "data", "server.json").toAbsolutePath();
 
         Files.createDirectories(path); //exception remontées
         if(!Files.exists(path)) {
@@ -50,60 +51,34 @@ public class JsonRepository implements DataInterface, AutoCloseable {
         this.jsonUsersPath = jsonBooksPath.toString();
     }
 
-
     /**
-     * Sauvegarde l'utilisateur donné en l'ajoutant aux autres
-     * @param user (User) Objet User
-     * @throws NotSavedException Impossible de sauvegarder les utilisateurs
+     * Récupère les informations du serveur et ses utilisateurs
+     * @return (ServerSettings) Objet paramètres serveur
+     * @throws NotRetrievedException Impossible de récupérer les paramètres et utilisateurs du serveur
      */
     @Override
-    public void saveUser(User user) throws NotSavedException { //TODO déterminer si sauvegarde d'un seul utilisateur à la fois ou toute la liste (si un seul à la fois, alors json getUsers en plus !)
-        List<UserDTO> users;
-        try {
-            users = getUsers();
-        } catch (NotRetrievedException e) {
-            throw new NotSavedException(e.getMessage(), e);
-        }
-
-        if(users != null) {
-            users.add(DtoMapper.bookToDto(user));
-        } else {
-            users = new ArrayList<>();
-            users.add(DtoMapper.bookToDto(user));
-        }
-
-        saveUsers(users);
-    }
-
-    /**
-     * Récupère tous les utilisateurs stockés
-     * @return (List<UserDTO>) Liste d'objet DTO User
-     * @throws NotRetrievedException Impossible de récupérer les utilisateurs
-     */
-    @Override
-    public List<UserDTO> getUsers() throws NotRetrievedException {
-        List<UserDTO> users = new ArrayList<>();
-
+    public ServerSettings getServerSettings() throws NotRetrievedException {
         try(Reader reader = new BufferedReader(new FileReader(jsonUsersPath))) {
-            Type userDtoList = new TypeToken<ArrayList<UserDTO>>(){}.getType();
-            users = gson.fromJson(reader, userDtoList);
+            Type serverDtoType = new TypeToken<ServerDTO>(){}.getType();
+            return DtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
         } catch (IOException e) {
             throw new NotRetrievedException("Impossible de récupérer les utilisateurs existants", e);
+        } catch (InvalidUserException | InvalidServerSettingsException | InvalidTagException e) {
+            throw new NotRetrievedException(e.getMessage(), e);
         }
-
-        return users;
     }
 
     /**
-     * Sauvegarde tous les utilisateurs donnés
-     * @param users (List<UserDTO>) Liste de tous les utilisateurs en Objet DTO
-     * @throws NotSavedException Impossible de sauvegarder les utilisateurs
+     * Sauvegarde les paramètres serveur et ses utilisateurs
+     * @param serverSettings (ServerSettings) Objet paramètres serveur
+     * @throws NotSavedException Impossible de sauvegarder les paramètres et utilisateurs du serveur
      */
-    private void saveUsers(List<UserDTO> users) throws NotSavedException {
+    @Override
+    public void saveServerSettings(ServerSettings serverSettings) throws NotSavedException {
         try(FileWriter fw = new FileWriter(jsonUsersPath, StandardCharsets.UTF_8)) {
-            gson.toJson(users, fw);
+            gson.toJson(DtoMapper.SeverSettingsToDto(serverSettings), fw);
         } catch (JsonIOException | IOException e) {
-            throw new NotSavedException("Impossible de sauvegarder les utilisateurs", e);
+            throw new NotSavedException("Impossible de sauvegarder l'état du serveur", e);
         }
     }
 

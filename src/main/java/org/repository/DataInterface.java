@@ -1,11 +1,9 @@
 package org.repository;
 
-import org.infrastructure.dto.UserDTO;
-import org.model.User;
+import org.model.ServerSettings;
 import org.repository.exceptions.NotRetrievedException;
 import org.repository.exceptions.NotSavedException;
 
-import java.util.List;
 
 
 /**
@@ -14,16 +12,16 @@ import java.util.List;
 public interface DataInterface extends AutoCloseable{
 
     /**
-     * Sauvegarde un utilisateur
-     * @param user (User) utilisateur à sauvegarder
-     * @throws NotSavedException
+     * Récupère les informations du serveur et ses utilisateurs
+     * @return (ServerSettings) Objet paramètres serveur
+     * @throws NotRetrievedException Impossible de récupérer les paramètres et utilisateurs du serveur
      */
-    void saveUser(User user) throws NotSavedException;
+    ServerSettings getServerSettings() throws NotRetrievedException;
 
     /**
-     * Récupère tous les utilisateurs stockés
-     * @return (List<UserDTO>) Liste d'objet DTO User
-     * @throws NotRetrievedException Impossible de récupérer les utilisateurs
+     * Sauvegarde les paramètres serveur et ses utilisateurs
+     * @param serverSettings (ServerSettings) Objet paramètres serveur
+     * @throws NotSavedException Impossible de sauvegarder les paramètres et utilisateurs du serveur
      */
-    List<UserDTO> getUsers() throws NotRetrievedException;
+    void saveServerSettings(ServerSettings serverSettings) throws NotSavedException;
 }

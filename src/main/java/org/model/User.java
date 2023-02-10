@@ -1,8 +1,10 @@
 package org.model;
 
-import org.model.exceptions.UserNotValidException;
+import org.model.exceptions.InvalidTagException;
+import org.model.exceptions.InvalidUserException;
 import org.utils.Regexes;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -17,16 +19,33 @@ public class User {
 
     private String bcryptHash;
 
+    private List<String> followers;
+
+    private List<String> userTags;
+
+    private int lockoutCounter;
+
     /**
-     * Constructeur de la classe user
+     * Constructeur classe utilisateur
+     *
+     * @param username        (String) nom d'utilisateur
+     * @param bcryptRotations (String) rotations bcrypt
+     * @param bcryptSalt      (String) salt bcrypt
+     * @param bcryptHash      (String) hash bcrypt
+     * @param followers       (List<String>) liste des followers
+     * @param userTags        (List<String>) liste des userTags
+     * @param lockoutCounter  (int) lockoutCounter
      */
-    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws UserNotValidException {
+    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) throws InvalidUserException {
         checkParameters(username, bcryptRotations, bcryptSalt, bcryptHash);
 
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
         this.bcryptHash = bcryptHash;
+        this.followers = followers;
+        this.userTags = userTags;
+        this.lockoutCounter = lockoutCounter;
     }
 
     /**
@@ -35,17 +54,20 @@ public class User {
      * @param bcryptRotations (int) rotations bcrypt
      * @param bcryptSalt (String) Sel bcrypt
      * @param bcryptHash (String) hash bcrypt
-     * @throws UserNotValidException Exception lancée si une des valeurs ne respecte pas sa syntaxe
+     * @throws InvalidUserException Exception lancée si une des valeurs ne respecte pas sa syntaxe
      */
-    private void checkParameters(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws UserNotValidException {
+    private void checkParameters(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws InvalidUserException {
         if(!Pattern.matches(Regexes.USERNAME, username) ||
-            !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations)) ||
-            !Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
-            !Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
+                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations)) ||
+                !Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
+                !Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
         {
-            throw new UserNotValidException("Valeurs utilisateur invalides");
+            throw new InvalidUserException("Valeurs utilisateur invalides");
         }
     }
+
+
+    //GETTERS
 
     /**
      * Récupère le nom d'utilisateur
@@ -77,5 +99,60 @@ public class User {
      */
     public String getBcryptHash() {
         return bcryptHash;
+    }
+
+    /**
+     * Récupère les followers
+     * @return (List<String>) followers
+     */
+    public List<String> getFollowers() {
+        return followers;
+    }
+
+    /**
+     * Récupère les userTags
+     * @return (List<String>) userTags
+     */
+    public List<String> getUserTags() {
+        return userTags;
+    }
+
+    /**
+     * Récupère le lockoutCounter
+     * @return (int)
+     */
+    public int getLockoutCounter() {
+        return lockoutCounter;
+    }
+
+
+    //SETTERS
+
+    /**
+     * Ajoute un follower à la liste des followers du tag
+     * @param follower (String) follower
+     * @throws InvalidUserException Exception lancée lorsque le champ follower ne respecte pas l syntaxe
+     */
+    public void addFollower(String follower) throws InvalidUserException {
+        if(Pattern.matches(Regexes.NAME_DOMAIN, follower))
+        {
+            followers.add(follower);
+        } else {
+            throw new InvalidUserException("La valeur follower ne respecte pas la syntaxe NAME_DOMAIN");
+        }
+    }
+
+    /**
+     * Ajoute un tag à la liste des userTags de l'utilisateur
+     * @param tag (String) tag
+     * @throws InvalidUserException Exception lancée lorsque le champ follower ne respecte pas l syntaxe
+     */
+    public void addUserTag(String tag) throws InvalidUserException {
+        if(Pattern.matches(Regexes.TAG_DOMAIN, tag))
+        {
+            userTags.add(tag);
+        } else {
+            throw new InvalidUserException("La valeur tag ne respecte pas la syntaxe TAG_DOMAIN");
+        }
     }
 }

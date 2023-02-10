@@ -2,6 +2,8 @@ package org.infrastructure.dto;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Classe DTO Book
  */
@@ -19,18 +21,34 @@ public class UserDTO {
     @SerializedName("BcryptHash")
     public final String bcryptHash;
 
+    @SerializedName("Followers")
+    public final List<String> followers;
+
+    @SerializedName("UserTags")
+    public final  List<String> userTags;
+
+    @SerializedName("LockoutCounter")
+    public final  int lockoutCounter;
+
     /**
      * Constructeur utilisateur DTO
-     * @param username (String) nom d'utilisateur
+     *
+     * @param username        (String) nom d'utilisateur
      * @param bcryptRotations (String) rotations bcrypt
-     * @param bcryptSalt (String) salt bcrypt
-     * @param bcryptHash (String) hash bcrypt
+     * @param bcryptSalt      (String) salt bcrypt
+     * @param bcryptHash      (String) hash bcrypt
+     * @param followers       (List<String>) liste des followers
+     * @param userTags        (List<String>) liste des userTags
+     * @param lockoutCounter  (int) lockoutCounter
      */
-    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) {
+    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
         this.bcryptHash = bcryptHash;
+        this.followers = followers;
+        this.userTags = userTags;
+        this.lockoutCounter = lockoutCounter;
     }
 
     /**
@@ -63,5 +81,29 @@ public class UserDTO {
      */
     public String getBcryptHash() {
         return bcryptHash;
+    }
+
+    /**
+     * Récupère les followers
+     * @return (List<String>) followers
+     */
+    public List<String> getFollowers() {
+        return followers;
+    }
+
+    /**
+     * Récupère les userTags
+     * @return (List<String>) userTags
+     */
+    public List<String> getUserTags() {
+        return userTags;
+    }
+
+    /**
+     * Récupère le lockoutCounter
+     * @return (int)
+     */
+    public int getLockoutCounter() {
+        return lockoutCounter;
     }
 }

@@ -1,15 +1,15 @@
 package org.model.exceptions;
 
 /**
- * Exception Récupèration donnée utilisateur invalide
+ * Exception Récupèration donnée param serveur invalide
  */
-public class UserNotValidException extends Exception{
+public class InvalidServerSettingsException extends Exception{
 
     /**
      * Remonte l'erreur donnée en paramètres
      * @param errorMessage (String) message d'erreur
      */
-    public UserNotValidException(String errorMessage) {
+    public InvalidServerSettingsException(String errorMessage) {
         super(errorMessage);
     }
 }

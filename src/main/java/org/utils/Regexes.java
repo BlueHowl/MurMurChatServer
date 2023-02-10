@@ -6,6 +6,8 @@ public class Regexes {
 
     public static final String DOMAIN = "^[a-zA-Z\\d.]{5,200}$";
 
+    public static final String ADDRESS = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
+
     public static final String PORT = "^\\d{1,5}$";
 
     public static final String ROUND_OR_SALT_SIZE = "^\\d{2}$";
@@ -24,7 +26,7 @@ public class Regexes {
 
     public static final String TAG = "^[#][a-zA-Z\\d]{5,20}$";
 
-    public static final String DOMAIN_NAME = "^[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
+    public static final String NAME_DOMAIN = "^[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
 
     public static final String TAG_DOMAIN = "^[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
 
