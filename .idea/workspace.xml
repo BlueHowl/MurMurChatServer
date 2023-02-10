@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Ajout App">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Changement server">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thread/ClientRunnable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +167,7 @@
       <workItem from="1675893937599" duration="1441000" />
       <workItem from="1675935351703" duration="446000" />
       <workItem from="1676029713422" duration="2641000" />
-      <workItem from="1676034781217" duration="5285000" />
+      <workItem from="1676034781217" duration="6078000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -227,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676036480663</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Changement server">
+      <created>1676040144189</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1676040144189</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +258,7 @@
     <MESSAGE value="Avancement tasks" />
     <MESSAGE value="Avancement 2 tasks" />
     <MESSAGE value="Ajout App" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout App" />
+    <MESSAGE value="Changement server" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement server" />
   </component>
 </project>
