@@ -22,16 +22,8 @@ public class TaskList {
      * Cette méthode permet de créer une tache de type SendMessageTask
      * et de l'ajouter à la liste de taches
      */
-    public void createSendMessageTask() {
-        //TODO ajouter la tache dans la liste
-    }
-
-    /**
-     * Cette méthode permet de créer une tache de type MsgsMessageTask
-     * et de l'ajouter à la liste de taches
-     */
-    public void createMsgsMessageTask() {
-        //TODO ajouter la tache dans la liste
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     /**
@@ -40,7 +32,6 @@ public class TaskList {
      * @return Task
      */
     public Task getTask() {
-        //TODO retourner la tache suivante
         return tasks.poll();
     }
 }

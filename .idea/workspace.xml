@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Multi-thread ?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/MsgsMessageTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/MsgsMessageTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/SendMessageTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/SendMessageTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/MsgsMessageTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/SendMessageTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/task/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/Task.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/task/TaskList.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +207,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
