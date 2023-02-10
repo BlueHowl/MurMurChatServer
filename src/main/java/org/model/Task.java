@@ -41,6 +41,6 @@ public class Task {
     }
 
     public enum Types {
-
+        
     }
 }
