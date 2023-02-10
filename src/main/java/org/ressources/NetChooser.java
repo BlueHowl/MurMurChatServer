@@ -1,4 +1,4 @@
-package com.swilabus.labo22.ressources;
+package org.ressources;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

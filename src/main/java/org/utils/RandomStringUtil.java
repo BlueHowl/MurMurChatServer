@@ -7,7 +7,7 @@ import java.util.Random;
  * Classe utile permettant de générer un String aléatoire contenant les caractères autorisés
  */
 public class RandomStringUtil {
-    private static final String caracters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*,-./:;<=>?@[]^_`";
+    private static final String caracters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#%&'()*,-./:;<=>?@[]^_`";
 
     /**
      * Génère une chaine de caractères aléatoire de la taille donnée et contenant les caractères autorisés

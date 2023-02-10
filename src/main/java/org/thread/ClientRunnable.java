@@ -1,6 +1,7 @@
 package org.thread;
 
 import org.server.Server;
+import org.utils.RandomStringUtil;
 
 import java.io.*;
 import java.net.Socket;
@@ -20,7 +21,7 @@ public class ClientRunnable implements Runnable {
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
-            String key = randomString(SIZE);
+            String key = RandomStringUtil.generateString(SIZE);
             sendMessage("HELLO localhost " + key + "\r\n");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -41,14 +42,5 @@ public class ClientRunnable implements Runnable {
     }
     private void sendMessage(String message) {
         out.println(message);
-    }
-    private String randomString(int size) {
-        String possibilites = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!%^.?@#&/*";
-        StringBuilder random = new StringBuilder();
-        for (int i = 0 ; i < size; i++) {
-            int character = (int) (Math.random() * (size));
-            random.append(possibilites.charAt(character));
-        }
-        return random.toString();
     }
 }
