@@ -1,5 +1,7 @@
 package org.task;
 
+import org.model.Task;
+
 /**
  * Cette classe permet de créer un thread qui va exécuter les taches
  */

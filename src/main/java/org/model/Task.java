@@ -1,4 +1,4 @@
-package org.task;
+package org.model;
 
 /**
  * Interface Task qui permet de récupérer le type de la tache et de l'exécuter
@@ -28,7 +28,7 @@ public class Task {
     /**
      * Cette méthode permet d'exécuter la tache
      */
-    void execute() {
+    public void execute() {
 
     }
 }
