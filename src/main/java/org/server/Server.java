@@ -9,7 +9,7 @@ import org.utils.RandomStringUtil;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +18,6 @@ import java.util.List;
  * Created by lsw on 02-02-16.
  */
 public class Server {
-    public static final int DEFAULT_PORT = 23502;
-    private final String DEFAULT_SERVER_NAME = "server1.godswila.guru";
     private List<ClientRunnable> clientsList;
     private boolean isStarted = false;
     private boolean isConnected = false;
@@ -47,8 +45,8 @@ public class Server {
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
 
-                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream(), Charset.forName("UTF-8")));
-                PrintWriter toClient = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), Charset.forName("UTF-8")), true);
+                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+                PrintWriter toClient = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
                 String ligne = readLine(fromClient);
                 System.out.println("Ligne reçue: " + (ligne==null?"":ligne));
 
@@ -76,7 +74,7 @@ public class Server {
      * @param toClient (PrintWriter)
      */
     private void sendHello(PrintWriter toClient) {
-        String hello = String.format(Queries.HELLO, DEFAULT_SERVER_NAME, RandomStringUtil.generateString(22));
+        String hello = String.format(Queries.HELLO, "", RandomStringUtil.generateString(22));
         System.out.println(hello); //DEBUG
         toClient.print(hello);
 
@@ -88,13 +86,5 @@ public class Server {
         if(line != null && line.length() > 2 && line.startsWith("\uFEFF"))
             return line.substring("\uFEFF".length());
         return line;
-    }
-
-    public static void main(String[] args) {
-        if(args.length == 0)
-            new Server(DEFAULT_PORT);
-        else
-            new Server(Integer.parseInt(args[0]));
-
     }
 }

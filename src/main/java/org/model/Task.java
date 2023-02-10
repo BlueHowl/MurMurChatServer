@@ -19,16 +19,28 @@ public class Task {
 
     /**
      * Cette méthode permet de récupérer le type de la tache
-     * @return
+     * @return le type de la tâche
      */
     public String getType() {
         return type;
     }
 
     /**
+     * Cette méthode retourne les informations de transit de la tâches
+     * @return un array source-> destination de la tâche
+     */
+    public String[] getTransitInfos() {
+        return new String[] { source, destination };
+    }
+
+    /**
      * Cette méthode permet d'exécuter la tache
      */
     public void execute() {
+
+    }
+
+    public enum Types {
 
     }
 }
