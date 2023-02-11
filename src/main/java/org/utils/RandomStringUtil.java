@@ -7,7 +7,7 @@ import java.util.Random;
  * Classe utile permettant de générer un String aléatoire contenant les caractères autorisés
  */
 public class RandomStringUtil {
-    private static final String caracters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#%&'()*,-./:;<=>?@[]^_`";
+    private static final String CARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*,-./:;<=>?@[]^_`";
 
     /**
      * Génère une chaine de caractères aléatoire de la taille donnée et contenant les caractères autorisés
@@ -21,9 +21,9 @@ public class RandomStringUtil {
         random.setSeed(new Date().getTime());
 
         for(int i = 0; i < length; i++) {
-            int index = random.nextInt(caracters.length());
+            int index = random.nextInt(CARACTERS.length());
 
-            sb.append(caracters.charAt(index));
+            sb.append(CARACTERS.charAt(index));
         }
 
         return sb.toString();

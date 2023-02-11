@@ -1,7 +1,9 @@
 package org.thread;
 
 import org.server.Server;
+import org.utils.Queries;
 import org.utils.RandomStringUtil;
+import org.utils.Regexes;
 
 import java.io.*;
 import java.net.Socket;
@@ -22,7 +24,7 @@ public class ClientRunnable implements Runnable {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
             String key = RandomStringUtil.generateString(SIZE);
-            sendMessage("HELLO localhost " + key + "\r\n");
+            sendMessage(String.format(Queries.HELLO, "localhost", key));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -30,11 +32,13 @@ public class ClientRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            String line = in.readLine();
-            while(line != null) {
-                System.out.printf("Read line: "+ line); //debug
+            String line;
+            do {
                 line = in.readLine();
-            }
+
+                Regexes.decomposeRegister(line);
+                Regexes.decomposeConnect(line);
+            } while (line != null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

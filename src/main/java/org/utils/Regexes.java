@@ -1,5 +1,8 @@
 package org.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regexes {
@@ -35,26 +38,148 @@ public class Regexes {
 
     //Received commands matchers pattern
 
-    public static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20]([a-zA-Z\\d]{5,20})[\\x0D][\\x0A]$");
+    public static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 
-    public static final Pattern REGISTER = Pattern.compile("^[R][E][G][I][S][T][E][R][\\x20]([a-zA-Z\\d]{5,20})[\\x20](\\d{2})[\\x20][2][b][$](\\d{2})[$]([a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})[\\x0D][\\x0A]$");
+    public static final Pattern REGISTER = Pattern.compile("^[R][E][G][I][S][T][E][R][\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
 
     public static final Pattern DISCONNECT = Pattern.compile("^[D][I][S][C][O][N][N][E][C][T][\\x0D][\\x0A]$");
 
-    public static final Pattern CONFIRM = Pattern.compile("^[C][O][N][F][I][R][M][\\x20]([a-zA-Z\\d]{30,200})[\\x0D][\\x0A]$");
+    public static final Pattern CONFIRM = Pattern.compile("^[C][O][N][F][I][R][M][\\x20](?<sha3hex>[a-zA-Z\\d]{30,200})$");
 
-    public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x1F]([\\x20-\\xFF]{1,200})[\\x0D][\\x0A]$");
+    public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x1F](?<message>[\\x20-\\xFF]{1,200})$");
 
-    public static final Pattern FOLLOW_DOMAIN = Pattern.compile("^[F][O][L][L][O][W][\\x20]([a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x0D][\\x0A]$");
-
-    public static final Pattern FOLLOW_TAG = Pattern.compile("^[F][O][L][L][O][W][\\x20]([#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x0D][\\x0A]$");
+    //(séparé pour reconnaitre les deux séparément)
+    public static final Pattern FOLLOW_DOMAIN = Pattern.compile("^[F][O][L][L][O][W][\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})$");
+    public static final Pattern FOLLOW_TAG = Pattern.compile("^[F][O][L][L][O][W][\\x20](?<tagdomain>[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})$");
 
     //Multicast
-    public static final Pattern ECHO = Pattern.compile("^[E][C][H][O][\\x20](\\d{1,5})[\\x20]([a-zA-Z\\d.]{5,200})[\\x0D][\\x0A]");
+    public static final Pattern ECHO = Pattern.compile("^[E][C][H][O][\\x20](?<port>\\d{1,5})[\\x20](?<domain>[a-zA-Z\\d.]{5,200})");
 
-    //Unicast
-    public static final Pattern SEND_NAME = Pattern.compile("[S][E][N][D][\\x20]([\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20]([a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20]([a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20]([\\x20-\\xFF]{1,500})[\\x0D][\\x0A]");
+    //Unicast (séparé pour reconnaitre les deux séparément)
+    public static final Pattern SEND_NAME = Pattern.compile("[S][E][N][D][\\x20](?<iddomain>[\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain2>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<internalmessage>[\\x20-\\xFF]{1,500})");
+    public static final Pattern SEND_TAG = Pattern.compile("[S][E][N][D][\\x20](?<iddomain>[\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<tagdomain>[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<internalmessage>[\\x20-\\xFF]{1,500})");
 
-    public static final Pattern SEND_TAG = Pattern.compile("[S][E][N][D][\\x20]([\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20]([a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20]([#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20]([\\x20-\\xFF]{1,500})[\\x0D][\\x0A]");
+
+    //Decomposers
+
+    /**
+     * Décompose la commande REGISTER et récupère les informations sous la forme d'une map
+     * @param command (String) Commande REGISTER
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeRegister(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.REGISTER.matcher(command);
+        if(m.find()) {
+            result.put("username", m.group("username"));
+            result.put("saltsize", m.group("saltsize"));
+            result.put("bcryptround", m.group("bcryptround"));
+            result.put("bcrypthash", m.group("bcrypthash"));
+            System.out.printf("REGISTER : (Username: %s, SaltSize: %s, BcryptRound: %s, BcryptHash: %s)", m.group("username"), m.group("saltsize"), m.group("bcryptround"), m.group("bcrypthash")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande CONNECT et récupère les informations sous la forme d'une map
+     * @param command (String) Commande CONNECT
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeConnect(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.CONNECT.matcher(command);
+        if(m.find()) {
+            result.put("username", m.group("username"));
+
+            System.out.printf("CONNECT : (Username: %s)", m.group("username")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande CONFIRM et récupère les informations sous la forme d'une map
+     * @param command (String) Commande CONFIRM
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeConfirm(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.CONFIRM.matcher(command);
+        if(m.find()) {
+            result.put("sha3hex", m.group("sha3hex"));
+
+            System.out.printf("CONFIRM : (Sha3hex: %s)", m.group("sha3hex")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande MSG et récupère les informations sous la forme d'une map
+     * @param command (String) Commande MSG
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeMsg(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.MSG.matcher(command);
+        if(m.find()) {
+            result.put("message", m.group("message"));
+
+            System.out.printf("MSG : (Message: %s)", m.group("message")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande FOLLOW avec nom domaine et récupère les informations sous la forme d'une map
+     * @param command (String) Commande FOLLOW avec nom domaine
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeFollowDomain(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.FOLLOW_DOMAIN.matcher(command);
+        if(m.find()) {
+            result.put("namedomain", m.group("namedomain"));
+
+            System.out.printf("FOLLOW NAME_DOMAIN : (NameDomain: %s)", m.group("namedomain")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande FOLLOW avec nom domaine et récupère les informations sous la forme d'une map
+     * @param command (String) Commande FOLLOW avec nom domaine
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    public static Map<String, String> decomposeFollowTag(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = Regexes.FOLLOW_TAG.matcher(command);
+        if(m.find()) {
+            result.put("tagdomain", m.group("tagdomain"));
+
+            System.out.printf("FOLLOW TAG_DOMAIN : (TagDomain: %s)", m.group("tagdomain")); //todo debug
+        }
+
+        return result;
+    }
+
+    /**
+     * Décompose la commande DISCONNECT et détermine si celle-ci correspond
+     * @param command (String) Commande DISCONNECT
+     * @return (boolean) true si disconnect sinon false
+     */
+    public static boolean checkDisconnect(String command) {
+        Matcher m = Regexes.DISCONNECT.matcher(command);
+        return m.matches();
+    }
 
 }
