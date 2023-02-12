@@ -15,7 +15,7 @@ public class Regexes {
 
     public static final String ROUND_OR_SALT_SIZE = "^\\d{2}$";
 
-    public static final String BCRYPT_HASH = "^[2][b][$]\\d{2}[$][a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70}$";
+    public static final String BCRYPT_HASH = "^[$][2][b][$]\\d{2}[$][a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70}$";
 
     public static final String SHA3_HEX ="^[a-zA-Z\\d]{30,200}$";
 
@@ -38,6 +38,8 @@ public class Regexes {
 
     //Received commands matchers pattern
 
+    public static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)[\\x20]");
+
     public static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 
     public static final Pattern REGISTER = Pattern.compile("^[R][E][G][I][S][T][E][R][\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
@@ -46,7 +48,7 @@ public class Regexes {
 
     public static final Pattern CONFIRM = Pattern.compile("^[C][O][N][F][I][R][M][\\x20](?<sha3hex>[a-zA-Z\\d]{30,200})$");
 
-    public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x1F](?<message>[\\x20-\\xFF]{1,200})$");
+    public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x20](?<message>[\\x20-\\xFF]{1,200})$");
 
     //(séparé pour reconnaitre les deux séparément)
     public static final Pattern FOLLOW_DOMAIN = Pattern.compile("^[F][O][L][L][O][W][\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})$");
@@ -67,16 +69,19 @@ public class Regexes {
      * @param command (String) Commande REGISTER
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    public static Map<String, String> decomposeRegister(String command) {
+    private static Map<String, String> decomposeRegister(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.REGISTER.matcher(command);
         if(m.find()) {
+            String bcrypthash = m.group("bcrypthash");
+            int saltsize = Integer.parseInt(m.group("saltsize"));
+
             result.put("username", m.group("username"));
-            result.put("saltsize", m.group("saltsize"));
             result.put("bcryptround", m.group("bcryptround"));
-            result.put("bcrypthash", m.group("bcrypthash"));
-            System.out.printf("REGISTER : (Username: %s, SaltSize: %s, BcryptRound: %s, BcryptHash: %s)", m.group("username"), m.group("saltsize"), m.group("bcryptround"), m.group("bcrypthash")); //todo debug
+            result.put("bcryptsalt", bcrypthash.substring(0, saltsize));
+            result.put("bcrypthash", bcrypthash.substring(saltsize));
+            System.out.printf("REGISTER : (Username: %s, BcryptRound: %s, BcryptHash: %s, Bcryptsalt: %s)", m.group("username"), m.group("bcryptround"), result.get("bcrypthash"), result.get("bcryptsalt")); //todo debug
         }
 
         return result;
@@ -87,7 +92,7 @@ public class Regexes {
      * @param command (String) Commande CONNECT
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    public static Map<String, String> decomposeConnect(String command) {
+    private static Map<String, String> decomposeConnect(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.CONNECT.matcher(command);
@@ -105,7 +110,7 @@ public class Regexes {
      * @param command (String) Commande CONFIRM
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    public static Map<String, String> decomposeConfirm(String command) {
+    private static Map<String, String> decomposeConfirm(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.CONFIRM.matcher(command);
@@ -123,7 +128,7 @@ public class Regexes {
      * @param command (String) Commande MSG
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    public static Map<String, String> decomposeMsg(String command) {
+    private static Map<String, String> decomposeMsg(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.MSG.matcher(command);
@@ -137,11 +142,11 @@ public class Regexes {
     }
 
     /**
-     * Décompose la commande FOLLOW avec nom domaine et récupère les informations sous la forme d'une map
-     * @param command (String) Commande FOLLOW avec nom domaine
+     * Décompose la commande FOLLOW et récupère les informations sous la forme d'une map
+     * @param command (String) Commande FOLLOW
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    public static Map<String, String> decomposeFollowDomain(String command) {
+    private static Map<String, String> decomposeFollow(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.FOLLOW_DOMAIN.matcher(command);
@@ -149,37 +154,53 @@ public class Regexes {
             result.put("namedomain", m.group("namedomain"));
 
             System.out.printf("FOLLOW NAME_DOMAIN : (NameDomain: %s)", m.group("namedomain")); //todo debug
+        } else {
+            m = Regexes.FOLLOW_TAG.matcher(command);
+            if(m.find()) {
+                result.put("tagdomain", m.group("tagdomain"));
+
+                System.out.printf("FOLLOW TAG_DOMAIN : (TagDomain: %s)", m.group("tagdomain")); //todo debug
+            }
         }
 
         return result;
     }
 
     /**
-     * Décompose la commande FOLLOW avec nom domaine et récupère les informations sous la forme d'une map
-     * @param command (String) Commande FOLLOW avec nom domaine
-     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     * Décompose la commande et récupère une Map des valeurs
+     * @param command
+     * @return
      */
-    public static Map<String, String> decomposeFollowTag(String command) {
+    public static Map<String, String> decomposeCommand(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.FOLLOW_TAG.matcher(command);
+        Matcher m = Regexes.TYPE.matcher(command);
         if(m.find()) {
-            result.put("tagdomain", m.group("tagdomain"));
+            switch (m.group("type")) {
+                case "Register":
+                    result.putAll(decomposeRegister(command));
+                    break;
 
-            System.out.printf("FOLLOW TAG_DOMAIN : (TagDomain: %s)", m.group("tagdomain")); //todo debug
+                case "CONNECT":
+                    result.putAll(decomposeConnect(command));
+                    break;
+
+                case "CONFIRM":
+                    result.putAll(decomposeConfirm(command));
+                    break;
+
+                case "MSG":
+                    result.putAll(decomposeMsg(command));
+                    break;
+
+                case "FOLLOW":
+                    result.putAll(decomposeFollow(command));
+                    break;
+
+            }
         }
 
         return result;
-    }
-
-    /**
-     * Décompose la commande DISCONNECT et détermine si celle-ci correspond
-     * @param command (String) Commande DISCONNECT
-     * @return (boolean) true si disconnect sinon false
-     */
-    public static boolean checkDisconnect(String command) {
-        Matcher m = Regexes.DISCONNECT.matcher(command);
-        return m.matches();
     }
 
 }

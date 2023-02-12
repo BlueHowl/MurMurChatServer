@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//TODO thread ou pas ?
 public class ClientListener implements Runnable {
     private List<ClientRunnable> clientsList;
 
@@ -41,13 +42,6 @@ public class ClientListener implements Runnable {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-    }
-
-    private String readLine(BufferedReader reader) throws IOException {
-        String line = reader.readLine();
-        if(line != null && line.length() > 2 && line.startsWith("\uFEFF"))
-            return line.substring("\uFEFF".length());
-        return line;
     }
 
 }

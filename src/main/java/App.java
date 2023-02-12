@@ -10,14 +10,14 @@ public class App {
 
     public static void main(String args[]) {
         try(DataInterface dataInterface = new JsonRepository()) {
-            Server serverSettings =  dataInterface.getServerSettings();
+            Server server =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
             TaskFactory taskFactory = new TaskFactory(taskList);
 
-            ClientListener clientListener = new ClientListener(taskFactory, serverSettings.getMulticastPort()); //TODO changer port ?
+            ClientListener clientListener = new ClientListener(taskFactory, server.getUnicastPort());
             (new Thread(clientListener)).start();
-            MurMurExecutor murMurExecutor = new MurMurExecutor(taskList, serverSettings);
+            MurMurExecutor murMurExecutor = new MurMurExecutor(taskList, server);
             (new Thread(murMurExecutor)).start();
 
         } catch (Exception e) {
