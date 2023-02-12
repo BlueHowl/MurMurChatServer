@@ -1,28 +1,31 @@
 package org.task;
 
 import org.model.Task;
+import org.thread.TaskFactoryInterface;
 
-public class TaskFactory {
+public class TaskFactory implements TaskFactoryInterface {
     private int idCount;
+
+    private TaskList taskList;
     private Task task;
+
     public TaskFactory(TaskList taskList) {
-        idCount = 1;
+        this.taskList = taskList;
     }
 
     //TODO Gérer la création des différentes tasks
+
+    /**
+     * Crée une nouvelle tache et la met dans la queue
+     * @param typeSended (String)
+     * @param source (String)
+     * @param destination (String)
+     */
     public void createTask(String typeSended, String source, String destination) {
         switch(typeSended) {
 
         }
-        task = new Task(idCount, typeSended, source, destination, "pending");
-        idCount++;
+        taskList.addTask(new Task(++idCount, typeSended, source, destination, "pending"));
     }
 
-    /**
-     * Une fonction qui retourne la tâche crée
-     * @return la tâche créee
-     */
-    public Task getTask() {
-        return task;
-    }
 }

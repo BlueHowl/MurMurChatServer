@@ -1,6 +1,5 @@
 package org.thread;
 
-import org.server.Server;
 import org.utils.Queries;
 import org.utils.RandomStringUtil;
 import org.utils.Regexes;
@@ -14,11 +13,11 @@ public class ClientRunnable implements Runnable {
     private final Socket client;
     private BufferedReader in;
     private PrintWriter out;
-    private final Server server;
+    private final TaskFactoryInterface taskFactoryInterface;
 
-    public ClientRunnable (Socket client, Server server) {
+    public ClientRunnable (Socket client, TaskFactoryInterface taskFactoryInterface) {
         this.client = client;
-        this.server = server;
+        this.taskFactoryInterface = taskFactoryInterface;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import org.infrastructure.dto.ServerDTO;
-import org.model.ServerSettings;
+import org.model.Server;
 import org.model.exceptions.InvalidServerSettingsException;
 import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
@@ -27,20 +27,24 @@ public class JsonRepository implements DataInterface, AutoCloseable {
 
     private final Gson gson = new Gson();
 
-    private String jsonUsersPath;
+    private final String jsonPath;
 
     /**
      * Constructeur du repository (crée un dossier ue36 si pas existant)
      */
-    public JsonRepository() throws IOException {
+    public JsonRepository() {
         Path path = Path.of(Paths.get("").toString(), "data", "server.json").toAbsolutePath();
 
-        Files.createDirectories(path); //exception remontées
-        if(!Files.exists(path)) {
-            Files.createFile(path);
-        }
+        try {
+            Files.createDirectories(path.getParent());
 
-        jsonUsersPath = path.toString();
+            if(!Files.exists(path)) {
+                Files.createFile(path);
+            }
+
+        } catch (IOException ignored) {}
+
+        jsonPath = path.toString();
     }
 
     /**
@@ -48,7 +52,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @param jsonBooksPath (Path) Chemin d'accès du fichier de sauvegarde
      */
     public JsonRepository(Path jsonBooksPath) {
-        this.jsonUsersPath = jsonBooksPath.toString();
+        this.jsonPath = jsonBooksPath.toString();
     }
 
     /**
@@ -57,8 +61,8 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws NotRetrievedException Impossible de récupérer les paramètres et utilisateurs du serveur
      */
     @Override
-    public ServerSettings getServerSettings() throws NotRetrievedException {
-        try(Reader reader = new BufferedReader(new FileReader(jsonUsersPath))) {
+    public Server getServerSettings() throws NotRetrievedException {
+        try(Reader reader = new BufferedReader(new FileReader(jsonPath))) {
             Type serverDtoType = new TypeToken<ServerDTO>(){}.getType();
             return DtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
         } catch (IOException e) {
@@ -74,8 +78,8 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws NotSavedException Impossible de sauvegarder les paramètres et utilisateurs du serveur
      */
     @Override
-    public void saveServerSettings(ServerSettings serverSettings) throws NotSavedException {
-        try(FileWriter fw = new FileWriter(jsonUsersPath, StandardCharsets.UTF_8)) {
+    public void saveServerSettings(Server serverSettings) throws NotSavedException {
+        try(FileWriter fw = new FileWriter(jsonPath, StandardCharsets.UTF_8)) {
             gson.toJson(DtoMapper.SeverSettingsToDto(serverSettings), fw);
         } catch (JsonIOException | IOException e) {
             throw new NotSavedException("Impossible de sauvegarder l'état du serveur", e);

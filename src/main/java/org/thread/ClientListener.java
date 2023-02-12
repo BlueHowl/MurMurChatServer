@@ -1,8 +1,4 @@
-package org.server;
-
-import org.task.TaskFactory;
-import org.task.TaskList;
-import org.thread.ClientRunnable;
+package org.thread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,34 +8,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by lsw on 02-02-16.
- */
-public class Server {
+public class ClientListener implements Runnable {
     private List<ClientRunnable> clientsList;
+
+    private Socket client;
+
+    private TaskFactoryInterface taskFactoryInterface;
+
+    private int port;
+
     private boolean isStarted = false;
     private boolean isConnected = false;
-    private TaskFactory taskFactory;
-    private TaskList taskList;
 
-    public Server(int port) {
-
+    public ClientListener(TaskFactoryInterface taskFactoryInterface, int port) {
         clientsList = Collections.synchronizedList(new ArrayList<>());
-        Socket client = null;
-        taskList = new TaskList();
-        TaskFactory taskFactory = new TaskFactory(taskList);
+        this.taskFactoryInterface = taskFactoryInterface;
+        this.port = port;
+    }
 
+    @Override
+    public void run() {
         try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("Démarrage du serveur sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
-            while(true) {
+            while (true) {
                 client = server.accept();
-                ClientRunnable runnable = new ClientRunnable(client, this);
+                ClientRunnable runnable = new ClientRunnable(client, taskFactoryInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
             }
 
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
@@ -50,4 +49,5 @@ public class Server {
             return line.substring("\uFEFF".length());
         return line;
     }
+
 }
