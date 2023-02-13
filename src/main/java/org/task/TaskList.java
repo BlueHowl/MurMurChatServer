@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * elle permet de récupérer la tache suivante à exécuter à l'aide de la méthode getTask()
  */
 public class TaskList {
-    private final Queue<Task> tasks;
+    private final Queue<Task> tasks; //todo synchronous queue?
 
     /**
      * Constructeur de la classe TaskList qui pour le moment ne prend rien en paramètres

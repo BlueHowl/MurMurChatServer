@@ -12,7 +12,7 @@ public class App {
             Server server =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
-            TaskHandler taskHandler = new TaskHandler(taskList, server);
+            TaskHandler taskHandler = new TaskHandler(taskList, server, dataInterface);
             (new Thread(taskHandler)).start();
 
             ClientListener clientListener = new ClientListener(taskHandler, server.getUnicastPort());

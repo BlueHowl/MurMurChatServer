@@ -155,7 +155,7 @@ public class Server {
      * @param user (User) utilisateur
      */
     public void addUser(User user) throws InvalidUserException{
-        if (userExist(user)) users.add(user);
+        if (!userExist(user)) users.add(user);
         else throw new InvalidUserException("L'utilisateur est déjà existant");
     }
 

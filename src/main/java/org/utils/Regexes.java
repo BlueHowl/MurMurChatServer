@@ -19,7 +19,7 @@ public class Regexes {
 
     public static final String SHA3_HEX ="^[a-zA-Z\\d]{30,200}$";
 
-    public static final String BCRYPT_SALT = "^[a-zA-Z\\d\\x21-\\x2F\\x3A\\x-40\\x5B-\\x60]{22}$";
+    public static final String BCRYPT_SALT = "^[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{22}$";
 
     public static final String MESSAGE = "^[\\x20-\\xFF]{1,200}$";
 
@@ -176,7 +176,10 @@ public class Regexes {
 
         Matcher m = Regexes.TYPE.matcher(command);
         if(m.find()) {
-            switch (m.group("type")) {
+            String type = m.group("type");
+            result.put("type", type);
+
+            switch (type) {
                 case "REGISTER":
                     result.putAll(decomposeRegister(command));
                     break;

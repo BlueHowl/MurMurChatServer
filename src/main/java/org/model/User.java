@@ -5,6 +5,7 @@ import org.model.exceptions.InvalidUserException;
 import org.utils.Regexes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -58,9 +59,9 @@ public class User {
      */
     private void checkParameters(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws InvalidUserException {
         if(!Pattern.matches(Regexes.USERNAME, username) ||
-                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations)) ||
-                !Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
-                !Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
+                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations))) //||
+                //!Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
+                //!Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
         {
             throw new InvalidUserException("Valeurs utilisateur invalides");
         }
@@ -154,5 +155,18 @@ public class User {
         } else {
             throw new InvalidUserException("La valeur tag ne respecte pas la syntaxe TAG_DOMAIN");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 }
