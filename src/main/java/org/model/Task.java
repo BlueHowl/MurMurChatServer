@@ -1,5 +1,7 @@
 package org.model;
 
+import java.io.PrintWriter;
+
 /**
  * Interface Task qui permet de récupérer le type de la tache et de l'exécuter
  */
@@ -7,9 +9,9 @@ public class Task {
     private int id;
     private String type;
     private String source;
-    private String destination;
+    private PrintWriter destination;
     private String status;
-    public Task(int id, String type, String source, String destination, String status) {
+    public Task(int id, String type, String source, PrintWriter destination, String status) {
         this.id = id;
         this.type = type;
         this.source = source;
@@ -25,22 +27,7 @@ public class Task {
         return type;
     }
 
-    /**
-     * Cette méthode retourne les informations de transit de la tâches
-     * @return un array source-> destination de la tâche
-     */
-    public String[] getTransitInfos() {
-        return new String[] { source, destination };
-    }
-
-    /**
-     * Cette méthode permet d'exécuter la tache
-     */
-    public void execute() {
-
-    }
-
-    public enum Types {
-        
+    public PrintWriter getDestination() {
+        return destination;
     }
 }

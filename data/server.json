@@ -1,0 +1,13 @@
+{
+  "CurrentDomain": "server1.godswila.guru",
+  "SaltSizeInBytes": 16,
+  "MulticastAddress": "224.1.1.255",
+  "MulticastPort": 23502,
+  "UnicastPort": 23846,
+  "RelayPort": 23847,
+  "NetworkInterface": "eth12",
+  "Base64AES": "P3FXqAUgfhy5cTjYdWlPQBJ/d6fdpbR88YsDPWPbo14\u003d",
+  "Tls": false,
+  "Users": [],
+  "Tags": []
+}

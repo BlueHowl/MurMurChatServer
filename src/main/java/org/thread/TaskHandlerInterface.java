@@ -1,17 +1,16 @@
 package org.thread;
 
-import org.model.Task;
+import java.io.PrintWriter;
 
 /**
  * Interface TaskList
  * Permet de récupérer les taches à exécuter
  */
-public interface TaskListInterface {
-
+public interface TaskHandlerInterface {
     /**
      * Cette méthode permet de récupérer la tache suivante à exécuter
      * @return Task retourne null si plus de tache à exécuter
      */
-    Task getTask();
-
+     void processTask(String line, PrintWriter destination);
+     void createHello(PrintWriter destination);
 }

@@ -1,7 +1,6 @@
 package org.task;
 
 import org.model.Task;
-import org.thread.TaskListInterface;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -11,7 +10,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * elle permet de créer des taches
  * elle permet de récupérer la tache suivante à exécuter à l'aide de la méthode getTask()
  */
-public class TaskList implements TaskListInterface {
+public class TaskList {
     private final Queue<Task> tasks;
 
     /**
@@ -27,7 +26,7 @@ public class TaskList implements TaskListInterface {
      * @param task (Task) tache
      */
     public void addTask(Task task) {
-         tasks.add(task); //TODO offer() ?
+         tasks.add(task);
     }
 
     /**
@@ -35,10 +34,7 @@ public class TaskList implements TaskListInterface {
      * à l'aide du poll() qui va récupérer la tache et la retirer de la queue
      * @return Task retourne null si la queue est vide
      */
-    @Override
     public Task getTask() {
         return tasks.poll();
     }
-
-
 }

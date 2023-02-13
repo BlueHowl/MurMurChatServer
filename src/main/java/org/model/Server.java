@@ -154,8 +154,18 @@ public class Server {
      * Ajoute un utilisateur à la liste des utilisateurs du serveur
      * @param user (User) utilisateur
      */
-    public void addUser(User user) {
-        users.add(user);
+    public void addUser(User user) throws InvalidUserException{
+        if (userExist(user)) users.add(user);
+        else throw new InvalidUserException("L'utilisateur est déjà existant");
+    }
+
+    /**
+     * Vérifie si l'utilisateur est déjà un compte connu
+     * @param user le compte
+     * @return vrai s'il l'utilisateur est existant
+     */
+    private boolean userExist(User user) {
+        return users.contains(user);
     }
 
     /**

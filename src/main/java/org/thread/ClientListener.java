@@ -1,6 +1,5 @@
 package org.thread;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,22 +7,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//TODO thread ou pas ?
 public class ClientListener implements Runnable {
     private List<ClientRunnable> clientsList;
 
     private Socket client;
 
-    private TaskFactoryInterface taskFactoryInterface;
+    private TaskHandlerInterface taskHandlerInterface;
 
     private int port;
 
     private boolean isStarted = false;
     private boolean isConnected = false;
 
-    public ClientListener(TaskFactoryInterface taskFactoryInterface, int port) {
+    public ClientListener(TaskHandlerInterface taskHandlerInterface, int port) {
         clientsList = Collections.synchronizedList(new ArrayList<>());
-        this.taskFactoryInterface = taskFactoryInterface;
+        this.taskHandlerInterface = taskHandlerInterface;
         this.port = port;
     }
 
@@ -34,14 +32,12 @@ public class ClientListener implements Runnable {
 
             while (true) {
                 client = server.accept();
-                ClientRunnable runnable = new ClientRunnable(client, taskFactoryInterface);
+                ClientRunnable runnable = new ClientRunnable(client, taskHandlerInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
             }
-
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
-
 }

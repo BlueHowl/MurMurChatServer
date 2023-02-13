@@ -1,10 +1,9 @@
 import org.infrastructure.json.JsonRepository;
 import org.model.Server;
 import org.repository.DataInterface;
-import org.task.TaskFactory;
+import org.task.TaskHandler;
 import org.task.TaskList;
 import org.thread.ClientListener;
-import org.thread.MurMurExecutor;
 
 public class App {
 
@@ -13,13 +12,11 @@ public class App {
             Server server =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
-            TaskFactory taskFactory = new TaskFactory(taskList);
+            TaskHandler taskHandler = new TaskHandler(taskList, server);
+            (new Thread(taskHandler)).start();
 
-            ClientListener clientListener = new ClientListener(taskFactory, server.getUnicastPort());
+            ClientListener clientListener = new ClientListener(taskHandler, server.getUnicastPort());
             (new Thread(clientListener)).start();
-            MurMurExecutor murMurExecutor = new MurMurExecutor(taskList, server);
-            (new Thread(murMurExecutor)).start();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

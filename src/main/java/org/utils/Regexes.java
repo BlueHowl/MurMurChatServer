@@ -177,7 +177,7 @@ public class Regexes {
         Matcher m = Regexes.TYPE.matcher(command);
         if(m.find()) {
             switch (m.group("type")) {
-                case "Register":
+                case "REGISTER":
                     result.putAll(decomposeRegister(command));
                     break;
 
