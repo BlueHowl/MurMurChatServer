@@ -1,6 +1,5 @@
 package org.model;
 
-import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 import org.utils.Regexes;
 
@@ -12,15 +11,15 @@ import java.util.regex.Pattern;
  * Data class de mémorisation des informations utilisateur
  */
 public class User {
-    private String username;
+    private final String username;
 
-    private int bcryptRotations;
+    private final int bcryptRotations;
 
-    private String bcryptSalt;
+    private final String bcryptSalt;
 
-    private String bcryptHash;
+    private final String bcryptHash;
 
-    private List<String> followers;
+    private final List<String> followers;
 
     private List<String> userTags;
 

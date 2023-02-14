@@ -81,7 +81,7 @@ public class Regexes {
             result.put("bcryptround", m.group("bcryptround"));
             result.put("bcryptsalt", bcrypthash.substring(0, saltsize));
             result.put("bcrypthash", bcrypthash.substring(saltsize));
-            System.out.printf("REGISTER : (Username: %s, BcryptRound: %s, BcryptHash: %s, Bcryptsalt: %s)", m.group("username"), m.group("bcryptround"), result.get("bcrypthash"), result.get("bcryptsalt")); //todo debug
+            System.out.printf("REGISTER : (Username: %s, BcryptRound: %s, BcryptHash: %s, Bcryptsalt: %s)\n", m.group("username"), m.group("bcryptround"), result.get("bcrypthash"), result.get("bcryptsalt")); //todo debug
         }
 
         return result;
@@ -99,7 +99,7 @@ public class Regexes {
         if(m.find()) {
             result.put("username", m.group("username"));
 
-            System.out.printf("CONNECT : (Username: %s)", m.group("username")); //todo debug
+            System.out.printf("CONNECT : (Username: %s)\n", m.group("username")); //todo debug
         }
 
         return result;
@@ -117,7 +117,7 @@ public class Regexes {
         if(m.find()) {
             result.put("sha3hex", m.group("sha3hex"));
 
-            System.out.printf("CONFIRM : (Sha3hex: %s)", m.group("sha3hex")); //todo debug
+            System.out.printf("CONFIRM : (Sha3hex: %s)\n", m.group("sha3hex")); //todo debug
         }
 
         return result;

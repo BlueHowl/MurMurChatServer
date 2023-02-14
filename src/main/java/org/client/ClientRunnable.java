@@ -26,12 +26,11 @@ public class ClientRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            String line;
-            do {
-                line = in.readLine();
-
+            String line = in.readLine();
+            while (line != null) {
                 taskHandlerInterface.createTask(line, this);
-            } while (line != null);
+                line = in.readLine();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

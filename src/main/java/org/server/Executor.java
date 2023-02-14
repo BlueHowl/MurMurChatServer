@@ -53,7 +53,6 @@ public class Executor implements Runnable{
                 client.sendMessage(String.format(Queries.HELLO, server.getCurrentDomain(), key));
                 break;
             case "REGISTER":
-                //TODO si on check l'utilisateur avant de créer l'objet meilleur pratique
                 try {
                     User user = new User(commandMap.get("username"), Integer.parseInt(commandMap.get("bcryptround")),
                             commandMap.get("bcryptsalt"), commandMap.get("bcrypthash"), new ArrayList<>(),
@@ -61,10 +60,28 @@ public class Executor implements Runnable{
                     server.addUser(user);
                     dataInterface.saveServerSettings(server);
                     client.sendMessage(String.format(Queries.OK, "Le compte est enregistré"));
+                    System.out.println("Compte enregistré");
                 } catch (InvalidUserException | NotSavedException ex) {
-                    client.sendMessage(String.format(Queries.ERR, "Erreur lors de l'enregistrement"));
+                    client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
+                    System.out.println("Erreur envoyé, erreur d'enregistrement");
                 }
+                break;
             case "CONNECT":
+                try {
+                    User user = server.findUser(commandMap.get("username"));
+                    client.sendMessage(String.format(Queries.PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
+                } catch (InvalidUserException ex) {
+                    client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
+                }
+                break;
+            case "CONFIRM":
+
+                break;
+            case "MSG":
+                break;
+            case "FOLLOW":
+                break;
+            case "DISCONNECT":
                 break;
         }
     }

@@ -7,6 +7,7 @@ import org.utils.Regexes;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -165,7 +166,14 @@ public class Server {
      * @return vrai s'il l'utilisateur est existant
      */
     private boolean userExist(User user) {
-        return users.contains(user);
+        return users.stream().anyMatch(n -> n.getUsername().equals(user.getUsername()));
+    }
+
+    public User findUser(String username) throws InvalidUserException {
+        Optional<User> u = users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
+        if (u.isPresent())
+            return u.get();
+        else throw new InvalidUserException("Le compte n'existe pas");
     }
 
     /**
