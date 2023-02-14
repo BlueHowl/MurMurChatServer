@@ -10,6 +10,9 @@ import org.repository.exceptions.NotSavedException;
 import org.utils.Queries;
 import org.utils.RandomStringUtil;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,6 +25,7 @@ public class Executor implements Runnable{
     private final Server server;
 
     private final DataInterface dataInterface;
+    private String key;
 
     public Executor(TaskList taskList, Server server, DataInterface dataInterface) {
         this.taskList = taskList;
@@ -49,7 +53,7 @@ public class Executor implements Runnable{
 
         switch(commandMap.get("type")) {
             case "HELLO":
-                String key = RandomStringUtil.generateString(RANDOM22SIZE);
+                key = RandomStringUtil.generateString(RANDOM22SIZE);
                 client.sendMessage(String.format(Queries.HELLO, server.getCurrentDomain(), key));
                 break;
             case "REGISTER":
@@ -61,6 +65,7 @@ public class Executor implements Runnable{
                     dataInterface.saveServerSettings(server);
                     client.sendMessage(String.format(Queries.OK, "Le compte est enregistré"));
                     System.out.println("Compte enregistré");
+                    client.setUser(user);
                 } catch (InvalidUserException | NotSavedException ex) {
                     client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
                     System.out.println("Erreur envoyé, erreur d'enregistrement");
@@ -70,11 +75,29 @@ public class Executor implements Runnable{
                 try {
                     User user = server.findUser(commandMap.get("username"));
                     client.sendMessage(String.format(Queries.PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
+                    client.setUser(user);
                 } catch (InvalidUserException ex) {
                     client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
                 }
+                System.out.println("Sending PARAM");
                 break;
             case "CONFIRM":
+                User user = client.getUser();
+                String sha3hex = commandMap.get("sha3hex");
+                String comparable;
+                try {
+                    MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+                    byte[] hash = digest.digest((key + "$2b$" + user.getBcryptRotations() + "$" + user.getBcryptSalt() + user.getBcryptHash()).getBytes(StandardCharsets.UTF_8));
+                    comparable = bytesToHex(hash);
+                    if (sha3hex.equals(comparable)) {
+                        client.sendMessage(String.format(Queries.OK, "Welcome!"));
+                        System.out.println("Sending +OK");
+                    } else
+                        client.sendMessage(String.format(Queries.ERR, "Wrong password"));
+                        System.out.println("Sending -ERR: Wrong password!");
+                } catch (NoSuchAlgorithmException ex) {
+                    client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
+                }
 
                 break;
             case "MSG":
@@ -84,5 +107,15 @@ public class Executor implements Runnable{
             case "DISCONNECT":
                 break;
         }
+    }
+
+    private String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte h : hash) {
+            String hex = Integer.toHexString(0xff & h);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }

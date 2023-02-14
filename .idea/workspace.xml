@@ -4,15 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Task Update #1">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Confirm added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ServerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TaskFactoryInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/TaskFactoryInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/ressources/NetChooser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/resources/NetChooser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/utils/Queries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/utils/Queries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/TaskFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/TaskFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,6 +104,8 @@
       <recent name="C:\Users\alexi\OneDrive\Documents\HELMo\Reseau\Projet" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.controller" />
+      <recent name="org.server" />
       <recent name="org.model" />
     </key>
   </component>
@@ -119,7 +122,7 @@
       <module name="MurMurProject.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.server.*" />
+          <option name="PATTERN" value="org.controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -177,7 +180,8 @@
       <workItem from="1676074462868" duration="973000" />
       <workItem from="1676232231026" duration="14773000" />
       <workItem from="1676379158952" duration="6901000" />
-      <workItem from="1676387579251" duration="4211000" />
+      <workItem from="1676387579251" duration="5410000" />
+      <workItem from="1676400819222" duration="6647000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -263,7 +267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676247015341</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Connect added">
+      <created>1676391863529</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1676391863529</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,6 +304,8 @@
     <MESSAGE value="HELLO &amp; REGISTER" />
     <MESSAGE value="update #1" />
     <MESSAGE value="Task Update #1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Task Update #1" />
+    <MESSAGE value="Connect added" />
+    <MESSAGE value="Confirm added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Confirm added" />
   </component>
 </project>

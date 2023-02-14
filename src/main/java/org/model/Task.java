@@ -1,13 +1,7 @@
 package org.model;
 
 import org.client.ClientRunnable;
-import org.model.exceptions.InvalidUserException;
-import org.repository.exceptions.NotSavedException;
-import org.utils.Queries;
-import org.utils.RandomStringUtil;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -19,10 +13,10 @@ public class Task {
     private final ClientRunnable client;
     private String status;
 
-    public Task(int id, Map<String, String> commandMap, ClientRunnable client, String status) {
+    public Task(int id, Map<String, String> commandMap, ClientRunnable clientRunnable, String status) {
         this.id = id;
         this.commandMap = commandMap;
-        this.client = client;
+        this.client = clientRunnable;
         this.status = status;
     }
 

@@ -1,4 +1,4 @@
-package org.ressources;
+package org.resources;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

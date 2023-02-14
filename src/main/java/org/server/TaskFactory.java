@@ -18,11 +18,11 @@ public class TaskFactory implements TaskFactoryInterface {
     /**
      * Crée une tache sur base d'une commande et du thread client concerné
      * @param command (String)
-     * @param client (ClientRunnable)
+     * @param clientRunnable (ClientRunnable)
      */
-    public synchronized void createTask(String command, ClientRunnable client) {
+    public synchronized void createTask(String command, ClientRunnable clientRunnable) {
         Map<String, String> commandInfos = Regexes.decomposeCommand(command);
-        taskList.addTask(new Task(++idCountTasks, commandInfos, client, "pending"));
+        taskList.addTask(new Task(++idCountTasks, commandInfos, clientRunnable, "pending"));
     }
 
 }

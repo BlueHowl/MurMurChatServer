@@ -1,5 +1,7 @@
 package org.client;
 
+import org.model.User;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +12,7 @@ public class ClientRunnable implements Runnable {
     private BufferedReader in;
     private PrintWriter out;
     private final TaskFactoryInterface taskHandlerInterface;
+    private User user = null;
 
     public ClientRunnable (Socket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
@@ -22,6 +25,7 @@ public class ClientRunnable implements Runnable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
     }
     @Override
     public void run() {
@@ -42,5 +46,13 @@ public class ClientRunnable implements Runnable {
      */
     public void sendMessage(String command) {
         out.println(command);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

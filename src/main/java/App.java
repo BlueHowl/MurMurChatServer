@@ -4,7 +4,7 @@ import org.repository.DataInterface;
 import org.server.Executor;
 import org.server.TaskFactory;
 import org.server.TaskList;
-import org.client.ClientListener;
+import org.client.ServerManager;
 
 public class App {
 
@@ -15,8 +15,8 @@ public class App {
             TaskList taskList = new TaskList();
             TaskFactory taskFactory = new TaskFactory(taskList);
 
-            ClientListener clientListener = new ClientListener(taskFactory, server.getUnicastPort());
-            (new Thread(clientListener)).start();
+            ServerManager serverManager = new ServerManager(taskFactory, server.getUnicastPort());
+            (new Thread(serverManager)).start();
             Executor executor = new Executor(taskList, server, dataInterface);
             (new Thread(executor)).start();
         } catch (Exception e) {
