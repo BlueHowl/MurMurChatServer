@@ -1,4 +1,4 @@
-package org.task;
+package org.server;
 
 import org.model.Task;
 

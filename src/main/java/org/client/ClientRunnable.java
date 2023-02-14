@@ -1,4 +1,4 @@
-package org.thread;
+package org.client;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,16 +9,16 @@ public class ClientRunnable implements Runnable {
     private final Socket client;
     private BufferedReader in;
     private PrintWriter out;
-    private final TaskHandlerInterface taskHandlerInterface;
+    private final TaskFactoryInterface taskHandlerInterface;
 
-    public ClientRunnable (Socket client, TaskHandlerInterface taskHandlerInterface) {
+    public ClientRunnable (Socket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
         this.taskHandlerInterface = taskHandlerInterface;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
-            taskHandlerInterface.createHello(out);
+            taskHandlerInterface.createTask("HELLO ",this);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -30,10 +30,18 @@ public class ClientRunnable implements Runnable {
             do {
                 line = in.readLine();
 
-                taskHandlerInterface.processTask(line, out);
+                taskHandlerInterface.createTask(line, this);
             } while (line != null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Permet de renvoyer une commande au client
+     * @param command (String) Commande
+     */
+    public void sendMessage(String command) {
+        out.println(command);
     }
 }

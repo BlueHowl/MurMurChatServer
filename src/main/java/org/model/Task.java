@@ -1,33 +1,52 @@
 package org.model;
 
+import org.client.ClientRunnable;
+import org.model.exceptions.InvalidUserException;
+import org.repository.exceptions.NotSavedException;
+import org.utils.Queries;
+import org.utils.RandomStringUtil;
+
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Interface Task qui permet de récupérer le type de la tache et de l'exécuter
  */
 public class Task {
-    private int id;
-    private String type;
-    private String source;
-    private PrintWriter destination;
+    private final int id;
+    private final Map<String, String> commandMap;
+    private final ClientRunnable client;
     private String status;
-    public Task(int id, String type, String source, PrintWriter destination, String status) {
+
+    public Task(int id, Map<String, String> commandMap, ClientRunnable client, String status) {
         this.id = id;
-        this.type = type;
-        this.source = source;
-        this.destination = destination;
+        this.commandMap = commandMap;
+        this.client = client;
         this.status = status;
     }
 
     /**
-     * Cette méthode permet de récupérer le type de la tache
-     * @return le type de la tâche
+     * Récupère la map des valeurs de la commande associée
+     * @return (Map<String, String>) commandMap
      */
-    public String getType() {
-        return type;
+    public Map<String, String> getCommandMap() {
+        return commandMap;
     }
 
-    public PrintWriter getDestination() {
-        return destination;
+    /**
+     * Récupère le thread client
+     * @return (ClientRunnable)
+     */
+    public ClientRunnable getClient() {
+        return client;
+    }
+
+    /**
+     * Récupère le status de la tache
+     * @return (String)
+     */
+    public String getStatus() {
+        return status;
     }
 }

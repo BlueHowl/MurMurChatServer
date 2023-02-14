@@ -1,4 +1,4 @@
-package org.thread;
+package org.client;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,14 +12,14 @@ public class ClientListener implements Runnable {
 
     private Socket client;
 
-    private TaskHandlerInterface taskHandlerInterface;
+    private TaskFactoryInterface taskHandlerInterface;
 
     private int port;
 
     private boolean isStarted = false;
     private boolean isConnected = false;
 
-    public ClientListener(TaskHandlerInterface taskHandlerInterface, int port) {
+    public ClientListener(TaskFactoryInterface taskHandlerInterface, int port) {
         clientsList = Collections.synchronizedList(new ArrayList<>());
         this.taskHandlerInterface = taskHandlerInterface;
         this.port = port;

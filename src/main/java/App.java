@@ -1,9 +1,10 @@
 import org.infrastructure.json.JsonRepository;
 import org.model.Server;
 import org.repository.DataInterface;
-import org.task.TaskHandler;
-import org.task.TaskList;
-import org.thread.ClientListener;
+import org.server.Executor;
+import org.server.TaskFactory;
+import org.server.TaskList;
+import org.client.ClientListener;
 
 public class App {
 
@@ -12,11 +13,12 @@ public class App {
             Server server =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
-            TaskHandler taskHandler = new TaskHandler(taskList, server, dataInterface);
-            (new Thread(taskHandler)).start();
+            TaskFactory taskFactory = new TaskFactory(taskList);
 
-            ClientListener clientListener = new ClientListener(taskHandler, server.getUnicastPort());
+            ClientListener clientListener = new ClientListener(taskFactory, server.getUnicastPort());
             (new Thread(clientListener)).start();
+            Executor executor = new Executor(taskList, server, dataInterface);
+            (new Thread(executor)).start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
