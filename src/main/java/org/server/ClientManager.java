@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ServerManager implements Runnable {
+public class ClientManager implements Runnable {
     private List<ClientRunnable> clientsList;
 
     private Socket client;
@@ -22,7 +22,7 @@ public class ServerManager implements Runnable {
     private boolean isStarted = false;
     private boolean isConnected = false;
 
-    public ServerManager(TaskFactoryInterface taskHandlerInterface, int port) {
+    public ClientManager(TaskFactoryInterface taskHandlerInterface, int port) {
         clientsList = Collections.synchronizedList(new ArrayList<>());
         this.taskHandlerInterface = taskHandlerInterface;
         this.port = port;

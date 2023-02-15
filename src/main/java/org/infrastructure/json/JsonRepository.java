@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import org.infrastructure.dto.ServerDTO;
-import org.model.Server;
+import org.model.ServerSettings;
 import org.model.exceptions.InvalidServerSettingsException;
 import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
@@ -61,7 +61,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws NotRetrievedException Impossible de récupérer les paramètres et utilisateurs du serveur
      */
     @Override
-    public Server getServerSettings() throws NotRetrievedException {
+    public ServerSettings getServerSettings() throws NotRetrievedException {
         try(Reader reader = new BufferedReader(new FileReader(jsonPath))) {
             Type serverDtoType = new TypeToken<ServerDTO>(){}.getType();
             return DtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
@@ -78,7 +78,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
      * @throws NotSavedException Impossible de sauvegarder les paramètres et utilisateurs du serveur
      */
     @Override
-    public void saveServerSettings(Server serverSettings) throws NotSavedException {
+    public void saveServerSettings(ServerSettings serverSettings) throws NotSavedException {
         try(FileWriter fw = new FileWriter(jsonPath, StandardCharsets.UTF_8)) {
             gson.toJson(DtoMapper.SeverSettingsToDto(serverSettings), fw);
         } catch (JsonIOException | IOException e) {

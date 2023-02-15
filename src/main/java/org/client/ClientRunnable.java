@@ -55,4 +55,8 @@ public class ClientRunnable implements Runnable {
     public User getUser() {
         return user;
     }
+
+    public String getUsername() {
+        return user.getUsername();
+    }
 }
