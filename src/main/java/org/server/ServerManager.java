@@ -3,6 +3,9 @@ package org.server;
 import org.client.ClientRunnable;
 import org.client.TaskFactoryInterface;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,8 +15,6 @@ import java.util.List;
 
 public class ServerManager implements Runnable {
     private List<ClientRunnable> clientsList;
-
-    private Socket client;
 
     private TaskFactoryInterface taskHandlerInterface;
 
@@ -30,11 +31,12 @@ public class ServerManager implements Runnable {
 
     @Override
     public void run() {
-        try (ServerSocket server = new ServerSocket(port)) {
+        SSLServerSocketFactory sslssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        try (SSLServerSocket server = (SSLServerSocket) sslssf.createServerSocket(port)) {
             System.out.println("Démarrage du serveur sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {
-                client = server.accept();
+                final SSLSocket client = (SSLSocket) server.accept();
                 ClientRunnable runnable = new ClientRunnable(client, taskHandlerInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();

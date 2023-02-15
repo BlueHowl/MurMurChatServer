@@ -2,19 +2,21 @@ package org.client;
 
 import org.model.User;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ClientRunnable implements Runnable {
 
-    private final Socket client;
+    private final SSLSocket client;
     private BufferedReader in;
     private PrintWriter out;
     private final TaskFactoryInterface taskHandlerInterface;
     private User user = null;
 
-    public ClientRunnable (Socket client, TaskFactoryInterface taskHandlerInterface) {
+    public ClientRunnable (SSLSocket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
         this.taskHandlerInterface = taskHandlerInterface;
 

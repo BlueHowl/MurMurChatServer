@@ -4,21 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="fast push #1">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="add des certificats">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_12_18__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_12_18__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_14_34__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_14_34__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/ServerManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="CodeInsightWorkspaceSettings">
-    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -28,9 +29,6 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <task path="$PROJECT_DIR$">
-          <activation />
-        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -48,28 +46,14 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <favorite-branches>
-      <branch-storage>
-        <map>
-          <entry type="LOCAL">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="dev_samuel" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -83,33 +67,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alexi\OneDrive\Documents\HELMo\Reseau\Projet" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.controller" />
-      <recent name="org.server" />
-      <recent name="org.model" />
     </key>
   </component>
   <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="MurMurProject.main" />
+      <option name="PROGRAM_PARAMETERS" value="src/star.godswila.guru.p12 labo2023" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -119,7 +93,7 @@
       <module name="MurMurProject.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.controller.*" />
+          <option name="PATTERN" value="org.server.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -127,33 +101,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MurMurProject [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="dependencies" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+    <list>
+      <item itemvalue="Application.App" />
+      <item itemvalue="Application.Server" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.App" />
-        <item itemvalue="Gradle.MurMurProject [dependencies]" />
-        <item itemvalue="Application.Server" />
-        <item itemvalue="Application.Server" />
         <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
@@ -169,18 +123,7 @@
       <workItem from="1675878025044" duration="810000" />
       <workItem from="1675878852570" duration="1110000" />
       <workItem from="1675880152509" duration="2788000" />
-      <workItem from="1675889009407" duration="4179000" />
-      <workItem from="1675893937599" duration="1441000" />
-      <workItem from="1675935351703" duration="446000" />
-      <workItem from="1676029713422" duration="2641000" />
-      <workItem from="1676034781217" duration="10387000" />
-      <workItem from="1676074462868" duration="973000" />
-      <workItem from="1676232231026" duration="14773000" />
-      <workItem from="1676379158952" duration="6901000" />
-      <workItem from="1676387579251" duration="5410000" />
-      <workItem from="1676400819222" duration="6686000" />
-      <workItem from="1676445416113" duration="5491000" />
-      <workItem from="1676452280956" duration="6253000" />
+      <workItem from="1676482645488" duration="1250000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -196,98 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675878612214</updated>
     </task>
-    <task id="LOCAL-00003" summary="Ajout de la liste de taches (TaskList) et du MurMurExecutor">
-      <created>1675895152326</created>
+    <task id="LOCAL-00003" summary="add des certificats">
+      <created>1676470261845</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1675895152326</updated>
+      <updated>1676470261845</updated>
     </task>
-    <task id="LOCAL-00004" summary="Ajout des taches MsgsMessageTask et SendMessageTask">
-      <created>1675895391728</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1675895391728</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Task class">
-      <created>1676024914576</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1676024914576</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Avancement tasks">
-      <created>1676025976616</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1676025976616</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Avancement 2 tasks">
-      <created>1676028575422</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1676028575422</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Ajout App">
-      <created>1676036480663</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1676036480663</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Changement server">
-      <created>1676040144189</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1676040144189</updated>
-    </task>
-    <task id="LOCAL-00010" summary="HELLO &amp; REGISTER">
-      <created>1676041412377</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1676041412377</updated>
-    </task>
-    <task id="LOCAL-00011" summary="update #1">
-      <created>1676046247763</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1676046247763</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Task Update #1">
-      <created>1676247015341</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1676247015341</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Connect added">
-      <created>1676391863529</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1676391863529</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Confirm added">
-      <created>1676411256200</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1676411256200</updated>
-    </task>
-    <task id="LOCAL-00015" summary="fast push #1">
-      <created>1676452394608</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1676452394608</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -298,40 +157,17 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
     <MESSAGE value="Ajout serveur" />
-    <MESSAGE value="Ajout de la liste de taches (TaskList) et du MurMurExecutor" />
-    <MESSAGE value="Ajout des taches MsgsMessageTask et SendMessageTask" />
-    <MESSAGE value="Task class" />
-    <MESSAGE value="Avancement tasks" />
-    <MESSAGE value="Avancement 2 tasks" />
-    <MESSAGE value="Ajout App" />
-    <MESSAGE value="Changement server" />
-    <MESSAGE value="HELLO &amp; REGISTER" />
-    <MESSAGE value="update #1" />
-    <MESSAGE value="Task Update #1" />
-    <MESSAGE value="Connect added" />
-    <MESSAGE value="Confirm added" />
-    <MESSAGE value="fast push #1" />
-    <option name="LAST_COMMIT_MESSAGE" value="fast push #1" />
+    <MESSAGE value="add des certificats" />
+    <option name="LAST_COMMIT_MESSAGE" value="add des certificats" />
   </component>
 </project>
