@@ -67,6 +67,7 @@ public class Executor implements Runnable{
                 confirm(commandMap, client);
                 break;
             case "MSG":
+                msg(commandMap, client);
                 break;
             case "FOLLOW":
                 follow(commandMap, client);
@@ -138,23 +139,30 @@ public class Executor implements Runnable{
         if (commandMap.get("name") != null) {
             try {
                 User followedUser = server.findUser(commandMap.get("name"));
-                server.addFollowerToUser(followedUser, client.getUser().getUsername());
+                server.addFollowerToUser(followedUser, client.getUsername());
             } catch (InvalidUserException ex) {
                 System.out.println("Le compte n'existe pas");
             }
         } else {
             String followedTagString = commandMap.get("tag");
             if (server.tagExists(followedTagString)) {
-
-            } else {
                 try {
-                    Tag newTag = new Tag(followedTagString, new ArrayList<>());
-                    newTag.addFollower(client.getUser().getUsername()+"@"+domain);
-                    client.getUser().addUserTag(newTag.getTag()+"@"+domain);
+                    Tag tag = server.findTag(followedTagString);
+                    server.addFollowerToTag(tag, client.getUsername());
+                    server.addUserTagToUser(client.getUser(), followedTagString);
                 } catch (InvalidTagException ex) {
 
                 }
 
+            } else {
+                try {
+                    Tag newTag = new Tag(followedTagString, new ArrayList<>());
+                    server.addTag(newTag);
+                    server.addFollowerToTag(newTag, client.getUsername());
+                    server.addUserTagToUser(client.getUser(), followedTagString);
+                } catch (InvalidTagException ex) {
+
+                }
             }
         }
         System.out.println("Follow reçu");

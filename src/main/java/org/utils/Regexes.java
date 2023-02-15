@@ -52,6 +52,8 @@ public class Regexes {
 
     public static final Pattern FOLLOW = Pattern.compile("^[F][O][L][L][O][W][\\x20]((?<tag>[#][a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))[@](?<domain>[a-zA-Z\\d.]{5,200})$");
 
+    private static final Pattern HASHTAG = Pattern.compile("(#[a-zA-Z\\d]{5,20})");
+
     //multicast
     //Unicast (séparé pour reconnaitre les deux séparément)
     public static final Pattern SEND_NAME = Pattern.compile("[S][E][N][D][\\x20](?<iddomain>[\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain2>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<internalmessage>[\\x20-\\xFF]{1,500})");

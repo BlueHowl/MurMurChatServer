@@ -190,6 +190,13 @@ public class Server {
         return tags.stream().anyMatch(t -> t.getTag().equals(tag));
     }
 
+    public Tag findTag(String tag) throws InvalidTagException {
+        Optional<Tag> correctTag = tags.stream().filter(t -> t.getTag().equals(tag)).findFirst();
+        if (correctTag.isPresent())
+            return correctTag.get();
+        else throw new InvalidTagException("Le tag n'existe pas");
+    }
+
     /**
      * Ajoute un follower à un utilisateur du serveur   !peut changer
      * @param user (User) utilisateur de la liste des utilisateurs du serveur
