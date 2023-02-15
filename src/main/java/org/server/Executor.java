@@ -5,6 +5,7 @@ import org.model.ServerSettings;
 import org.model.Tag;
 import org.model.Task;
 import org.model.User;
+import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
@@ -29,7 +30,7 @@ public class Executor implements Runnable{
 
     private final TaskList taskList;
 
-    private final Server server;
+    private final ServerSettings server;
 
     private final DataInterface dataInterface;
     private String key;

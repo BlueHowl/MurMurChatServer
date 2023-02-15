@@ -1,5 +1,6 @@
 package org.model;
 
+import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -9,7 +10,7 @@ import java.util.Optional;
 /**
  * Classe de stockage des paramètres serveurs et des utilisateurs et tags
  */
-public class Server {
+public class ServerSettings {
     //todo enlever les param serveur si directement assignables  + renommer Server et changer l'ancienne classe serveur ?
     private final String currentDomain;
     private final int saltSizeInBytes;
@@ -23,7 +24,7 @@ public class Server {
     private final List<User> users;
     private final List<Tag> tags;
 
-    public Server(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -168,6 +169,13 @@ public class Server {
 
     public boolean tagExists(String tag) {
         return tags.stream().anyMatch(t -> t.getTag().equals(tag));
+    }
+
+    public Tag findTag(String tag) throws InvalidTagException {
+        Optional<Tag> correctTag = tags.stream().filter(t -> t.getTag().equals(tag)).findFirst();
+        if (correctTag.isPresent())
+            return correctTag.get();
+        else throw new InvalidTagException("Le tag n'existe pas");
     }
 
     /**
