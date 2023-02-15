@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Confirm added">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="fast push #1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,6 +180,7 @@
       <workItem from="1676387579251" duration="5410000" />
       <workItem from="1676400819222" duration="6686000" />
       <workItem from="1676445416113" duration="5491000" />
+      <workItem from="1676452280956" duration="6253000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -276,7 +280,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676411256200</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="fast push #1">
+      <created>1676452394608</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1676452394608</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -287,7 +298,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -308,6 +331,7 @@
     <MESSAGE value="Task Update #1" />
     <MESSAGE value="Connect added" />
     <MESSAGE value="Confirm added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Confirm added" />
+    <MESSAGE value="fast push #1" />
+    <option name="LAST_COMMIT_MESSAGE" value="fast push #1" />
   </component>
 </project>

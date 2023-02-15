@@ -1,5 +1,6 @@
 package org.model;
 
+import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 import org.utils.Regexes;
 
@@ -147,12 +148,12 @@ public class User {
      * @param tag (String) tag
      * @throws InvalidUserException Exception lancée lorsque le champ follower ne respecte pas l syntaxe
      */
-    public void addUserTag(String tag) throws InvalidUserException {
+    public void addUserTag(String tag) throws InvalidTagException {
         if(Pattern.matches(Regexes.TAG_DOMAIN, tag))
         {
             userTags.add(tag);
         } else {
-            throw new InvalidUserException("La valeur tag ne respecte pas la syntaxe TAG_DOMAIN");
+            throw new InvalidTagException("La valeur tag ne respecte pas la syntaxe TAG_DOMAIN");
         }
     }
 
