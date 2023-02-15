@@ -15,11 +15,11 @@ public class Regexes {
 
     public static final String ROUND_OR_SALT_SIZE = "^\\d{2}$";
 
-    public static final String BCRYPT_HASH = "^[$][2][b][$]\\d{2}[$][a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70}$";
-
     public static final String SHA3_HEX ="^[a-zA-Z\\d]{30,200}$";
 
     public static final String BCRYPT_SALT = "^[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{22}$";
+
+    public static final String BCRYPT_HASH = "^[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{31}$";
 
     public static final String MESSAGE = "^[\\x20-\\xFF]{1,200}$";
 
@@ -27,7 +27,7 @@ public class Regexes {
 
     public static final String USERNAME = "^[a-zA-Z\\d]{5,20}$";
 
-    public static final String TAG = "^[#][a-zA-Z\\d]{5,20}$";
+    public static final String TAG = "[#][a-zA-Z\\d]{5,20}";
 
     public static final String NAME_DOMAIN = "^[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
 
@@ -50,9 +50,7 @@ public class Regexes {
 
     public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x20](?<message>[\\x20-\\xFF]{1,200})$");
 
-    //(séparé pour reconnaitre les deux séparément)
-    public static final Pattern FOLLOW_DOMAIN = Pattern.compile("^[F][O][L][L][O][W][\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})$");
-    public static final Pattern FOLLOW_TAG = Pattern.compile("^[F][O][L][L][O][W][\\x20](?<tagdomain>[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})$");
+    public static final Pattern FOLLOW = Pattern.compile("^[F][O][L][L][O][W][\\x20]((?<tag>[#][a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))[@](?<domain>[a-zA-Z\\d.]{5,200})$");
 
     //Multicast
     public static final Pattern ECHO = Pattern.compile("^[E][C][H][O][\\x20](?<port>\\d{1,5})[\\x20](?<domain>[a-zA-Z\\d.]{5,200})");
@@ -149,18 +147,13 @@ public class Regexes {
     private static Map<String, String> decomposeFollow(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.FOLLOW_DOMAIN.matcher(command);
+        Matcher m = Regexes.FOLLOW.matcher(command);
         if(m.find()) {
-            result.put("namedomain", m.group("namedomain"));
+            result.put("name", m.group("name"));
+            result.put("tag", m.group("tag"));
+            result.put("domain", m.group("domain"));
 
-            System.out.printf("FOLLOW NAME_DOMAIN : (NameDomain: %s)", m.group("namedomain")); //todo debug
-        } else {
-            m = Regexes.FOLLOW_TAG.matcher(command);
-            if(m.find()) {
-                result.put("tagdomain", m.group("tagdomain"));
-
-                System.out.printf("FOLLOW TAG_DOMAIN : (TagDomain: %s)", m.group("tagdomain")); //todo debug
-            }
+            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
         }
         return result;
     }

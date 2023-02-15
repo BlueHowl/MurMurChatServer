@@ -13,10 +13,10 @@ public class Task {
     private final ClientRunnable client;
     private String status;
 
-    public Task(int id, Map<String, String> commandMap, ClientRunnable clientRunnable, String status) {
+    public Task(int id, Map<String, String> commandMap, ClientRunnable client, String status) {
         this.id = id;
         this.commandMap = commandMap;
-        this.client = clientRunnable;
+        this.client = client;
         this.status = status;
     }
 
@@ -43,4 +43,5 @@ public class Task {
     public String getStatus() {
         return status;
     }
+
 }

@@ -19,7 +19,7 @@ public class User {
 
     private final String bcryptHash;
 
-    private final List<String> followers;
+    private List<String> followers;
 
     private List<String> userTags;
 
@@ -58,9 +58,9 @@ public class User {
      */
     private void checkParameters(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws InvalidUserException {
         if(!Pattern.matches(Regexes.USERNAME, username) ||
-                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations))) //||
-                //!Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
-                //!Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
+                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations)) ||
+                !Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
+                !Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
         {
             throw new InvalidUserException("Valeurs utilisateur invalides");
         }
