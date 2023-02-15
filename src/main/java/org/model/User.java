@@ -1,12 +1,7 @@
 package org.model;
 
-import org.model.exceptions.InvalidTagException;
-import org.model.exceptions.InvalidUserException;
-import org.utils.Regexes;
-
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Data class de mémorisation des informations utilisateur
@@ -37,9 +32,7 @@ public class User {
      * @param userTags        (List<String>) liste des userTags
      * @param lockoutCounter  (int) lockoutCounter
      */
-    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) throws InvalidUserException {
-        checkParameters(username, bcryptRotations, bcryptSalt, bcryptHash);
-
+    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
@@ -47,24 +40,6 @@ public class User {
         this.followers = followers;
         this.userTags = userTags;
         this.lockoutCounter = lockoutCounter;
-    }
-
-    /**
-     * Méthode qui vérifie les paramètres avec des regex
-     * @param username (String) nom d'utilisateur
-     * @param bcryptRotations (int) rotations bcrypt
-     * @param bcryptSalt (String) Sel bcrypt
-     * @param bcryptHash (String) hash bcrypt
-     * @throws InvalidUserException Exception lancée si une des valeurs ne respecte pas sa syntaxe
-     */
-    private void checkParameters(String username, int bcryptRotations, String bcryptSalt, String bcryptHash) throws InvalidUserException {
-        if(!Pattern.matches(Regexes.USERNAME, username) ||
-                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(bcryptRotations)) ||
-                !Pattern.matches(Regexes.BCRYPT_SALT, bcryptSalt) ||
-                !Pattern.matches(Regexes.BCRYPT_HASH, bcryptHash))
-        {
-            throw new InvalidUserException("Valeurs utilisateur invalides");
-        }
     }
 
 
@@ -132,29 +107,17 @@ public class User {
     /**
      * Ajoute un follower à la liste des followers du tag
      * @param follower (String) follower
-     * @throws InvalidUserException Exception lancée lorsque le champ follower ne respecte pas l syntaxe
      */
-    public void addFollower(String follower) throws InvalidUserException {
-        if(Pattern.matches(Regexes.NAME_DOMAIN, follower))
-        {
-            followers.add(follower);
-        } else {
-            throw new InvalidUserException("La valeur follower ne respecte pas la syntaxe NAME_DOMAIN");
-        }
+    public void addFollower(String follower) {
+        followers.add(follower);
     }
 
     /**
      * Ajoute un tag à la liste des userTags de l'utilisateur
      * @param tag (String) tag
-     * @throws InvalidUserException Exception lancée lorsque le champ follower ne respecte pas l syntaxe
-     */
-    public void addUserTag(String tag) throws InvalidTagException {
-        if(Pattern.matches(Regexes.TAG_DOMAIN, tag))
-        {
-            userTags.add(tag);
-        } else {
-            throw new InvalidTagException("La valeur tag ne respecte pas la syntaxe TAG_DOMAIN");
-        }
+     * */
+    public void addUserTag(String tag) {
+        userTags.add(tag);
     }
 
     @Override
