@@ -1,4 +1,7 @@
-package org.client;
+package org.server;
+
+import org.client.ClientRunnable;
+import org.client.TaskFactoryInterface;
 
 import java.io.IOException;
 import java.net.ServerSocket;

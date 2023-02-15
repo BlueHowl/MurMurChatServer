@@ -11,4 +11,6 @@ public class Queries {
     public static final String OK = "+OK[ %s]\r\n";
     public static final String ERR = "-ERR[ %s]\r\n";
 
+    public static final String ECHO = "ECHO %d %s\r\n";
+
 }

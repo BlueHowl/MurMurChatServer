@@ -1,10 +1,11 @@
 import org.infrastructure.json.JsonRepository;
 import org.model.Server;
+import org.relay.RelayMulticast;
 import org.repository.DataInterface;
 import org.server.Executor;
 import org.server.TaskFactory;
 import org.server.TaskList;
-import org.client.ServerManager;
+import org.server.ServerManager;
 
 public class App {
 
@@ -17,8 +18,11 @@ public class App {
 
             ServerManager serverManager = new ServerManager(taskFactory, server.getUnicastPort());
             (new Thread(serverManager)).start();
+
             Executor executor = new Executor(taskList, server, dataInterface);
             (new Thread(executor)).start();
+
+            new RelayMulticast(server.getMulticastAddress(), server.getMulticastPort(), server.getRelayPort(), server.getCurrentDomain());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
