@@ -92,9 +92,10 @@ public class Executor implements Runnable{
                     if (sha3hex.equals(comparable)) {
                         client.sendMessage(String.format(Queries.OK, "Welcome!"));
                         System.out.println("Sending +OK");
-                    } else
+                    } else{
                         client.sendMessage(String.format(Queries.ERR, "Wrong password"));
                         System.out.println("Sending -ERR: Wrong password!");
+                    }
                 } catch (NoSuchAlgorithmException ex) {
                     client.sendMessage(String.format(Queries.ERR, ex.getMessage()));
                 }
@@ -103,6 +104,21 @@ public class Executor implements Runnable{
             case "MSG":
                 break;
             case "FOLLOW":
+                String tagDomain = commandMap.get("namedomain");
+                int index = tagDomain.indexOf("@");
+                String domain = tagDomain.substring(index+1);
+                if (tagDomain.charAt(0) == '#') {
+                    try {
+                        User followedUser = server.findUser(tagDomain.substring(0, index));
+                        server.addFollowerToUser(followedUser, client.getUser().getUsername());
+                    } catch (InvalidUserException ex) {
+                        System.out.println("Le compte n'existe pas");
+                    }
+                } else {
+                    String followedTagString = tagDomain.substring(1, index);
+
+                }
+                System.out.println("Follow reçu");
                 break;
             case "DISCONNECT":
                 break;

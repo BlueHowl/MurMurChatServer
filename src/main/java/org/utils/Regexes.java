@@ -162,7 +162,6 @@ public class Regexes {
                 System.out.printf("FOLLOW TAG_DOMAIN : (TagDomain: %s)", m.group("tagdomain")); //todo debug
             }
         }
-
         return result;
     }
 
@@ -202,7 +201,6 @@ public class Regexes {
 
             }
         }
-
         return result;
     }
 
