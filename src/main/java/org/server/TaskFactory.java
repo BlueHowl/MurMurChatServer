@@ -11,8 +11,11 @@ public class TaskFactory implements TaskFactoryInterface {
     private int idCountTasks = 0;
     private final TaskList taskList;
 
+    private final Regexes regexes;
+
     public TaskFactory(TaskList taskList) {
         this.taskList = taskList;
+        this.regexes = Regexes.getInstance();
     }
 
     /**
@@ -21,7 +24,7 @@ public class TaskFactory implements TaskFactoryInterface {
      * @param clientRunnable (ClientRunnable)
      */
     public synchronized void createTask(String command, ClientRunnable clientRunnable) {
-        Map<String, String> commandInfos = Regexes.decomposeCommand(command);
+        Map<String, String> commandInfos = regexes.decomposeCommand(command);
         taskList.addTask(new Task(++idCountTasks, commandInfos, clientRunnable, "pending"));
     }
 

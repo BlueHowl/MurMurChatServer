@@ -7,56 +7,21 @@ import java.util.regex.Pattern;
 
 public class Regexes {
 
-    public static final String DOMAIN = "^[a-zA-Z\\d.]{5,200}$";
+    private static Regexes instance;
 
-    public static final String ADDRESS = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
+    private static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)[\\x20]");
 
-    public static final String PORT = "^\\d{1,5}$";
+    private static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 
-    public static final String ROUND_OR_SALT_SIZE = "^\\d{2}$";
+    private static final Pattern REGISTER = Pattern.compile("^REGISTER[\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
 
-    public static final String SHA3_HEX ="^[a-zA-Z\\d]{30,200}$";
+    private static final Pattern CONFIRM = Pattern.compile("^CONFIRM[\\x20](?<sha3hex>[a-zA-Z\\d]{30,200})$");
 
-    public static final String BCRYPT_SALT = "^[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{22}$";
+    private static final Pattern MSG = Pattern.compile("^MSG[\\x20](?<message>[\\x20-\\xFF]{1,200})$");
 
-    public static final String BCRYPT_HASH = "^[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{31}$";
+    private static final Pattern FOLLOW = Pattern.compile("^FOLLOW[\\x20]((?<tag>[#][a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))[@](?<domain>[a-zA-Z\\d.]{5,200})$");
 
-    public static final String MESSAGE = "^[\\x20-\\xFF]{1,200}$";
-
-    public static final String MESSAGE_INTERNE = "^[\\x20-\\xFF]{1,500}$";
-
-    public static final String USERNAME = "^[a-zA-Z\\d]{5,20}$";
-
-    public static final String TAG = "[#][a-zA-Z\\d]{5,20}";
-
-    public static final String NAME_DOMAIN = "^[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
-
-    public static final String TAG_DOMAIN = "^[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200}$";
-
-    public static final String ID_DOMAIN = "^[\\d]{1,5}[@][a-zA-Z\\d.]{5,200}$";
-
-
-    //Received commands matchers pattern
-
-    public static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)[\\x20]");
-
-    public static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
-
-    public static final Pattern REGISTER = Pattern.compile("^[R][E][G][I][S][T][E][R][\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
-
-    public static final Pattern DISCONNECT = Pattern.compile("^[D][I][S][C][O][N][N][E][C][T][\\x0D][\\x0A]$");
-
-    public static final Pattern CONFIRM = Pattern.compile("^[C][O][N][F][I][R][M][\\x20](?<sha3hex>[a-zA-Z\\d]{30,200})$");
-
-    public static final Pattern MSG = Pattern.compile("^[M][S][G][\\x20](?<message>[\\x20-\\xFF]{1,200})$");
-
-    public static final Pattern FOLLOW = Pattern.compile("^[F][O][L][L][O][W][\\x20]((?<tag>[#][a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))[@](?<domain>[a-zA-Z\\d.]{5,200})$");
-
-    //multicast
-    //Unicast (séparé pour reconnaitre les deux séparément)
-    public static final Pattern SEND_NAME = Pattern.compile("[S][E][N][D][\\x20](?<iddomain>[\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain2>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<internalmessage>[\\x20-\\xFF]{1,500})");
-    public static final Pattern SEND_TAG = Pattern.compile("[S][E][N][D][\\x20](?<iddomain>[\\d]{1,5}[@][a-zA-Z\\d.]{5,200})[\\x20](?<namedomain>[a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<tagdomain>[#][a-zA-Z\\d]{5,20}[@][a-zA-Z\\d.]{5,200})[\\x20](?<internalmessage>[\\x20-\\xFF]{1,500})");
-
+    private static final Pattern HASHTAG = Pattern.compile("(#[a-zA-Z\\d]{5,20})");
 
     //Decomposers
 
@@ -65,7 +30,7 @@ public class Regexes {
      * @param command (String) Commande REGISTER
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    private static Map<String, String> decomposeRegister(String command) {
+    private Map<String, String> decomposeRegister(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.REGISTER.matcher(command);
@@ -88,7 +53,7 @@ public class Regexes {
      * @param command (String) Commande CONNECT
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    private static Map<String, String> decomposeConnect(String command) {
+    private Map<String, String> decomposeConnect(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.CONNECT.matcher(command);
@@ -106,7 +71,7 @@ public class Regexes {
      * @param command (String) Commande CONFIRM
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    private static Map<String, String> decomposeConfirm(String command) {
+    private Map<String, String> decomposeConfirm(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.CONFIRM.matcher(command);
@@ -124,10 +89,11 @@ public class Regexes {
      * @param command (String) Commande MSG
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    private static Map<String, String> decomposeMsg(String command) {
+    private Map<String, String> decomposeMsg(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.MSG.matcher(command);
+
         if(m.find()) {
             result.put("message", m.group("message"));
 
@@ -142,7 +108,7 @@ public class Regexes {
      * @param command (String) Commande FOLLOW
      * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
      */
-    private static Map<String, String> decomposeFollow(String command) {
+    private Map<String, String> decomposeFollow(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.FOLLOW.matcher(command);
@@ -157,11 +123,33 @@ public class Regexes {
     }
 
     /**
-     * Décompose la commande et récupère une Map des valeurs
-     * @param command
-     * @return
+     * Décompose un message et récupère les hashtags
+     * @param message (String)
+     * @return String[] tableau de hashtag
      */
-    public static Map<String, String> decomposeCommand(String command) {
+    public String[] decomposeHashtags(String message) {
+        String[] hashtag = {};
+
+        Matcher m = Regexes.HASHTAG.matcher(message);
+        if(m.find()) {
+            hashtag = new String[m.groupCount()];
+
+            for(int i = 0; i < m.groupCount(); ++i) {
+                hashtag[i] = m.group(i);
+            }
+
+            return hashtag;
+        }
+
+        return hashtag;
+    }
+
+    /**
+     * Décompose la commande et récupère une Map des valeurs
+     * @param command (String)
+     * @return (Map<String, String>) valeurs de la commande décomposée
+     */
+    public Map<String, String> decomposeCommand(String command) {
         Map<String, String> result = new HashMap<>();
 
         Matcher m = Regexes.TYPE.matcher(command);
@@ -193,6 +181,13 @@ public class Regexes {
             }
         }
         return result;
+    }
+
+    public static Regexes getInstance() {
+        if (instance == null) {
+            instance = new Regexes();
+        }
+        return instance;
     }
 
 }

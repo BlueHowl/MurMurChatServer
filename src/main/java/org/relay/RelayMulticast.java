@@ -1,7 +1,5 @@
 package org.relay;
 
-import org.utils.Queries;
-
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -11,18 +9,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class RelayMulticast {
-    private final InetAddress multicastIP;
-    private final int relayPort;
-    private final MulticastSocket socketEmission;
-    private final String domain;
 
     public RelayMulticast(String multicastIP, int multicastPort, int relayPort, String domain) throws Exception {
-        this.multicastIP = new InetSocketAddress(multicastIP, multicastPort).getAddress();
-        this.relayPort = relayPort;
-        this.domain = domain;
-        socketEmission = new MulticastSocket();
+        InetAddress ip = new InetSocketAddress(multicastIP, multicastPort).getAddress();
 
-        MulticastRunnable multicastRunnable = new MulticastRunnable(this.multicastIP, relayPort, domain);
+        MulticastRunnable multicastRunnable = new MulticastRunnable(new MulticastSocket(), ip, relayPort, domain);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(multicastRunnable, 0, 15, TimeUnit.SECONDS);
@@ -32,16 +23,19 @@ public class RelayMulticast {
 
 
 class MulticastRunnable implements Runnable {
+
+    public static final String ECHO = "ECHO %d %s\r\n";
+
     private final InetAddress multicastIP;
     private final int port;
     private final MulticastSocket socketEmission;
     private final String domain;
 
-    MulticastRunnable(InetAddress multicastIP, int port, String domain) throws Exception {
+    MulticastRunnable(MulticastSocket socketEmission, InetAddress multicastIP, int port, String domain) throws Exception {
         this.multicastIP = multicastIP;
         this.port = port;
         this.domain = domain;
-        socketEmission = new MulticastSocket();
+        this.socketEmission = socketEmission;
     }
 
     public void run() {
@@ -53,11 +47,11 @@ class MulticastRunnable implements Runnable {
             //ByteArrayOutputStream output = new ByteArrayOutputStream();
             //(new DataOutputStream(output)).writeUTF(command);
             //content = output.toByteArray();
-            content = String.format(Queries.ECHO, port, domain).getBytes();
+            content = String.format(ECHO, port, domain).getBytes();
             msg = new DatagramPacket(content, content.length, multicastIP, port);
             socketEmission.send(msg);
 
-            System.out.println("Multicast sent " + String.format(Queries.ECHO, port, domain)); //todo debug
+            System.out.println("Multicast sent " + String.format(ECHO, port, domain)); //todo debug
         } catch (Exception ignored) {}; //todo change ?
 
     }

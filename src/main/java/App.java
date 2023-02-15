@@ -11,7 +11,6 @@ public class App {
 
     public static void main(String args[]) {
         try(DataInterface dataInterface = new JsonRepository()) {
-            setSystemProperty(args);
             Server server =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
@@ -27,13 +26,5 @@ public class App {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static void setSystemProperty(final String[] args) {
-        for(String arg : args){
-            System.out.println(arg);
-        }
-        System.setProperty("javax.net.ssl.keyStore", args[0]);
-        System.setProperty("javax.net.ssl.keyStorePassword", args[1]);
     }
 }

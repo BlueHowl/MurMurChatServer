@@ -1,19 +1,16 @@
 package org.model;
 
-import org.model.exceptions.InvalidServerSettingsException;
 import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
-import org.utils.Regexes;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 /**
  * Classe de stockage des paramètres serveurs et des utilisateurs et tags
  */
-public class Server {
+public class ServerSettings {
     //todo enlever les param serveur si directement assignables  + renommer Server et changer l'ancienne classe serveur ?
     private final String currentDomain;
     private final int saltSizeInBytes;
@@ -27,9 +24,7 @@ public class Server {
     private final List<User> users;
     private final List<Tag> tags;
 
-    public Server(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) throws InvalidServerSettingsException {
-        checkParameters(currentDomain, saltSizeInBytes, multicastAddress, multicastPort, unicastPort, relayPort, networkInterface, AESKey, tls, users, tags);
-
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -41,19 +36,6 @@ public class Server {
         this.tls = tls;
         this.users = users;
         this.tags = tags;
-    }
-
-    private void checkParameters(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec aesKey, boolean tls, List<User> users, List<Tag> tags) throws InvalidServerSettingsException{
-        //todo verifier networkInterface ?
-        if(!Pattern.matches(Regexes.DOMAIN, currentDomain) ||
-                !Pattern.matches(Regexes.ROUND_OR_SALT_SIZE, String.valueOf(saltSizeInBytes)) ||
-                !Pattern.matches(Regexes.ADDRESS, multicastAddress) ||
-                !Pattern.matches(Regexes.PORT, String.valueOf(multicastPort)) ||
-                !Pattern.matches(Regexes.PORT, String.valueOf(unicastPort)) ||
-                !Pattern.matches(Regexes.PORT, String.valueOf(relayPort)))
-        {
-            throw new InvalidServerSettingsException("Valeurs paramètres serveur invalides");
-        }
     }
 
 
@@ -177,12 +159,11 @@ public class Server {
     }
 
     /**
-     * Ajoute un follower à un utilisateur du serveur   !peut changer
+     * Ajoute un follower à un utilisateur du serveur
      * @param user (User) utilisateur de la liste des utilisateurs du serveur
      * @param follower (String) follower@domaine
-     * @throws InvalidUserException Exception lancée si le champ follower ne respecte pas la syntaxe
      */
-    public void addFollowerToUser(User user, String follower) throws InvalidUserException {
+    public void addFollowerToUser(User user, String follower) {
         user.addFollower(follower);
     }
 
@@ -190,13 +171,19 @@ public class Server {
         return tags.stream().anyMatch(t -> t.getTag().equals(tag));
     }
 
+    public Tag findTag(String tag) throws InvalidTagException {
+        Optional<Tag> correctTag = tags.stream().filter(t -> t.getTag().equals(tag)).findFirst();
+        if (correctTag.isPresent())
+            return correctTag.get();
+        else throw new InvalidTagException("Le tag n'existe pas");
+    }
+
     /**
      * Ajoute un follower à un utilisateur du serveur   !peut changer
      * @param user (User) utilisateur de la liste des utilisateurs du serveur
      * @param tag (String) tag@domaine
-     * @throws InvalidUserException Exception lancée si le champ tag ne respecte pas la syntaxe
      */
-    public void addUserTagToUser(User user, String tag) throws InvalidTagException {
+    public void addUserTagToUser(User user, String tag) {
         user.addUserTag(tag);
     }
 
@@ -214,9 +201,8 @@ public class Server {
      * Ajoute un follower à un tag du serveur   !peut changer
      * @param tag (Tag) tag de la liste des tags du serveur
      * @param follower (String) follower@domaine
-     * @throws InvalidTagException Exception lancée si le champ follower ne respecte pas la syntaxe
      */
-    public void addFollowerToTag(Tag tag, String follower) throws InvalidTagException {
+    public void addFollowerToTag(Tag tag, String follower) {
         tag.addFollower(follower);
     }
 
