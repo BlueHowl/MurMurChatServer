@@ -4,12 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="fast push #1">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="fast push #2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/DtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/DtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/JsonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/JsonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/ServerSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/repository/DataInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/repository/DataInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/utils/Regexes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/ClientManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +183,7 @@
       <workItem from="1676400819222" duration="6686000" />
       <workItem from="1676445416113" duration="5491000" />
       <workItem from="1676452280956" duration="6253000" />
-      <workItem from="1676464361118" duration="3765000" />
+      <workItem from="1676464361118" duration="4983000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -287,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676452394608</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="fast push #2">
+      <created>1676468185357</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1676468185357</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,6 +342,7 @@
     <MESSAGE value="Connect added" />
     <MESSAGE value="Confirm added" />
     <MESSAGE value="fast push #1" />
-    <option name="LAST_COMMIT_MESSAGE" value="fast push #1" />
+    <MESSAGE value="fast push #2" />
+    <option name="LAST_COMMIT_MESSAGE" value="fast push #2" />
   </component>
 </project>

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Classe de stockage des paramètres serveurs et des utilisateurs et tags
  */
-public class Server {
+public class ServerSettings {
     //todo enlever les param serveur si directement assignables  + renommer Server et changer l'ancienne classe serveur ?
     private final String currentDomain;
     private final int saltSizeInBytes;
@@ -27,7 +27,7 @@ public class Server {
     private final List<User> users;
     private final List<Tag> tags;
 
-    public Server(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) throws InvalidServerSettingsException {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) throws InvalidServerSettingsException {
         checkParameters(currentDomain, saltSizeInBytes, multicastAddress, multicastPort, unicastPort, relayPort, networkInterface, AESKey, tls, users, tags);
 
         this.currentDomain = currentDomain;

@@ -1,7 +1,7 @@
 package org.server;
 
 import org.client.ClientRunnable;
-import org.model.Server;
+import org.model.ServerSettings;
 import org.model.Tag;
 import org.model.Task;
 import org.model.User;
@@ -24,12 +24,12 @@ public class Executor implements Runnable{
 
     private final TaskList taskList;
 
-    private final Server server;
+    private final ServerSettings server;
 
     private final DataInterface dataInterface;
     private String key;
 
-    public Executor(TaskList taskList, Server server, DataInterface dataInterface) {
+    public Executor(TaskList taskList, ServerSettings server, DataInterface dataInterface) {
         this.taskList = taskList;
         this.server = server;
         this.dataInterface = dataInterface;

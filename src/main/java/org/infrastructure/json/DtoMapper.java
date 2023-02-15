@@ -3,7 +3,7 @@ package org.infrastructure.json;
 import org.infrastructure.dto.ServerDTO;
 import org.infrastructure.dto.TagDTO;
 import org.infrastructure.dto.UserDTO;
-import org.model.Server;
+import org.model.ServerSettings;
 import org.model.Tag;
 import org.model.User;
 import org.model.exceptions.InvalidServerSettingsException;
@@ -62,7 +62,7 @@ public class DtoMapper {
     }
 
 
-    public static Server dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException, InvalidUserException, InvalidTagException {
+    public static ServerSettings dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException, InvalidUserException, InvalidTagException {
         if(serverDto == null) {
             throw new InvalidServerSettingsException("Configuration serveur vide");
         }
@@ -75,10 +75,10 @@ public class DtoMapper {
         for (UserDTO userDto: serverDto.getUsers()) { users.add(dtoToUser(userDto)); }
         for (TagDTO tagDto: serverDto.getTags()) { tags.add(dtoToTag(tagDto)); }
 
-        return new Server(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags);
+        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags);
     }
 
-    public static ServerDTO SeverSettingsToDto(Server serverSettings) {
+    public static ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {
         String AESKey = Base64.getEncoder().encodeToString(serverSettings.getAESKey().getEncoded());
 
         List<UserDTO> users = new ArrayList<>();
