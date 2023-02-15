@@ -166,7 +166,7 @@ public class Server {
      * @return vrai s'il l'utilisateur est existant
      */
     private boolean userExist(User user) {
-        return users.stream().anyMatch(n -> n.getUsername().equals(user.getUsername()));
+        return users.stream().anyMatch(n -> n.equals(user));
     }
 
     public User findUser(String username) throws InvalidUserException {
@@ -186,13 +186,17 @@ public class Server {
         user.addFollower(follower);
     }
 
+    public boolean tagExists(String tag) {
+        return tags.stream().anyMatch(t -> t.getTag().equals(tag));
+    }
+
     /**
      * Ajoute un follower à un utilisateur du serveur   !peut changer
      * @param user (User) utilisateur de la liste des utilisateurs du serveur
      * @param tag (String) tag@domaine
      * @throws InvalidUserException Exception lancée si le champ tag ne respecte pas la syntaxe
      */
-    public void addUserTagToUser(User user, String tag) throws InvalidUserException {
+    public void addUserTagToUser(User user, String tag) throws InvalidTagException {
         user.addUserTag(tag);
     }
 

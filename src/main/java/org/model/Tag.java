@@ -1,11 +1,10 @@
 package org.model;
 
-import org.model.exceptions.InvalidServerSettingsException;
 import org.model.exceptions.InvalidTagException;
-import org.model.exceptions.InvalidUserException;
 import org.utils.Regexes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -33,11 +32,8 @@ public class Tag {
     private boolean checkFollowersParameter(List<String> followers) {
         for (String follower : followers) {
             if(!Pattern.matches(Regexes.NAME_DOMAIN, follower))
-            {
                 return false;
-            }
         }
-
         return true;
     }
 
@@ -75,6 +71,19 @@ public class Tag {
         } else {
             throw new InvalidTagException("La valeurs follower ne respecte pas la syntaxe NAME_DOMAIN");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag t = (Tag) o;
+        return t.getTag().equals(((Tag) o).getTag());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tag);
     }
 }
 
