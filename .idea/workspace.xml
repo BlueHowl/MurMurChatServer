@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="fast push #1">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2023_19_26__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_12_18_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_12_18__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_14_34_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2023_14_34__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/JsonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/JsonRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,6 +115,7 @@
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="MurMurProject.main" />
+      <option name="PROGRAM_PARAMETERS" value="src/star.godswila.guru.p12 labo2023" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -148,6 +154,11 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Application.App" />
+      <item itemvalue="Application.Server" />
+      <item itemvalue="Gradle.MurMurProject [dependencies]" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.App" />

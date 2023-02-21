@@ -6,8 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import org.infrastructure.dto.ServerDTO;
 import org.model.ServerSettings;
 import org.model.exceptions.InvalidServerSettingsException;
-import org.model.exceptions.InvalidTagException;
-import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotRetrievedException;
 import org.repository.exceptions.NotSavedException;
@@ -67,7 +65,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
             return DtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
         } catch (IOException e) {
             throw new NotRetrievedException("Impossible de récupérer les utilisateurs existants", e);
-        } catch (InvalidUserException | InvalidServerSettingsException | InvalidTagException e) {
+        } catch (InvalidServerSettingsException e) {
             throw new NotRetrievedException(e.getMessage(), e);
         }
     }
