@@ -13,12 +13,9 @@ import org.repository.exceptions.NotSavedException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-public class Executor implements Runnable{
+public class Executor implements Runnable {
 
     private static final String CARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*,-./:;<=>?@[]^_`";
     private static final int RANDOM22SIZE = 22;
@@ -30,14 +27,17 @@ public class Executor implements Runnable{
 
     private final TaskList taskList;
 
-    private final ServerSettings server;
+    private final ClientManager clientManager;
+
+    private final ServerSettings serverSettings;
 
     private final DataInterface dataInterface;
     private String key;
 
-    public Executor(TaskList taskList, ServerSettings server, DataInterface dataInterface) {
+    public Executor(TaskList taskList, ClientManager clientManager, ServerSettings server, DataInterface dataInterface) {
         this.taskList = taskList;
-        this.server = server;
+        this.clientManager = clientManager;
+        this.serverSettings = server;
         this.dataInterface = dataInterface;
     }
 
@@ -86,7 +86,7 @@ public class Executor implements Runnable{
 
     private void hello(ClientRunnable client) {
         key = generateString(RANDOM22SIZE);
-        client.sendMessage(String.format(HELLO, server.getCurrentDomain(), key));
+        client.send(String.format(HELLO, serverSettings.getCurrentDomain(), key));
     }
 
     private void register(Map<String, String> commandMap, ClientRunnable client) {
@@ -94,24 +94,24 @@ public class Executor implements Runnable{
             User user = new User(commandMap.get("username"), Integer.parseInt(commandMap.get("bcryptround")),
                     commandMap.get("bcryptsalt"), commandMap.get("bcrypthash"), new ArrayList<>(),
                     new ArrayList<>(), 0);
-            server.addUser(user);
-            dataInterface.saveServerSettings(server);
-            client.sendMessage(String.format(OK, "Le compte est enregistré"));
+            serverSettings.addUser(user);
+            dataInterface.saveServerSettings(serverSettings); //sauvegarde json
+            client.send(String.format(OK, "Le compte est enregistré"));
             System.out.println("Compte enregistré");
             client.setUser(user);
         } catch (InvalidUserException | NotSavedException ex) {
-            client.sendMessage(String.format(ERR, ex.getMessage()));
+            client.send(String.format(ERR, ex.getMessage()));
             System.out.println("Erreur envoyé, erreur d'enregistrement");
         }
     }
 
     private void connect(Map<String, String> commandMap, ClientRunnable client) {
         try {
-            User user = server.findUser(commandMap.get("username"));
-            client.sendMessage(String.format(PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
+            User user = serverSettings.findUser(commandMap.get("username"));
+            client.send(String.format(PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
             client.setUser(user);
         } catch (InvalidUserException ex) {
-            client.sendMessage(String.format(ERR, ex.getMessage()));
+            client.send(String.format(ERR, ex.getMessage()));
         }
         System.out.println("Sending PARAM");
     }
@@ -125,18 +125,28 @@ public class Executor implements Runnable{
             byte[] hash = digest.digest((key + "$2b$" + user.getBcryptRotations() + "$" + user.getBcryptSalt() + user.getBcryptHash()).getBytes(StandardCharsets.UTF_8));
             comparable = bytesToHex(hash);
             if (sha3hex.equals(comparable)) {
-                client.sendMessage(String.format(OK, "Welcome!"));
+                client.send(String.format(OK, "Welcome!"));
                 System.out.println("Sending +OK");
             } else{
-                client.sendMessage(String.format(ERR, "Wrong password"));
+                client.send(String.format(ERR, "Wrong password"));
                 System.out.println("Sending -ERR: Wrong password!");
             }
         } catch (NoSuchAlgorithmException ex) {
-            client.sendMessage(String.format(ERR, ex.getMessage()));
+            client.send(String.format(ERR, ex.getMessage()));
         }
     }
 
     private void msg(Map<String, String> commandMap, ClientRunnable client) {
+        String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
+
+        String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
+
+        //message to followers todo gerer hashtags
+        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), client.getFollowers());
+        for (ClientRunnable c : clients) {
+            c.send(msgs);
+        }
+
 
     }
 
@@ -144,18 +154,18 @@ public class Executor implements Runnable{
         String domain = commandMap.get("domain");
         if (commandMap.get("name") != null) {
             try {
-                User followedUser = server.findUser(commandMap.get("name"));
-                server.addFollowerToUser(followedUser, client.getUsername());
+                User followedUser = serverSettings.findUser(commandMap.get("name"));
+                serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), commandMap.get("domain")));
             } catch (InvalidUserException ex) {
                 System.out.println("Le compte n'existe pas");
             }
         } else {
             String followedTagString = commandMap.get("tag");
-            if (server.tagExists(followedTagString)) {
+            if (serverSettings.tagExists(followedTagString)) {
                 try {
-                    Tag tag = server.findTag(followedTagString);
-                    server.addFollowerToTag(tag, client.getUsername());
-                    server.addUserTagToUser(client.getUser(), followedTagString);
+                    Tag tag = serverSettings.findTag(followedTagString);
+                    serverSettings.addFollowerToTag(tag, client.getUsername());
+                    serverSettings.addUserTagToUser(client.getUser(), followedTagString);
                 } catch (InvalidTagException ex) {
 
                 }
@@ -166,6 +176,13 @@ public class Executor implements Runnable{
                 client.getUser().addUserTag(newTag.getTag()+"@"+domain);
             }
         }
+
+        try {
+            dataInterface.saveServerSettings(serverSettings); //sauvegarde json todo changer
+        } catch (NotSavedException e) {
+            throw new RuntimeException(e);
+        }
+
         System.out.println("Follow reçu");
     }
 

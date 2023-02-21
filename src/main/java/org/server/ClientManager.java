@@ -7,18 +7,16 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ClientManager implements Runnable {
-    private List<ClientRunnable> clientsList;
+    private final List<ClientRunnable> clientsList;
 
-    private TaskFactoryInterface taskHandlerInterface;
+    private final TaskFactoryInterface taskHandlerInterface;
 
-    private int port;
+    private final int port;
 
     private boolean isStarted = false;
     private boolean isConnected = false;
@@ -44,5 +42,21 @@ public class ClientManager implements Runnable {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    /**
+     * Récupère les clients correspondants à la liste d'utilisateur donnée
+     * @return (List<ClientRunnable>) liste de clients
+     */
+    public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {//TODO synchronized ?
+        List<ClientRunnable> clients = new ArrayList<>();
+
+        for (ClientRunnable c : clientsList) {
+            if(followers.contains(String.format("%s@%s", c.getUsername(), domain))) {
+                clients.add(c);
+            }
+        }
+
+        return clients;
     }
 }

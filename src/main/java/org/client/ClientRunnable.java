@@ -2,11 +2,10 @@ package org.client;
 
 import org.model.User;
 
-import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class ClientRunnable implements Runnable {
 
@@ -46,7 +45,7 @@ public class ClientRunnable implements Runnable {
      * Permet de renvoyer une commande au client
      * @param command (String) Commande
      */
-    public void sendMessage(String command) {
+    public void send(String command) {
         out.println(command);
     }
 
@@ -60,5 +59,9 @@ public class ClientRunnable implements Runnable {
 
     public String getUsername() {
         return user.getUsername();
+    }
+
+    public List<String> getFollowers() {
+        return user.getFollowers();
     }
 }

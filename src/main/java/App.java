@@ -20,7 +20,7 @@ public class App {
             ClientManager clientManager = new ClientManager(taskFactory, server.getUnicastPort());
             (new Thread(clientManager)).start();
 
-            Executor executor = new Executor(taskList, server, dataInterface);
+            Executor executor = new Executor(taskList, clientManager, server, dataInterface);
             (new Thread(executor)).start();
 
             new RelayMulticast(server.getMulticastAddress(), server.getMulticastPort(), server.getRelayPort(), server.getCurrentDomain());

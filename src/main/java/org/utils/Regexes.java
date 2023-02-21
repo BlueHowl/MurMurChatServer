@@ -11,7 +11,7 @@ public class Regexes {
 
     private static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)[\\x20]");
 
-    private static final Pattern CONNECT = Pattern.compile("^[C][O][N][N][E][C][T][\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
+    private static final Pattern CONNECT = Pattern.compile("^CONNECT[\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 
     private static final Pattern REGISTER = Pattern.compile("^REGISTER[\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
 
@@ -97,7 +97,7 @@ public class Regexes {
         if(m.find()) {
             result.put("message", m.group("message"));
 
-            System.out.printf("MSG : (Message: %s)", m.group("message")); //todo debug
+            System.out.printf("MSG : (Message: %s)\n", m.group("message")); //todo debug
         }
 
         return result;
@@ -117,7 +117,7 @@ public class Regexes {
             result.put("tag", m.group("tag"));
             result.put("domain", m.group("domain"));
 
-            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
+            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)\n", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
         }
         return result;
     }

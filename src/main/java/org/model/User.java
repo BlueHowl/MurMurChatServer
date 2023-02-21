@@ -1,5 +1,6 @@
 package org.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,7 +83,7 @@ public class User {
      * @return (List<String>) followers
      */
     public List<String> getFollowers() {
-        return followers;
+        return new ArrayList<>(followers);
     }
 
     /**
@@ -90,7 +91,7 @@ public class User {
      * @return (List<String>) userTags
      */
     public List<String> getUserTags() {
-        return userTags;
+        return new ArrayList<>(userTags);
     }
 
     /**
