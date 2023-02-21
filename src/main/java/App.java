@@ -30,9 +30,6 @@ public class App {
     }
 
     private static void setSystemProperty(final String[] args) {
-        for(String arg : args){
-            System.out.println(arg);
-        }
         System.setProperty("javax.net.ssl.keyStore", args[0]);
         System.setProperty("javax.net.ssl.keyStorePassword", args[1]);
     }
