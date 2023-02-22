@@ -24,7 +24,7 @@ public class TaskFactory implements TaskFactoryInterface {
      * @param clientRunnable (ClientRunnable)
      */
     public synchronized void createTask(String command, ClientRunnable clientRunnable) {
-        Map<String, String> commandInfos = regexes.decomposeCommand(command);
+        Map<String, Object> commandInfos = regexes.decomposeCommand(command);
         taskList.addTask(new Task(++idCountTasks, commandInfos, clientRunnable, "pending"));
     }
 

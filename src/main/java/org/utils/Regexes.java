@@ -33,7 +33,7 @@ public class Regexes {
     private Map<String, String> decomposeRegister(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.REGISTER.matcher(command);
+        Matcher m = REGISTER.matcher(command);
         if(m.find()) {
             String bcrypthash = m.group("bcrypthash");
             int saltsize = Integer.parseInt(m.group("saltsize"));
@@ -56,7 +56,7 @@ public class Regexes {
     private Map<String, String> decomposeConnect(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.CONNECT.matcher(command);
+        Matcher m = CONNECT.matcher(command);
         if(m.find()) {
             result.put("username", m.group("username"));
 
@@ -74,7 +74,7 @@ public class Regexes {
     private Map<String, String> decomposeConfirm(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.CONFIRM.matcher(command);
+        Matcher m = CONFIRM.matcher(command);
         if(m.find()) {
             result.put("sha3hex", m.group("sha3hex"));
 
@@ -92,7 +92,7 @@ public class Regexes {
     private Map<String, String> decomposeMsg(String command) {
         Map<String, String> result = new HashMap<>();
 
-        Matcher m = Regexes.MSG.matcher(command);
+        Matcher m = MSG.matcher(command);
 
         if(m.find()) {
             result.put("message", m.group("message"));
@@ -104,33 +104,14 @@ public class Regexes {
     }
 
     /**
-     * Décompose la commande FOLLOW et récupère les informations sous la forme d'une map
-     * @param command (String) Commande FOLLOW
-     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
-     */
-    private Map<String, String> decomposeFollow(String command) {
-        Map<String, String> result = new HashMap<>();
-
-        Matcher m = Regexes.FOLLOW.matcher(command);
-        if(m.find()) {
-            result.put("name", m.group("name"));
-            result.put("tag", m.group("tag"));
-            result.put("domain", m.group("domain"));
-
-            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)\n", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
-        }
-        return result;
-    }
-
-    /**
      * Décompose un message et récupère les hashtags
      * @param message (String)
      * @return String[] tableau de hashtag
      */
-    public String[] decomposeHashtags(String message) {
+    private String[] decomposeHashtags(String message) {
         String[] hashtag = {};
 
-        Matcher m = Regexes.HASHTAG.matcher(message);
+        Matcher m = HASHTAG.matcher(message);
         if(m.find()) {
             hashtag = new String[m.groupCount()];
 
@@ -145,14 +126,33 @@ public class Regexes {
     }
 
     /**
+     * Décompose la commande FOLLOW et récupère les informations sous la forme d'une map
+     * @param command (String) Commande FOLLOW
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    private Map<String, String> decomposeFollow(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = FOLLOW.matcher(command);
+        if(m.find()) {
+            result.put("name", m.group("name"));
+            result.put("tag", m.group("tag"));
+            result.put("domain", m.group("domain"));
+
+            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)\n", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
+        }
+        return result;
+    }
+
+    /**
      * Décompose la commande et récupère une Map des valeurs
      * @param command (String)
      * @return (Map<String, String>) valeurs de la commande décomposée
      */
-    public Map<String, String> decomposeCommand(String command) {
-        Map<String, String> result = new HashMap<>();
+    public Map<String, Object> decomposeCommand(String command) {
+        Map<String, Object> result = new HashMap<>();
 
-        Matcher m = Regexes.TYPE.matcher(command);
+        Matcher m = TYPE.matcher(command);
         if(m.find()) {
             String type = m.group("type");
             result.put("type", type);
@@ -172,6 +172,7 @@ public class Regexes {
 
                 case "MSG":
                     result.putAll(decomposeMsg(command));
+                    result.put("hashtags", decomposeHashtags(command));
                     break;
 
                 case "FOLLOW":

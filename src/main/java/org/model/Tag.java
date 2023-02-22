@@ -8,11 +8,11 @@ import java.util.Objects;
  */
 public class Tag {
 
-    private final String tag;
+    private final String name;
     private final List<String> followers;
 
-    public Tag(String tag, List<String> followers) {
-        this.tag = tag;
+    public Tag(String name, List<String> followers) {
+        this.name = name;
         this.followers = followers;
     }
 
@@ -23,8 +23,8 @@ public class Tag {
      * Récupère le nom du tag
      * @return (String) nom
      */
-    public String getTag() {
-        return tag;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -51,12 +51,12 @@ public class Tag {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag t = (Tag) o;
-        return t.getTag().equals(((Tag) o).getTag());
+        return t.getName().equals(((Tag) o).getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tag);
+        return Objects.hash(name);
     }
 }
 

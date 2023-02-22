@@ -46,7 +46,7 @@ public class DtoMapper {
      * @return (TagDTO) tag dto
      */
     private static TagDTO tagToDto(Tag tag) {
-        return new TagDTO(tag.getTag(), tag.getFollowers());
+        return new TagDTO(tag.getName(), tag.getFollowers());
     }
 
     /**

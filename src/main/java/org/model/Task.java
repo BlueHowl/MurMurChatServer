@@ -9,11 +9,11 @@ import java.util.Map;
  */
 public class Task {
     private final int id;
-    private final Map<String, String> commandMap;
+    private final Map<String, Object> commandMap;
     private final ClientRunnable client;
     private String status;
 
-    public Task(int id, Map<String, String> commandMap, ClientRunnable client, String status) {
+    public Task(int id, Map<String, Object> commandMap, ClientRunnable client, String status) {
         this.id = id;
         this.commandMap = commandMap;
         this.client = client;
@@ -24,7 +24,7 @@ public class Task {
      * Récupère la map des valeurs de la commande associée
      * @return (Map<String, String>) commandMap
      */
-    public Map<String, String> getCommandMap() {
+    public Map<String, Object> getCommandMap() {
         return commandMap;
     }
 

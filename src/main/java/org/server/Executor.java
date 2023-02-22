@@ -56,10 +56,10 @@ public class Executor implements Runnable {
      * @param task (Task)
      */
     private void execute(Task task) {
-        Map<String, String> commandMap = task.getCommandMap();
+        Map<String, Object> commandMap = task.getCommandMap();
         ClientRunnable client = task.getClient();
 
-        switch(commandMap.get("type")) {
+        switch((String)commandMap.get("type")) {
             case "HELLO":
                 hello(client);
                 break;
@@ -85,14 +85,14 @@ public class Executor implements Runnable {
     }
 
     private void hello(ClientRunnable client) {
-        key = generateString(RANDOM22SIZE);
+        key = generateRandomString(RANDOM22SIZE);
         client.send(String.format(HELLO, serverSettings.getCurrentDomain(), key));
     }
 
-    private void register(Map<String, String> commandMap, ClientRunnable client) {
+    private void register(Map<String, Object> commandMap, ClientRunnable client) {
         try {
-            User user = new User(commandMap.get("username"), Integer.parseInt(commandMap.get("bcryptround")),
-                    commandMap.get("bcryptsalt"), commandMap.get("bcrypthash"), new ArrayList<>(),
+            User user = new User((String)commandMap.get("username"), Integer.parseInt((String)commandMap.get("bcryptround")),
+                    (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new ArrayList<>(),
                     new ArrayList<>(), 0);
             serverSettings.addUser(user);
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
@@ -105,9 +105,9 @@ public class Executor implements Runnable {
         }
     }
 
-    private void connect(Map<String, String> commandMap, ClientRunnable client) {
+    private void connect(Map<String, Object> commandMap, ClientRunnable client) {
         try {
-            User user = serverSettings.findUser(commandMap.get("username"));
+            User user = serverSettings.findUser((String)commandMap.get("username"));
             client.send(String.format(PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
             client.setUser(user);
         } catch (InvalidUserException ex) {
@@ -116,9 +116,9 @@ public class Executor implements Runnable {
         System.out.println("Sending PARAM");
     }
 
-    private void confirm(Map<String, String> commandMap, ClientRunnable client) {
+    private void confirm(Map<String, Object> commandMap, ClientRunnable client) {
         User user = client.getUser();
-        String sha3hex = commandMap.get("sha3hex");
+        String sha3hex = (String)commandMap.get("sha3hex");
         String comparable;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA3-256");
@@ -136,45 +136,44 @@ public class Executor implements Runnable {
         }
     }
 
-    private void msg(Map<String, String> commandMap, ClientRunnable client) {
+    private void msg(Map<String, Object> commandMap, ClientRunnable client) {
         String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
 
         String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
 
-        //message to followers todo gerer hashtags
-        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), client.getFollowers());
+        HashSet<String> destinations = new HashSet<>(); //préviens les envois dupliqués
+        destinations.addAll(client.getFollowers());
+        destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
+
+        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
         for (ClientRunnable c : clients) {
             c.send(msgs);
         }
-
-
     }
 
-    private void follow(Map<String, String> commandMap, ClientRunnable client) {
-        String domain = commandMap.get("domain");
+    private void follow(Map<String, Object> commandMap, ClientRunnable client) {
+        String domain = (String)commandMap.get("domain");
         if (commandMap.get("name") != null) {
             try {
-                User followedUser = serverSettings.findUser(commandMap.get("name"));
-                serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), commandMap.get("domain")));
+                User followedUser = serverSettings.findUser((String)commandMap.get("name"));
+                serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
             } catch (InvalidUserException ex) {
-                System.out.println("Le compte n'existe pas");
+                System.out.println(ex.getMessage());
             }
         } else {
-            String followedTagString = commandMap.get("tag");
-            if (serverSettings.tagExists(followedTagString)) {
-                try {
-                    Tag tag = serverSettings.findTag(followedTagString);
-                    serverSettings.addFollowerToTag(tag, client.getUsername());
-                    serverSettings.addUserTagToUser(client.getUser(), followedTagString);
-                } catch (InvalidTagException ex) {
+            String followedTagString = (String)commandMap.get("tag");
 
-                }
-
-            } else {
+            try {
+                Tag tag = serverSettings.findTag(followedTagString);
+                serverSettings.addFollowerToTag(tag, client.getUsername()+"@"+domain);
+                serverSettings.addUserTagToUser(client.getUser(), followedTagString+"@"+domain);
+            } catch (InvalidTagException ex) {
                 Tag newTag = new Tag(followedTagString, new ArrayList<>());
-                newTag.addFollower(client.getUser().getUsername()+"@"+domain);
-                client.getUser().addUserTag(newTag.getTag()+"@"+domain);
+                newTag.addFollower(client.getUsername()+"@"+domain);
+                serverSettings.addTag(newTag);
+                serverSettings.addUserTagToUser(client.getUser(), newTag.getName()+"@"+domain);
             }
+
         }
 
         try {
@@ -201,7 +200,7 @@ public class Executor implements Runnable {
      * @param length (int) Taille de la chaine à retourner
      * @return (String) chaine de caractères aléatoire
      */
-    private static String generateString(int length) {
+    private static String generateRandomString(int length) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 

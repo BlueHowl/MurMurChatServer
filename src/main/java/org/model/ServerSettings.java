@@ -4,6 +4,7 @@ import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +114,7 @@ public class ServerSettings {
         return tls;
     }
 
+    //USERS
     /**
      * Récupère la liste des utilisateurs DTO
      * @return (UserDTO)
@@ -122,11 +124,55 @@ public class ServerSettings {
     }
 
     /**
+     * Vérifie si l'utilisateur est déjà un compte connu
+     * @param user le compte
+     * @return vrai s'il l'utilisateur est existant
+     */
+    private boolean userExist(User user) {
+        return users.stream().anyMatch(n -> n.equals(user)); //todo contains c'est 10x plus simple xd
+    }
+
+    public User findUser(String username) throws InvalidUserException {
+        Optional<User> u = users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
+        if (u.isPresent())
+            return u.get();
+        else throw new InvalidUserException("Le compte n'existe pas");
+    }
+
+    //TAGS
+    /**
      * Récupère la liste des tags DTO
      * @return (TagDTO)
      */
     public List<Tag> getTags() {
         return tags;
+    }
+
+    public boolean tagExists(String tag) {
+        return tags.stream().anyMatch(t -> t.getName().equals(tag));
+    }
+
+    public Tag findTag(String tag) throws InvalidTagException {
+        Optional<Tag> correctTag = tags.stream().filter(t -> t.getName().equals(tag)).findFirst();
+        if (correctTag.isPresent())
+            return correctTag.get();
+        else throw new InvalidTagException("Le tag n'existe pas");
+    }
+
+    /**
+     * Récupère les followers des tags existants
+     * @param hashtags (String[]) tableau de tags
+     * @return (List<String>) liste de followers
+     */
+    public List<String> getTagFollowers(String[] hashtags) {
+        List<String> followers = new ArrayList<>();
+        for (String hashtag : hashtags) {
+            try {
+                followers.addAll(findTag(hashtag).getFollowers());
+            } catch (InvalidTagException ignored) {}
+        }
+
+        return followers;
     }
 
 
@@ -143,39 +189,12 @@ public class ServerSettings {
     }
 
     /**
-     * Vérifie si l'utilisateur est déjà un compte connu
-     * @param user le compte
-     * @return vrai s'il l'utilisateur est existant
-     */
-    private boolean userExist(User user) {
-        return users.stream().anyMatch(n -> n.equals(user));
-    }
-
-    public User findUser(String username) throws InvalidUserException {
-        Optional<User> u = users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
-        if (u.isPresent())
-            return u.get();
-        else throw new InvalidUserException("Le compte n'existe pas");
-    }
-
-    /**
      * Ajoute un follower à un utilisateur du serveur
      * @param user (User) utilisateur de la liste des utilisateurs du serveur
      * @param follower (String) follower@domaine
      */
     public void addFollowerToUser(User user, String follower) {
         user.addFollower(follower);
-    }
-
-    public boolean tagExists(String tag) {
-        return tags.stream().anyMatch(t -> t.getTag().equals(tag));
-    }
-
-    public Tag findTag(String tag) throws InvalidTagException {
-        Optional<Tag> correctTag = tags.stream().filter(t -> t.getTag().equals(tag)).findFirst();
-        if (correctTag.isPresent())
-            return correctTag.get();
-        else throw new InvalidTagException("Le tag n'existe pas");
     }
 
     /**
