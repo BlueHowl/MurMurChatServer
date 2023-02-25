@@ -9,6 +9,7 @@ import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
+import org.server.exception.CloseClientException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -79,7 +80,7 @@ public class Executor implements Runnable {
                 follow(commandMap, client);
                 break;
             case "DISCONNECT":
-
+                disconnect(client);
                 break;
         }
     }
@@ -183,6 +184,21 @@ public class Executor implements Runnable {
         }
 
         System.out.println("Follow reçu");
+    }
+
+    /**
+     * Déconnecte le client
+     * @param client (ClientRunnable)
+     */
+    private void disconnect(ClientRunnable client) {
+        client.send(String.format(OK, "GoodBye!"));
+        try { //todo stop le thread ?
+            clientManager.removeClient(client);
+            System.out.printf("Déconnexion client : %s\n", client.getUsername()); //todo debug
+        } catch (CloseClientException e) {
+            System.out.printf("%s : %s\n", e.getMessage(), client.getUsername()); //todo debug
+        }
+
     }
 
     private String bytesToHex(byte[] hash) {

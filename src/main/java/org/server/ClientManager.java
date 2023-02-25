@@ -2,6 +2,7 @@ package org.server;
 
 import org.client.ClientRunnable;
 import org.client.TaskFactoryInterface;
+import org.server.exception.CloseClientException;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -31,13 +32,14 @@ public class ClientManager implements Runnable {
     public void run() {
         SSLServerSocketFactory sslssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
         try (SSLServerSocket server = (SSLServerSocket) sslssf.createServerSocket(port)) {
-            System.out.println("Démarrage du serveur sur l'adresse " + server.getInetAddress() + " et le port " + port);
+            System.out.println("Démarrage du serveur client sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {
-                final SSLSocket client = (SSLSocket) server.accept();
+                final SSLSocket client = (SSLSocket) server.accept(); //todo implement auto-closeable ? Comment gèrer la déconnexion timeout
                 ClientRunnable runnable = new ClientRunnable(client, taskHandlerInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
+                System.out.println("Nombre de clients : " + clientsList.size());
             }
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -58,5 +60,18 @@ public class ClientManager implements Runnable {
         }
 
         return clients;
+    }
+
+    /**
+     * Supprime un client de la liste
+     * @param client (ClientRunnable)
+     */
+    public void removeClient(ClientRunnable client) throws CloseClientException {
+        try { //todo stop le thread ?
+            client.close();
+            clientsList.remove(client);
+        } catch (IOException e) {
+            throw new CloseClientException("Erreur lors de la fermeture du client", e);
+        }
     }
 }

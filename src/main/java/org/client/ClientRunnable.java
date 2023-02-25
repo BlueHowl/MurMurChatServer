@@ -7,7 +7,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ClientRunnable implements Runnable {
+public class ClientRunnable implements Runnable, Closeable {
 
     private final SSLSocket client;
     private BufferedReader in;
@@ -39,6 +39,13 @@ public class ClientRunnable implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void close() throws IOException{
+        out.close();
+        in.close();
+        client.close();
     }
 
     /**

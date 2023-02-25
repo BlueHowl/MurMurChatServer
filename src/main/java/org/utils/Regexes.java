@@ -9,7 +9,7 @@ public class Regexes {
 
     private static Regexes instance;
 
-    private static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)[\\x20]");
+    private static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)");
 
     private static final Pattern CONNECT = Pattern.compile("^CONNECT[\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 

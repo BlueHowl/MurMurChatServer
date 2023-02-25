@@ -1,5 +1,6 @@
 import org.infrastructure.json.JsonRepository;
 import org.model.ServerSettings;
+import org.relay.RelayManager;
 import org.relay.RelayMulticast;
 import org.repository.DataInterface;
 import org.server.ClientManager;
@@ -23,7 +24,9 @@ public class App {
             Executor executor = new Executor(taskList, clientManager, server, dataInterface);
             (new Thread(executor)).start();
 
-            new RelayMulticast(server.getMulticastAddress(), server.getMulticastPort(), server.getRelayPort(), server.getCurrentDomain());
+            RelayMulticast relayMulticast = new RelayMulticast(server.getMulticastAddress(), server.getMulticastPort(), server.getRelayPort(), server.getCurrentDomain());
+            RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, server.getRelayPort());
+            (new Thread(relayManager)).start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
