@@ -191,8 +191,9 @@ public class Executor implements Runnable {
      * @param client (ClientRunnable)
      */
     private void disconnect(ClientRunnable client) {
-        client.send(String.format(OK, "GoodBye!"));
+
         try { //todo stop le thread ?
+            client.send(String.format(OK, "GoodBye!"));
             clientManager.removeClient(client);
             System.out.printf("Déconnexion client : %s\n", client.getUsername()); //todo debug
         } catch (CloseClientException e) {

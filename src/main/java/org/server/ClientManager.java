@@ -39,6 +39,7 @@ public class ClientManager implements Runnable {
                 ClientRunnable runnable = new ClientRunnable(client, taskHandlerInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
+
                 System.out.println("Nombre de clients : " + clientsList.size());
             }
         } catch (IOException exception) {
@@ -67,7 +68,7 @@ public class ClientManager implements Runnable {
      * @param client (ClientRunnable)
      */
     public void removeClient(ClientRunnable client) throws CloseClientException {
-        try { //todo stop le thread ?
+        try { //todo stop le thread ? comment faire quand le client est fermé brutalement (timeout)
             client.close();
             clientsList.remove(client);
         } catch (IOException e) {

@@ -33,7 +33,7 @@ public class RelayManager implements Runnable {
 
             while (true) {
                 if(relay == null) { //tant qu'il n'y a pas un relai
-                    final Socket client = (Socket) server.accept();
+                    final Socket client = server.accept();
                     RelayRunnable runnable = new RelayRunnable();
                     relay = runnable; //ajoute le nouveau client relai à la liste
                     relayMulticast.toggleMulticast(); //désactive le multicast

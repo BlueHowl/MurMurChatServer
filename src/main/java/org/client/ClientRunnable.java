@@ -12,12 +12,12 @@ public class ClientRunnable implements Runnable, Closeable {
     private final SSLSocket client;
     private BufferedReader in;
     private PrintWriter out;
-    private final TaskFactoryInterface taskHandlerInterface;
+    private final TaskFactoryInterface taskFactoryInterface;
     private User user = null;
 
     public ClientRunnable (SSLSocket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
-        this.taskHandlerInterface = taskHandlerInterface;
+        this.taskFactoryInterface = taskHandlerInterface;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -33,11 +33,12 @@ public class ClientRunnable implements Runnable, Closeable {
         try {
             String line = in.readLine();
             while (line != null) {
-                taskHandlerInterface.createTask(line, this);
+                taskFactoryInterface.createTask(line, this);
                 line = in.readLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Lost client connection"); //todo debug
+            taskFactoryInterface.createTask("DISCONNECT", this); //todo meilleur façon ?
         }
     }
 
