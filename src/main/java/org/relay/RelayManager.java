@@ -1,6 +1,6 @@
 package org.relay;
 
-import org.client.TaskFactoryInterface;
+import org.sharedClients.TaskFactoryInterface;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
@@ -9,20 +9,16 @@ import java.net.Socket;
 
 public class RelayManager implements Runnable {
     private RelayRunnable relay = null;
-
     private final TaskFactoryInterface taskHandlerInterface;
-
     private final RelayMulticast relayMulticast;
-
     private final int port;
+    private final AESGCM aesgcm;
 
-    private boolean isStarted = false;
-    private boolean isConected = false;
-
-    public RelayManager(TaskFactoryInterface taskHandlerInterface, RelayMulticast relayMulticast, int port) {
+    public RelayManager(TaskFactoryInterface taskHandlerInterface, RelayMulticast relayMulticast, int port, AESGCM aesgcm) {
         this.taskHandlerInterface = taskHandlerInterface;
         this.relayMulticast = relayMulticast;
         this.port = port;
+        this.aesgcm = aesgcm;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class RelayManager implements Runnable {
             while (true) {
                 if(relay == null) { //tant qu'il n'y a pas un relai
                     final Socket client = server.accept();
-                    RelayRunnable runnable = new RelayRunnable();
+                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface, aesgcm);
                     relay = runnable; //ajoute le nouveau client relai à la liste
                     relayMulticast.toggleMulticast(); //désactive le multicast
                     (new Thread(runnable)).start();

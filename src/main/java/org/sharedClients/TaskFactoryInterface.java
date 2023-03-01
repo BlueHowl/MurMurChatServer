@@ -1,4 +1,4 @@
-package org.client;
+package org.sharedClients;
 
 /**
  * Interface TaskList
@@ -9,8 +9,8 @@ public interface TaskFactoryInterface {
     /**
      * Cette méthode permet de récupérer la tache suivante à exécuter
      * @param command (String)
-     * @param clientRunnable (ClientRunnable)
+     * @param runnable (SharedRunnableInterface)
      */
-     void createTask(String command, ClientRunnable clientRunnable);
+     void createTask(String command, SharedRunnableInterface runnable);
 
 }

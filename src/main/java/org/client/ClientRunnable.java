@@ -1,13 +1,15 @@
 package org.client;
 
 import org.model.User;
+import org.sharedClients.SharedRunnableInterface;
+import org.sharedClients.TaskFactoryInterface;
 
 import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ClientRunnable implements Runnable, Closeable {
+public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterface {
 
     private final SSLSocket client;
     private BufferedReader in;

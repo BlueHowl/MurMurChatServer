@@ -1,8 +1,8 @@
 package org.server;
 
 import org.model.Task;
-import org.client.ClientRunnable;
-import org.client.TaskFactoryInterface;
+import org.sharedClients.SharedRunnableInterface;
+import org.sharedClients.TaskFactoryInterface;
 import org.utils.Regexes;
 
 import java.util.Map;
@@ -21,11 +21,11 @@ public class TaskFactory implements TaskFactoryInterface {
     /**
      * Crée une tache sur base d'une commande et du thread client concerné
      * @param command (String)
-     * @param clientRunnable (ClientRunnable)
+     * @param runnable (SharedRunnableInterface)
      */
-    public synchronized void createTask(String command, ClientRunnable clientRunnable) {
+    public synchronized void createTask(String command, SharedRunnableInterface runnable) {
         Map<String, Object> commandInfos = regexes.decomposeCommand(command);
-        taskList.addTask(new Task(++idCountTasks, commandInfos, clientRunnable, "pending"));
+        taskList.addTask(new Task(++idCountTasks, commandInfos, runnable, "pending"));
     }
 
 }

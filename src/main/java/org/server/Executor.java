@@ -10,6 +10,7 @@ import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
 import org.server.exception.CloseClientException;
+import org.sharedClients.SharedRunnableInterface;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -58,20 +59,20 @@ public class Executor implements Runnable {
      */
     private void execute(Task task) {
         Map<String, Object> commandMap = task.getCommandMap();
-        ClientRunnable client = task.getClient();
+        SharedRunnableInterface client = task.getClient();
 
         switch((String)commandMap.get("type")) {
             case "HELLO":
-                hello(client);
+                hello((ClientRunnable) client);
                 break;
             case "REGISTER":
-                register(commandMap, client);
+                register(commandMap, (ClientRunnable) client);
                 break;
             case "CONNECT":
-                connect(commandMap, client);
+                connect(commandMap, (ClientRunnable) client);
                 break;
             case "CONFIRM":
-                confirm(commandMap, client);
+                confirm(commandMap, (ClientRunnable) client);
                 break;
             case "MSG":
                 msg(commandMap, client);
@@ -80,7 +81,7 @@ public class Executor implements Runnable {
                 follow(commandMap, client);
                 break;
             case "DISCONNECT":
-                disconnect(client);
+                disconnect((ClientRunnable) client);
                 break;
         }
     }

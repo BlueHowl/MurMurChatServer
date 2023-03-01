@@ -1,5 +1,6 @@
 import org.infrastructure.json.JsonRepository;
 import org.model.ServerSettings;
+import org.relay.AESGCM;
 import org.relay.RelayManager;
 import org.relay.RelayMulticast;
 import org.repository.DataInterface;
@@ -25,7 +26,7 @@ public class App {
             (new Thread(executor)).start();
 
             RelayMulticast relayMulticast = new RelayMulticast(server.getMulticastAddress(), server.getMulticastPort(), server.getRelayPort(), server.getCurrentDomain());
-            RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, server.getRelayPort());
+            RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, server.getRelayPort(), new AESGCM(server.getAESKey()));
             (new Thread(relayManager)).start();
         } catch (Exception e) {
             throw new RuntimeException(e);

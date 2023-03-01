@@ -1,7 +1,7 @@
 package org.server;
 
 import org.client.ClientRunnable;
-import org.client.TaskFactoryInterface;
+import org.sharedClients.TaskFactoryInterface;
 import org.server.exception.CloseClientException;
 
 import javax.net.ssl.SSLServerSocket;
