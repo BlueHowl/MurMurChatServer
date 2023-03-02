@@ -1,4 +1,4 @@
-package org.relay;
+package org.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

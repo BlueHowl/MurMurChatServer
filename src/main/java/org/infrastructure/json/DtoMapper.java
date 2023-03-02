@@ -26,7 +26,7 @@ public class DtoMapper {
      * @param user (User) utilisateur
      * @return (UserDTO) utilisateur dto
      */
-    private static UserDTO userToDto(User user) {
+    private UserDTO userToDto(User user) {
         return new UserDTO(user.getUsername(), user.getBcryptRotations(), user.getBcryptSalt(), user.getBcryptHash(), user.getFollowers(), user.getUserTags(), user.getLockoutCounter());
     }
 
@@ -35,7 +35,7 @@ public class DtoMapper {
      * @param userDto (UserDTO) Utilisateur dto
      * @return (User) Utilisateur
      */
-    private static User dtoToUser(UserDTO userDto) {
+    private User dtoToUser(UserDTO userDto) {
         return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash(), userDto.getFollowers(), userDto.getUserTags(), userDto.getLockoutCounter());
     }
 
@@ -45,7 +45,7 @@ public class DtoMapper {
      * @param tag (Tag) tag
      * @return (TagDTO) tag dto
      */
-    private static TagDTO tagToDto(Tag tag) {
+    private TagDTO tagToDto(Tag tag) {
         return new TagDTO(tag.getName(), tag.getFollowers());
     }
 
@@ -54,12 +54,12 @@ public class DtoMapper {
      * @param tagDto (TagDTO) tag dto
      * @return (Tag) tag
      */
-    private static Tag dtoToTag(TagDTO tagDto) {
+    private Tag dtoToTag(TagDTO tagDto) {
         return new Tag(tagDto.getTag(), tagDto.getFollowers());
     }
 
 
-    public static ServerSettings dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException {
+    public ServerSettings dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException {
         if(serverDto == null) {
             throw new InvalidServerSettingsException("Configuration serveur vide");
         }
@@ -75,7 +75,7 @@ public class DtoMapper {
         return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags);
     }
 
-    public static ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {
+    public ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {
         String AESKey = Base64.getEncoder().encodeToString(serverSettings.getAESKey().getEncoded());
 
         List<UserDTO> users = new ArrayList<>();

@@ -34,7 +34,7 @@ public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterf
     public void run() {
         try {
             String line = in.readLine();
-            while (line != null) {
+            while (line != null) { //todo gèrer déconnexion quand line == null
                 taskFactoryInterface.createTask(line, this);
                 line = in.readLine();
             }

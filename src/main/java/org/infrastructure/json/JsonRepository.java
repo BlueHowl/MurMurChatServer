@@ -23,6 +23,8 @@ import java.nio.file.Paths;
  */
 public class JsonRepository implements DataInterface, AutoCloseable {
 
+    private final DtoMapper dtoMapper = new DtoMapper();
+
     private final Gson gson = new Gson();
 
     private final String jsonPath;
@@ -62,7 +64,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
     public ServerSettings getServerSettings() throws NotRetrievedException {
         try(Reader reader = new BufferedReader(new FileReader(jsonPath))) {
             Type serverDtoType = new TypeToken<ServerDTO>(){}.getType();
-            return DtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
+            return dtoMapper.dtoToServerSettings(gson.fromJson(reader, serverDtoType));
         } catch (IOException e) {
             throw new NotRetrievedException("Impossible de récupérer les utilisateurs existants", e);
         } catch (InvalidServerSettingsException e) {
@@ -78,7 +80,7 @@ public class JsonRepository implements DataInterface, AutoCloseable {
     @Override
     public void saveServerSettings(ServerSettings serverSettings) throws NotSavedException {
         try(FileWriter fw = new FileWriter(jsonPath, StandardCharsets.UTF_8)) {
-            gson.toJson(DtoMapper.SeverSettingsToDto(serverSettings), fw);
+            gson.toJson(dtoMapper.SeverSettingsToDto(serverSettings), fw);
         } catch (JsonIOException | IOException e) {
             throw new NotSavedException("Impossible de sauvegarder l'état du serveur", e);
         }
