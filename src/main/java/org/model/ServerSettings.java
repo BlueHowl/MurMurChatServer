@@ -1,6 +1,5 @@
 package org.model;
 
-import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -148,15 +147,21 @@ public class ServerSettings {
         return tags;
     }
 
-    public boolean tagExists(String tag) {
-        return tags.stream().anyMatch(t -> t.getName().equals(tag));
+    public boolean tagExists(String tagString) {
+       for (Tag tag : tags) {
+            return tag.getName().equals(tagString);
+        }
+       return false;
     }
 
-    public Tag findTag(String tag) throws InvalidTagException {
-        Optional<Tag> correctTag = tags.stream().filter(t -> t.getName().equals(tag)).findFirst();
-        if (correctTag.isPresent())
-            return correctTag.get();
-        else throw new InvalidTagException("Le tag n'existe pas");
+    public Tag findTag(String tag) {
+        if (tagExists(tag))
+            return tags.stream().filter(t -> t.getName().equals(tag)).findFirst().get();
+        else {
+            System.out.println("Le tag n'existe pas");
+            System.out.println("Création du nouveau tag");
+            return new Tag(tag, new ArrayList<>());
+        }
     }
 
     /**
@@ -167,9 +172,7 @@ public class ServerSettings {
     public List<String> getTagFollowers(String[] hashtags) {
         List<String> followers = new ArrayList<>();
         for (String hashtag : hashtags) {
-            try {
-                followers.addAll(findTag(hashtag).getFollowers());
-            } catch (InvalidTagException ignored) {}
+            followers.addAll(findTag(hashtag).getFollowers());
         }
 
         return followers;

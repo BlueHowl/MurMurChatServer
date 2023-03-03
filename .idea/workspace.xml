@@ -4,22 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="RelayRunnable et début SharedRunnableInterface">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/relay/AESGCM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/sharedClients/SharedRunnableInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2023_10_40__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_02_2023_00_15__Changes_.xml" beforeDir="false" />
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="ajout tls car petit bug avec le git">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TaskFactoryInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sharedClients/TaskFactoryInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/relay/RelayManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/relay/RelayManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/relay/RelayRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/relay/RelayRunnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/ServerSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/ServerSettings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/TaskFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/TaskFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,8 +46,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -83,6 +72,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="el4jaq70" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -92,21 +84,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/alexi/OneDrive/Documents/HELMo/Reseau/Projet/MurMurProject",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alexi\OneDrive\Documents\HELMo\Reseau\Projet" />
@@ -198,8 +189,7 @@
       <workItem from="1676400819222" duration="6686000" />
       <workItem from="1676445416113" duration="5491000" />
       <workItem from="1676452280956" duration="6253000" />
-      <workItem from="1677667769335" duration="5913000" />
-      <workItem from="1677679501067" duration="2122000" />
+      <workItem from="1677872014270" duration="7196000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1675878157831</created>
@@ -330,7 +320,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/dev" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -359,7 +349,6 @@
     <MESSAGE value="Confirm added" />
     <MESSAGE value="fast push #1" />
     <MESSAGE value="ajout tls car petit bug avec le git" />
-    <MESSAGE value="RelayRunnable et début SharedRunnableInterface" />
-    <option name="LAST_COMMIT_MESSAGE" value="RelayRunnable et début SharedRunnableInterface" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajout tls car petit bug avec le git" />
   </component>
 </project>

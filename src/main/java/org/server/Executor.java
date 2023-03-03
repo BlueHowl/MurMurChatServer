@@ -5,7 +5,6 @@ import org.model.ServerSettings;
 import org.model.Tag;
 import org.model.Task;
 import org.model.User;
-import org.model.exceptions.InvalidTagException;
 import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
@@ -157,32 +156,30 @@ public class Executor implements Runnable {
             String domain = (String)commandMap.get("domain");
 
             if (commandMap.get("name") != null) {
-                User followedUser = serverSettings.findUser((String)commandMap.get("name"));
-                serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
+                try {
+                    User followedUser = serverSettings.findUser((String)commandMap.get("name"));
+                    serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
+                }catch (InvalidUserException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("L'user est invalide");
+                }
             } else {
                 String followedTagString = (String)commandMap.get("tag");
-
-                try {
-                    Tag tag = serverSettings.findTag(followedTagString);
+                Tag tag = serverSettings.findTag(followedTagString);
+                if (tag.getFollowers().isEmpty()) {
+                    tag.addFollower(client.getUsername()+"@"+domain);
+                    serverSettings.addTag(tag);
+                    serverSettings.addUserTagToUser(client.getUser(), tag.getName()+"@"+domain);
+                } else {
                     serverSettings.addFollowerToTag(tag, client.getUsername()+"@"+domain);
                     serverSettings.addUserTagToUser(client.getUser(), followedTagString+"@"+domain);
-                } catch (InvalidTagException ex) {
-                    Tag newTag = new Tag(followedTagString, new ArrayList<>());
-                    newTag.addFollower(client.getUsername()+"@"+domain);
-                    serverSettings.addTag(newTag);
-                    serverSettings.addUserTagToUser(client.getUser(), newTag.getName()+"@"+domain);
                 }
-
             }
-
             dataInterface.saveServerSettings(serverSettings);
+            System.out.println("Follow reçu");
         } catch (NotSavedException e) {
             throw new RuntimeException(e);
-        } catch (InvalidUserException e) {
-            System.out.println(e.getMessage());
         }
-
-        System.out.println("Follow reçu");
     }
 
     /**
