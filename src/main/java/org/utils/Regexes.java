@@ -11,17 +11,20 @@ public class Regexes {
 
     private static final Pattern TYPE = Pattern.compile("^(?<type>[A-Z]*)");
 
-    private static final Pattern CONNECT = Pattern.compile("^CONNECT[\\x20](?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
+    private static final Pattern CONNECT = Pattern.compile("^CONNECT\\x20(?<username>[a-zA-Z\\d]{5,20})$"); //[\x0D][\x0A]
 
-    private static final Pattern REGISTER = Pattern.compile("^REGISTER[\\x20](?<username>[a-zA-Z\\d]{5,20})[\\x20](?<saltsize>\\d{2})[\\x20][$][2][b][$](?<bcryptround>\\d{2})[$](?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
+    private static final Pattern REGISTER = Pattern.compile("^REGISTER\\x20(?<username>[a-zA-Z\\d]{5,20})\\x20(?<saltsize>\\d{2})\\x20\\$2b\\$(?<bcryptround>\\d{2})\\$(?<bcrypthash>[a-zA-Z\\d\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60]{1,70})$");
 
-    private static final Pattern CONFIRM = Pattern.compile("^CONFIRM[\\x20](?<sha3hex>[a-zA-Z\\d]{30,200})$");
+    private static final Pattern CONFIRM = Pattern.compile("^CONFIRM\\x20(?<sha3hex>[a-zA-Z\\d]{30,200})$");
 
-    private static final Pattern MSG = Pattern.compile("^MSG[\\x20](?<message>[\\x20-\\xFF]{1,200})$");
+    private static final Pattern MSG = Pattern.compile("^MSG\\x20(?<message>[\\x20-\\xFF]{1,200})$");
 
-    private static final Pattern FOLLOW = Pattern.compile("^FOLLOW[\\x20]((?<tag>[#][a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))[@](?<domain>[a-zA-Z\\d.]{5,200})$");
+    private static final Pattern FOLLOW = Pattern.compile("^FOLLOW\\x20((?<tag>#[a-zA-Z\\d]{5,20})|(?<name>[a-zA-Z\\d]{5,20}))@(?<domain>[a-zA-Z\\d.]{5,200})$");
 
     private static final Pattern HASHTAG = Pattern.compile("(#[a-zA-Z\\d]{5,20})");
+
+    public static final Pattern SEND = Pattern.compile("^SEND\\x20(?<iddomain>\\d{1,5}@[a-zA-Z\\d.]{5,200})\\x20(?<sendernamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})\\x20((?<destnamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})|(?<desttagdomain>#[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200}))\\x20(?<internalmsg>[\\x20-\\xFF]{1,500})$");
+
 
     //Decomposers
 
