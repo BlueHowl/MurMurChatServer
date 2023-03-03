@@ -51,7 +51,7 @@ public class ClientManager implements Runnable {
      * Récupère les clients correspondants à la liste d'utilisateur donnée
      * @return (List<ClientRunnable>) liste de clients
      */
-    public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {//TODO synchronized ?
+    public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {
         List<ClientRunnable> clients = new ArrayList<>();
 
         for (ClientRunnable c : clientsList) {
@@ -74,14 +74,5 @@ public class ClientManager implements Runnable {
         } catch (IOException e) {
             throw new CloseClientException("Erreur lors de la fermeture du client", e);
         }
-    }
-
-    public ClientRunnable getClient (String username) {
-        for (ClientRunnable c : clientsList) {
-            if(c.getUsername().equals(username)) {
-                return c;
-            }
-        }
-        return null;
     }
 }

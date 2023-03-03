@@ -74,7 +74,7 @@ class MulticastRunnable implements Runnable {
             msg = new DatagramPacket(content, content.length, multicastIP, multicastPort);
             socketEmission.send(msg);
 
-            System.out.printf("Multicast[%s:%d] sent %s\n", multicastIP.toString(), multicastPort, String.format(ECHO, relayPort, domain)); //todo debug
+            System.out.printf("Multicast[%s:%d] sent %s\n", multicastIP.toString(), multicastPort, String.format(ECHO, relayPort, domain));
         } catch (Exception ignored) {}; //todo change ?
 
     }

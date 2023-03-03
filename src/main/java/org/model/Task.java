@@ -1,5 +1,7 @@
 package org.model;
 
+import org.client.ClientRunnable;
+
 import java.util.Map;
 
 /**
@@ -8,13 +10,13 @@ import java.util.Map;
 public class Task {
     private final int id;
     private final Map<String, Object> commandMap;
-    private final String username;
+    private final ClientRunnable client;
     private String status;
 
-    public Task(int id, Map<String, Object> commandMap, String username, String status) {
+    public Task(int id, Map<String, Object> commandMap, ClientRunnable client, String status) {
         this.id = id;
         this.commandMap = commandMap;
-        this.username = username;
+        this.client = client;
         this.status = status;
     }
 
@@ -28,10 +30,10 @@ public class Task {
 
     /**
      * Récupère le client
-     * @return (User)
+     * @return client (ClientRunnable)
      */
-    public String getUsername() {
-        return username;
+    public ClientRunnable getClient() {
+        return client;
     }
 
     /**

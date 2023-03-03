@@ -17,7 +17,7 @@ public class App {
             ServerSettings serverSettings =  dataInterface.getServerSettings();
 
             TaskList taskList = new TaskList();
-            TaskFactory taskFactory = new TaskFactory(taskList);
+            TaskFactory taskFactory = new TaskFactory(taskList, serverSettings);
 
             ClientManager clientManager = new ClientManager(taskFactory, serverSettings.getUnicastPort());
             (new Thread(clientManager)).start();

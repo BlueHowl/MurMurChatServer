@@ -1,10 +1,12 @@
 package org.client;
 
+import org.model.User;
 import org.sharedClients.TaskFactoryInterface;
 
 import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class ClientRunnable implements Runnable, Closeable {
 
@@ -12,7 +14,7 @@ public class ClientRunnable implements Runnable, Closeable {
     private BufferedReader in;
     private PrintWriter out;
     private final TaskFactoryInterface taskFactoryInterface;
-    private String username = null;
+    private User user = null;
 
     public ClientRunnable (SSLSocket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
@@ -21,7 +23,7 @@ public class ClientRunnable implements Runnable, Closeable {
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
-            taskHandlerInterface.createTask("HELLO ", username);
+            taskHandlerInterface.createTask("HELLO ", this);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -32,18 +34,18 @@ public class ClientRunnable implements Runnable, Closeable {
         try {
             String line = in.readLine();
             while (line != null) { //todo gèrer déconnexion quand line == null
-                taskFactoryInterface.createTask(line, username);
+                taskFactoryInterface.createTask(line, this);
                 line = in.readLine();
             }
         } catch (IOException e) {
-            System.out.println("Lost client connection"); //todo debug
-            taskFactoryInterface.createTask("DISCONNECT", username); //todo meilleur façon ?
+            System.out.println("Lost a client connection");
+            taskFactoryInterface.createTask("DISCONNECT", this); //todo meilleur façon ?
         }
     }
 
     @Override
     public void close() throws IOException{
-        out.close();
+        out.close(); //todo autocloseable ?
         in.close();
         client.close();
     }
@@ -56,12 +58,20 @@ public class ClientRunnable implements Runnable, Closeable {
         out.println(command);
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public String getUsername() {
-        return username;
+        return user.getUsername();
+    }
+
+    public List<String> getFollowers() {
+        return user.getFollowers();
     }
 
 }

@@ -45,7 +45,7 @@ public class Regexes {
             result.put("bcryptround", m.group("bcryptround"));
             result.put("bcryptsalt", bcrypthash.substring(0, saltsize));
             result.put("bcrypthash", bcrypthash.substring(saltsize));
-            System.out.printf("REGISTER : (Username: %s, BcryptRound: %s, BcryptHash: %s, Bcryptsalt: %s)\n", m.group("username"), m.group("bcryptround"), result.get("bcrypthash"), result.get("bcryptsalt")); //todo debug
+            System.out.printf("REGISTER : (Username: %s, BcryptRound: %s, BcryptHash: %s, Bcryptsalt: %s)\n", m.group("username"), m.group("bcryptround"), result.get("bcrypthash"), result.get("bcryptsalt"));
         }
 
         return result;
@@ -63,7 +63,7 @@ public class Regexes {
         if(m.find()) {
             result.put("username", m.group("username"));
 
-            System.out.printf("CONNECT : (Username: %s)\n", m.group("username")); //todo debug
+            System.out.printf("CONNECT : (Username: %s)\n", m.group("username"));
         }
 
         return result;
@@ -81,7 +81,7 @@ public class Regexes {
         if(m.find()) {
             result.put("sha3hex", m.group("sha3hex"));
 
-            System.out.printf("CONFIRM : (Sha3hex: %s)\n", m.group("sha3hex")); //todo debug
+            System.out.printf("CONFIRM : (Sha3hex: %s)\n", m.group("sha3hex"));
         }
 
         return result;
@@ -100,9 +100,44 @@ public class Regexes {
         if(m.find()) {
             result.put("message", m.group("message"));
 
-            System.out.printf("MSG : (Message: %s)\n", m.group("message")); //todo debug
+            System.out.printf("MSG : (Message: %s)\n", m.group("message"));
         }
 
+        return result;
+    }
+
+    /**
+     * Décompose la commande FOLLOW et récupère les informations sous la forme d'une map
+     * @param command (String) Commande FOLLOW
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
+    private Map<String, String> decomposeFollow(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = FOLLOW.matcher(command);
+        if(m.find()) {
+            result.put("name", m.group("name"));
+            result.put("tag", m.group("tag"));
+            result.put("domain", m.group("domain"));
+
+            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)\n", m.group("name"), m.group("tag"), m.group("domain"));
+        }
+        return result;
+    }
+
+    private Map<String, String> decomposeSend(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = SEND.matcher(command);
+        if(m.find()) {
+            result.put("id", m.group("iddomain"));
+            result.put("sender", m.group("sendernamedomain"));
+            result.put("destnamedomain", m.group("destnamedomain"));
+            result.put("desttagdomain", m.group("desttagdomain"));
+            result.put("msg", m.group("internalmsg"));
+
+            System.out.printf("SEND : (Id: %s), (Sender: %s), (Destname: %s), (Desttag: %s), (Msg: %s)\n", m.group("iddomain"), m.group("sendernamedomain"), m.group("destnamedomain"), m.group("desttagdomain"), m.group("internalmsg"));
+        }
         return result;
     }
 
@@ -126,25 +161,6 @@ public class Regexes {
         }
 
         return hashtag;
-    }
-
-    /**
-     * Décompose la commande FOLLOW et récupère les informations sous la forme d'une map
-     * @param command (String) Commande FOLLOW
-     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
-     */
-    private Map<String, String> decomposeFollow(String command) {
-        Map<String, String> result = new HashMap<>();
-
-        Matcher m = FOLLOW.matcher(command);
-        if(m.find()) {
-            result.put("name", m.group("name"));
-            result.put("tag", m.group("tag"));
-            result.put("domain", m.group("domain"));
-
-            System.out.printf("FOLLOW : (Name: %s), (Tag: %s), (Domain: %s)\n", m.group("name"), m.group("tag"), m.group("domain")); //todo debug
-        }
-        return result;
     }
 
     /**
@@ -180,6 +196,10 @@ public class Regexes {
 
                 case "FOLLOW":
                     result.putAll(decomposeFollow(command));
+                    break;
+
+                case "SEND":
+                    result.putAll(decomposeSend(command));
                     break;
 
             }
