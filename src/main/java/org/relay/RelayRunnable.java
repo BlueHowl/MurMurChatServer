@@ -1,14 +1,13 @@
 package org.relay;
 
 import org.sharedClients.TaskFactoryInterface;
-import org.sharedClients.SharedRunnableInterface;
 import org.utils.AESGCM;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-public class RelayRunnable implements Runnable, Closeable, SharedRunnableInterface {
+public class RelayRunnable implements Runnable, Closeable {
     private final Socket client;
     private BufferedReader in;
     private PrintWriter out;
@@ -34,7 +33,7 @@ public class RelayRunnable implements Runnable, Closeable, SharedRunnableInterfa
             String line = in.readLine();
             while (line != null) {
                 aesgcm.decrypt(line);
-                taskFactoryInterface.createTask(line, this);
+                taskFactoryInterface.createTask(line);
                 line = in.readLine();
             }
         } catch (Exception e) {
@@ -49,7 +48,6 @@ public class RelayRunnable implements Runnable, Closeable, SharedRunnableInterfa
         client.close();
     }
 
-    @Override
     public void send(String command) {
         out.println(command);
     }

@@ -1,21 +1,18 @@
 package org.client;
 
-import org.model.User;
-import org.sharedClients.SharedRunnableInterface;
 import org.sharedClients.TaskFactoryInterface;
 
 import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
-public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterface {
+public class ClientRunnable implements Runnable, Closeable {
 
     private final SSLSocket client;
     private BufferedReader in;
     private PrintWriter out;
     private final TaskFactoryInterface taskFactoryInterface;
-    private User user = null;
+    private String username = null;
 
     public ClientRunnable (SSLSocket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
@@ -24,7 +21,7 @@ public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterf
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true);
-            taskHandlerInterface.createTask("HELLO ",this);
+            taskHandlerInterface.createTask("HELLO ", username);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -35,12 +32,12 @@ public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterf
         try {
             String line = in.readLine();
             while (line != null) { //todo gèrer déconnexion quand line == null
-                taskFactoryInterface.createTask(line, this);
+                taskFactoryInterface.createTask(line, username);
                 line = in.readLine();
             }
         } catch (IOException e) {
             System.out.println("Lost client connection"); //todo debug
-            taskFactoryInterface.createTask("DISCONNECT", this); //todo meilleur façon ?
+            taskFactoryInterface.createTask("DISCONNECT", username); //todo meilleur façon ?
         }
     }
 
@@ -59,19 +56,12 @@ public class ClientRunnable implements Runnable, Closeable, SharedRunnableInterf
         out.println(command);
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 
-    public List<String> getFollowers() {
-        return user.getFollowers();
-    }
 }

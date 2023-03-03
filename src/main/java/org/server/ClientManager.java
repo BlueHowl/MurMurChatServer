@@ -75,4 +75,13 @@ public class ClientManager implements Runnable {
             throw new CloseClientException("Erreur lors de la fermeture du client", e);
         }
     }
+
+    public ClientRunnable getClient (String username) {
+        for (ClientRunnable c : clientsList) {
+            if(c.getUsername().equals(username)) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

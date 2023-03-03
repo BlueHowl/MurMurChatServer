@@ -1,7 +1,6 @@
 package org.server;
 
 import org.model.Task;
-import org.sharedClients.SharedRunnableInterface;
 import org.sharedClients.TaskFactoryInterface;
 import org.utils.Regexes;
 
@@ -21,11 +20,17 @@ public class TaskFactory implements TaskFactoryInterface {
     /**
      * Crée une tache sur base d'une commande et du thread client concerné
      * @param command (String)
-     * @param runnable (SharedRunnableInterface)
+     * @param username (String)
      */
-    public synchronized void createTask(String command, SharedRunnableInterface runnable) {
+    public synchronized void createTask(String command, String username) {
         Map<String, Object> commandInfos = regexes.decomposeCommand(command);
-        taskList.addTask(new Task(++idCountTasks, commandInfos, runnable, "pending"));
+        taskList.addTask(new Task(++idCountTasks, commandInfos, username, "pending"));
+    }
+
+    public synchronized void createTask(String command) {
+        String username = "anonymous";
+        Map<String, Object> commandInfos = regexes.decomposeCommand(command);
+        taskList.addTask(new Task(++idCountTasks, commandInfos, username, "pending"));
     }
 
 }

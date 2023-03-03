@@ -1,16 +1,22 @@
 package org.sharedClients;
 
 /**
- * Interface TaskList
- * Permet de récupérer les taches à exécuter
+ * Interface TaskFactory
+ * Permet de créer une tache
  */
 public interface TaskFactoryInterface {
 
     /**
-     * Cette méthode permet de récupérer la tache suivante à exécuter
+     * Cette méthode permet de créer une tache via un thread client
      * @param command (String)
-     * @param runnable (SharedRunnableInterface)
+     * @param username (String)
      */
-     void createTask(String command, SharedRunnableInterface runnable);
+     void createTask(String command, String username);
+
+    /**
+     * Cette méthode permet de créer une tache via un thread relai
+     * @param command (String)
+     */
+    void createTask(String command);
 
 }

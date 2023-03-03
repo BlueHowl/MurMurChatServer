@@ -10,7 +10,6 @@ import org.model.exceptions.InvalidUserException;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
 import org.server.exception.CloseClientException;
-import org.sharedClients.SharedRunnableInterface;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -59,20 +58,20 @@ public class Executor implements Runnable {
      */
     private void execute(Task task) {
         Map<String, Object> commandMap = task.getCommandMap();
-        SharedRunnableInterface client = task.getClient();
+        ClientRunnable client = clientManager.getClient(task.getUsername());
 
         switch((String)commandMap.get("type")) {
             case "HELLO":
-                hello((ClientRunnable) client);
+                hello(client);
                 break;
             case "REGISTER":
-                register(commandMap, (ClientRunnable) client);
+                register(commandMap, client);
                 break;
             case "CONNECT":
-                connect(commandMap, (ClientRunnable) client);
+                connect(commandMap, client);
                 break;
             case "CONFIRM":
-                confirm(commandMap, (ClientRunnable) client);
+                confirm(commandMap, client);
                 break;
             case "MSG":
                 msg(commandMap, client);
@@ -81,7 +80,7 @@ public class Executor implements Runnable {
                 follow(commandMap, client);
                 break;
             case "DISCONNECT":
-                disconnect((ClientRunnable) client);
+                disconnect(client);
                 break;
         }
     }
@@ -100,7 +99,7 @@ public class Executor implements Runnable {
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
             client.send(String.format(OK, "Le compte est enregistré"));
             System.out.println("Compte enregistré");
-            client.setUser(user);
+            client.setUsername((String)commandMap.get("username"));
         } catch (InvalidUserException | NotSavedException ex) {
             client.send(String.format(ERR, ex.getMessage()));
             System.out.println("Erreur envoyé, erreur d'enregistrement");
@@ -111,7 +110,7 @@ public class Executor implements Runnable {
         try {
             User user = serverSettings.findUser((String)commandMap.get("username"));
             client.send(String.format(PARAM, user.getBcryptRotations(), user.getBcryptSalt()));
-            client.setUser(user);
+            client.setUsername((String)commandMap.get("username"));
         } catch (InvalidUserException ex) {
             client.send(String.format(ERR, ex.getMessage()));
         }
@@ -119,13 +118,13 @@ public class Executor implements Runnable {
     }
 
     private void confirm(Map<String, Object> commandMap, ClientRunnable client) {
-        User user = client.getUser();
-        String sha3hex = (String)commandMap.get("sha3hex");
-        String comparable;
         try {
+            User user = serverSettings.findUser(client.getUsername());
+            String sha3hex = (String)commandMap.get("sha3hex");
+
             MessageDigest digest = MessageDigest.getInstance("SHA3-256");
             byte[] hash = digest.digest((key + "$2b$" + user.getBcryptRotations() + "$" + user.getBcryptSalt() + user.getBcryptHash()).getBytes(StandardCharsets.UTF_8));
-            comparable = bytesToHex(hash);
+            String comparable = bytesToHex(hash);
             if (sha3hex.equals(comparable)) {
                 client.send(String.format(OK, "Welcome!"));
                 System.out.println("Sending +OK");
@@ -133,55 +132,60 @@ public class Executor implements Runnable {
                 client.send(String.format(ERR, "Wrong password"));
                 System.out.println("Sending -ERR: Wrong password!");
             }
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException | InvalidUserException ex) {
             client.send(String.format(ERR, ex.getMessage()));
         }
     }
 
     private void msg(Map<String, Object> commandMap, ClientRunnable client) {
-        String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
+        try {
+            String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
 
-        String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
+            String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
 
-        HashSet<String> destinations = new HashSet<>(); //préviens les envois dupliqués
-        destinations.addAll(client.getFollowers());
-        destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
+            HashSet<String> destinations = new HashSet<>(); //préviens les envois dupliqués
+            destinations.addAll(serverSettings.findUser(client.getUsername()).getFollowers());
+            destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
 
-        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
-        for (ClientRunnable c : clients) {
-            c.send(msgs);
+            List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
+            for (ClientRunnable c : clients) {
+                c.send(msgs);
+            }
+        } catch (InvalidUserException e) {
+
         }
     }
 
     private void follow(Map<String, Object> commandMap, ClientRunnable client) {
-        String domain = (String)commandMap.get("domain");
-        if (commandMap.get("name") != null) {
-            try {
+        try {
+            String domain = (String)commandMap.get("domain");
+
+            User user = serverSettings.findUser(client.getUsername());
+
+            if (commandMap.get("name") != null) {
                 User followedUser = serverSettings.findUser((String)commandMap.get("name"));
                 serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
-            } catch (InvalidUserException ex) {
-                System.out.println(ex.getMessage());
+            } else {
+                String followedTagString = (String)commandMap.get("tag");
+
+                try {
+                    Tag tag = serverSettings.findTag(followedTagString);
+                    serverSettings.addFollowerToTag(tag, client.getUsername()+"@"+domain);
+                    serverSettings.addUserTagToUser(user, followedTagString+"@"+domain);
+                } catch (InvalidTagException ex) {
+                    Tag newTag = new Tag(followedTagString, new ArrayList<>());
+                    newTag.addFollower(client.getUsername()+"@"+domain);
+                    serverSettings.addTag(newTag);
+                    serverSettings.addUserTagToUser(user, newTag.getName()+"@"+domain);
+                }
+
             }
-        } else {
-            String followedTagString = (String)commandMap.get("tag");
 
-            try {
-                Tag tag = serverSettings.findTag(followedTagString);
-                serverSettings.addFollowerToTag(tag, client.getUsername()+"@"+domain);
-                serverSettings.addUserTagToUser(client.getUser(), followedTagString+"@"+domain);
-            } catch (InvalidTagException ex) {
-                Tag newTag = new Tag(followedTagString, new ArrayList<>());
-                newTag.addFollower(client.getUsername()+"@"+domain);
-                serverSettings.addTag(newTag);
-                serverSettings.addUserTagToUser(client.getUser(), newTag.getName()+"@"+domain);
-            }
-
-        }
-
-        try {
-            dataInterface.saveServerSettings(serverSettings); //sauvegarde json todo changer
+            dataInterface.saveServerSettings(serverSettings);
         } catch (NotSavedException e) {
             throw new RuntimeException(e);
+        } catch (InvalidUserException e) {
+            System.out.println(e.getMessage());
         }
 
         System.out.println("Follow reçu");

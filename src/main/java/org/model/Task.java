@@ -1,7 +1,5 @@
 package org.model;
 
-import org.sharedClients.SharedRunnableInterface;
-
 import java.util.Map;
 
 /**
@@ -10,13 +8,13 @@ import java.util.Map;
 public class Task {
     private final int id;
     private final Map<String, Object> commandMap;
-    private final SharedRunnableInterface client;
+    private final String username;
     private String status;
 
-    public Task(int id, Map<String, Object> commandMap, SharedRunnableInterface client, String status) {
+    public Task(int id, Map<String, Object> commandMap, String username, String status) {
         this.id = id;
         this.commandMap = commandMap;
-        this.client = client;
+        this.username = username;
         this.status = status;
     }
 
@@ -29,11 +27,11 @@ public class Task {
     }
 
     /**
-     * Récupère le thread client
-     * @return (SharedRunnableInterface)
+     * Récupère le client
+     * @return (User)
      */
-    public SharedRunnableInterface getClient() {
-        return client;
+    public String getUsername() {
+        return username;
     }
 
     /**
