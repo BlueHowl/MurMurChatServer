@@ -9,9 +9,7 @@ import org.model.User;
 import org.model.exceptions.InvalidServerSettingsException;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -27,7 +25,7 @@ public class DtoMapper {
      * @return (UserDTO) utilisateur dto
      */
     private UserDTO userToDto(User user) {
-        return new UserDTO(user.getUsername(), user.getBcryptRotations(), user.getBcryptSalt(), user.getBcryptHash(), user.getFollowers(), user.getUserTags(), user.getLockoutCounter());
+        return new UserDTO(user.getUsername(), user.getBcryptRotations(), user.getBcryptSalt(), user.getBcryptHash(), user.getFollowers(), user.getUserTags(), user.getLockoutCounter(), user.getOfflineMessages());
     }
 
     /**
@@ -36,7 +34,7 @@ public class DtoMapper {
      * @return (User) Utilisateur
      */
     private User dtoToUser(UserDTO userDto) {
-        return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash(), userDto.getFollowers(), userDto.getUserTags(), userDto.getLockoutCounter());
+        return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash(), userDto.getFollowers(), userDto.getUserTags(), userDto.getLockoutCounter(), userDto.getOfflineMessages());
     }
 
     //Tag
@@ -59,6 +57,12 @@ public class DtoMapper {
     }
 
 
+    /**
+     * Conerti l'objet DTO serveur en objet serveur settings
+     * @param serverDto (ServerDTO) serveur dto
+     * @return (ServerSettings) serveur settings
+     * @throws InvalidServerSettingsException
+     */
     public ServerSettings dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException {
         if(serverDto == null) {
             throw new InvalidServerSettingsException("Configuration serveur vide");
@@ -68,11 +72,12 @@ public class DtoMapper {
 
         Set<User> users = new HashSet<>();
         Set<Tag> tags = new HashSet<>();
+        List<String> offlineMessages = new ArrayList<>();
 
         for (UserDTO userDto: serverDto.getUsers()) { users.add(dtoToUser(userDto)); }
         for (TagDTO tagDto: serverDto.getTags()) { tags.add(dtoToTag(tagDto)); }
 
-        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags);
+        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags, null);
     }
 
     public ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {

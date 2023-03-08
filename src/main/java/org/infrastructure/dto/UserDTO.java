@@ -2,6 +2,7 @@ package org.infrastructure.dto;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,6 +31,9 @@ public class UserDTO {
     @SerializedName("LockoutCounter")
     public final  int lockoutCounter;
 
+    @SerializedName("OfflineMessages")
+    public final List<String> offlineMessages;
+
     /**
      * Constructeur utilisateur DTO
      *
@@ -41,7 +45,7 @@ public class UserDTO {
      * @param userTags        (Set<String>) liste des userTags
      * @param lockoutCounter  (int) lockoutCounter
      */
-    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter) {
+    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter, List<String> offlineMessages) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
@@ -49,6 +53,7 @@ public class UserDTO {
         this.followers = followers;
         this.userTags = userTags;
         this.lockoutCounter = lockoutCounter;
+        this.offlineMessages = offlineMessages;
     }
 
     /**
@@ -105,5 +110,13 @@ public class UserDTO {
      */
     public int getLockoutCounter() {
         return lockoutCounter;
+    }
+
+    /**
+     * Récupère les messages hors ligne
+     * @return (List<String>)
+     */
+    public List<String> getOfflineMessages() {
+        return offlineMessages;
     }
 }

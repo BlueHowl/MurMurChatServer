@@ -1,5 +1,6 @@
 package org.model;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,9 +12,12 @@ public class Tag {
     private final String name;
     private final Set<String> followers;
 
+    public Tag(String name) {
+        this(name, null);
+    }
     public Tag(String name, Set<String> followers) {
         this.name = name;
-        this.followers = followers;
+        this.followers = (followers != null) ? followers : new HashSet<>();
     }
 
 

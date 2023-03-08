@@ -49,6 +49,8 @@ public class ClientManager implements Runnable {
 
     /**
      * Récupère les clients correspondants à la liste d'utilisateur donnée
+     * @param domain (String) domaine
+     * @param followers (List<String>) liste d'utilisateurs
      * @return (List<ClientRunnable>) liste de clients
      */
     public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {

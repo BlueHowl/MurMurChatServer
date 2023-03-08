@@ -49,6 +49,10 @@ public class RelayRunnable implements Runnable, Closeable {
     }
 
     public void send(String command) {
-        out.println(command);
+        try {
+            out.println(aesgcm.encrypt(command));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

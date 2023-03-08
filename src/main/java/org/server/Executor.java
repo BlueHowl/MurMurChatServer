@@ -93,7 +93,7 @@ public class Executor implements Runnable {
         try {
             User user = new User((String)commandMap.get("username"), Integer.parseInt((String)commandMap.get("bcryptround")),
                     (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new HashSet<>(),
-                    new HashSet<>(), 0);
+                    new HashSet<>(), 0, null);
             serverSettings.addUser(user);
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
             client.send(String.format(OK, "Le compte est enregistré"));
@@ -136,13 +136,22 @@ public class Executor implements Runnable {
         }
     }
 
+    /**
+     * Envoyer un message
+     * @param commandMap (Map<String, Object>) contient le message et les hashtags
+     * @param client (ClientRunnable) client qui envoie le message
+     */
     private void msg(Map<String, Object> commandMap, ClientRunnable client) {
         String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
 
         String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
 
-        HashSet<String> destinations = new HashSet<>(); //préviens les envois dupliqués
+        Set<String> destinations = new HashSet<>(); //préviens les envois dupliqués
         destinations.addAll(client.getFollowers());
+        //TODO envoyer a chaque follower du client un message SEND avec comme destination le follower
+        for (String follower : client.getFollowers()) {
+
+        }
         destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
 
         //TODO regarder pour remplacer par un Set

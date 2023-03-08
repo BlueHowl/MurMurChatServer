@@ -20,6 +20,8 @@ public class User {
 
     private int lockoutCounter;
 
+    private List<String> offlineMessages;
+
     /**
      * Constructeur classe utilisateur
      *
@@ -29,16 +31,18 @@ public class User {
      * @param bcryptHash      (String) hash bcrypt
      * @param followers       (Set<String>) liste des followers
      * @param userTags        (Set<String>) liste des userTags
-     * @param lockoutCounter  (int) lockoutCounter
+     * @param lockoutCounter  (int) lockoutCounter // pas utilisé
+     * @param offlineMessages (List<String>) liste des messages offline
      */
-    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter) {
+    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter, List<String> offlineMessages) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
         this.bcryptHash = bcryptHash;
-        this.followers = followers;
-        this.userTags = userTags;
+        this.followers = (followers != null) ? followers : new HashSet<>();
+        this.userTags = (userTags != null) ? userTags : new HashSet<>();
         this.lockoutCounter = lockoutCounter;
+        this.offlineMessages = (offlineMessages != null) ? offlineMessages : new ArrayList<>();
     }
 
 
@@ -100,6 +104,14 @@ public class User {
         return lockoutCounter;
     }
 
+    /**
+     * Récupère la liste des messages offline
+     * @return (List<String>) offlineMessages
+     */
+    public List<String> getOfflineMessages() {
+        return offlineMessages;
+    }
+
 
     //SETTERS
 
@@ -117,6 +129,14 @@ public class User {
      * */
     public void addUserTag(String tag) {
         userTags.add(tag);
+    }
+
+    /**
+     * Ajoute un message à la liste des messages offline
+     * @param message (String) message
+     */
+    public void addOfflineMessage(String message) {
+        offlineMessages.add(message);
     }
 
     @Override

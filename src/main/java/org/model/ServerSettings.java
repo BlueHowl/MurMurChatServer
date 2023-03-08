@@ -21,8 +21,9 @@ public class ServerSettings {
     private final boolean tls;
     private final Set<User> users;
     private final Set<Tag> tags;
+    private final List<String> offlineMessages;
 
-    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, Set<User> users, Set<Tag> tags) {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -34,6 +35,7 @@ public class ServerSettings {
         this.tls = tls;
         this.users = users;
         this.tags = tags;
+        this.offlineMessages = (offlineMessages != null) ? offlineMessages : new ArrayList<>();
     }
 
 
@@ -121,6 +123,14 @@ public class ServerSettings {
     }
 
     /**
+     * Récupère la liste des messages offline
+     * @return (List<String>)
+     */
+    public List<String> getOfflineMessages() {
+        return offlineMessages;
+    }
+
+    /**
      * Vérifie si l'utilisateur est déjà un compte connu
      * @param user le compte
      * @return vrai s'il l'utilisateur est existant
@@ -158,7 +168,7 @@ public class ServerSettings {
         else {
             System.out.println("Le tag n'existe pas");
             System.out.println("Création du nouveau tag");
-            return new Tag(tag, new HashSet<>());
+            return new Tag(tag);
         }
     }
 
@@ -227,5 +237,11 @@ public class ServerSettings {
         tag.addFollower(follower);
     }
 
-
+    /**
+     * Ajoute un message offline à la liste des messages offline
+     * @param message (String) message
+     */
+    public void addOfflineMessage(String message) {
+        offlineMessages.add(message);
+    }
 }
