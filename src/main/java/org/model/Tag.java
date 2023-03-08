@@ -1,7 +1,7 @@
 package org.model;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Classe tag dto
@@ -9,9 +9,9 @@ import java.util.Objects;
 public class Tag {
 
     private final String name;
-    private final List<String> followers;
+    private final Set<String> followers;
 
-    public Tag(String name, List<String> followers) {
+    public Tag(String name, Set<String> followers) {
         this.name = name;
         this.followers = followers;
     }
@@ -29,9 +29,9 @@ public class Tag {
 
     /**
      * Récupère les followers
-     * @return (List<String>) liste de followers
+     * @return (Set<String>) liste de followers
      */
-    public List<String> getFollowers() {
+    public Set<String> getFollowers() {
         return followers;
     }
 
