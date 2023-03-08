@@ -92,8 +92,8 @@ public class Executor implements Runnable {
     private void register(Map<String, Object> commandMap, ClientRunnable client) {
         try {
             User user = new User((String)commandMap.get("username"), Integer.parseInt((String)commandMap.get("bcryptround")),
-                    (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new ArrayList<>(),
-                    new ArrayList<>(), 0);
+                    (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new HashSet<>(),
+                    new HashSet<>(), 0);
             serverSettings.addUser(user);
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
             client.send(String.format(OK, "Le compte est enregistré"));
@@ -145,6 +145,7 @@ public class Executor implements Runnable {
         destinations.addAll(client.getFollowers());
         destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
 
+        //TODO regarder pour remplacer par un Set
         List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
         for (ClientRunnable c : clients) {
             c.send(msgs);

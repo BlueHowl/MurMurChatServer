@@ -2,7 +2,7 @@ package org.infrastructure.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Classe DTO Book
@@ -22,10 +22,10 @@ public class UserDTO {
     public final String bcryptHash;
 
     @SerializedName("Followers")
-    public final List<String> followers;
+    public final Set<String> followers;
 
     @SerializedName("UserTags")
-    public final  List<String> userTags;
+    public final  Set<String> userTags;
 
     @SerializedName("LockoutCounter")
     public final  int lockoutCounter;
@@ -37,11 +37,11 @@ public class UserDTO {
      * @param bcryptRotations (String) rotations bcrypt
      * @param bcryptSalt      (String) salt bcrypt
      * @param bcryptHash      (String) hash bcrypt
-     * @param followers       (List<String>) liste des followers
-     * @param userTags        (List<String>) liste des userTags
+     * @param followers       (Set<String>) liste des followers
+     * @param userTags        (Set<String>) liste des userTags
      * @param lockoutCounter  (int) lockoutCounter
      */
-    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) {
+    public UserDTO(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
@@ -85,17 +85,17 @@ public class UserDTO {
 
     /**
      * Récupère les followers
-     * @return (List<String>) followers
+     * @return (Set<String>) followers
      */
-    public List<String> getFollowers() {
+    public Set<String> getFollowers() {
         return followers;
     }
 
     /**
      * Récupère les userTags
-     * @return (List<String>) userTags
+     * @return (Set<String>) userTags
      */
-    public List<String> getUserTags() {
+    public Set<String> getUserTags() {
         return userTags;
     }
 

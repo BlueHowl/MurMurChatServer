@@ -3,9 +3,7 @@ package org.model;
 import org.model.exceptions.InvalidUserException;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Classe de stockage des paramètres serveurs et des utilisateurs et tags
@@ -21,10 +19,10 @@ public class ServerSettings {
     private final String networkInterface;
     private final SecretKeySpec AESKey;
     private final boolean tls;
-    private final List<User> users;
-    private final List<Tag> tags;
+    private final Set<User> users;
+    private final Set<Tag> tags;
 
-    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, List<User> users, List<Tag> tags) {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, Set<User> users, Set<Tag> tags) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -118,7 +116,7 @@ public class ServerSettings {
      * Récupère la liste des utilisateurs DTO
      * @return (UserDTO)
      */
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
@@ -143,7 +141,7 @@ public class ServerSettings {
      * Récupère la liste des tags DTO
      * @return (TagDTO)
      */
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
@@ -160,7 +158,7 @@ public class ServerSettings {
         else {
             System.out.println("Le tag n'existe pas");
             System.out.println("Création du nouveau tag");
-            return new Tag(tag, new ArrayList<>());
+            return new Tag(tag, new HashSet<>());
         }
     }
 
@@ -170,6 +168,7 @@ public class ServerSettings {
      * @return (List<String>) liste de followers
      */
     public List<String> getTagFollowers(String[] hashtags) {
+        //TODO regarder si il faut changer en Set
         List<String> followers = new ArrayList<>();
         for (String hashtag : hashtags) {
             followers.addAll(findTag(hashtag).getFollowers());

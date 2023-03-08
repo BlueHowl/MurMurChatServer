@@ -2,7 +2,7 @@ package org.infrastructure.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Classe tag dto
@@ -13,9 +13,9 @@ public class TagDTO {
     public final String tag;
 
     @SerializedName("Followers")
-    public final List<String> followers;
+    public final Set<String> followers;
 
-    public TagDTO(String tag, List<String> followers) {
+    public TagDTO(String tag, Set<String> followers) {
         this.tag = tag;
         this.followers = followers;
     }
@@ -30,9 +30,9 @@ public class TagDTO {
 
     /**
      * Récupère les followers
-     * @return (List<String>) liste de followers
+     * @return (Set<String>) liste de followers
      */
-    public List<String> getFollowers() {
+    public Set<String> getFollowers() {
         return followers;
     }
 }
