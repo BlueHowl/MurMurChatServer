@@ -13,6 +13,9 @@ public class NetChooser {
 
     public NetChooser() {
         loadInterfaces();
+    }
+
+    public NetworkInterface selectInterface() {
         Scanner console = new Scanner(System.in);
         String[] allInterfaceNames = getInterfaces();
         for(int index=0; index < allInterfaceNames.length; ++index) {
@@ -21,7 +24,7 @@ public class NetChooser {
         System.out.printf("Select your interface :");
         NetworkInterface selected = getInterfacesByIndex(console.nextInt());
         System.out.printf("Selected interface: %s\n", selected.getDisplayName());
-
+        return selected;
     }
 
     private void loadInterfaces() {
@@ -66,4 +69,6 @@ public class NetChooser {
     public static void main(String[] args) {
         new NetChooser();
     }
+
+
 }

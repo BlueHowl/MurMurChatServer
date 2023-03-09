@@ -3,16 +3,22 @@ import org.model.ServerSettings;
 import org.relay.RelayManager;
 import org.relay.RelayMulticast;
 import org.repository.DataInterface;
+import org.resources.NetChooser;
 import org.server.ClientManager;
 import org.server.Executor;
 import org.server.TaskFactory;
 import org.server.TaskList;
 import org.utils.AESGCM;
 
+import java.net.NetworkInterface;
+
 public class App {
 
     public static void main(String args[]) {
         try(DataInterface dataInterface = new JsonRepository()) {
+            final NetChooser netChooser = new NetChooser();
+            final NetworkInterface net = netChooser.selectInterface();
+
             setSystemProperty(args);
             ServerSettings serverSettings =  dataInterface.getServerSettings();
 
@@ -21,7 +27,7 @@ public class App {
             TaskList taskList = new TaskList();
             TaskFactory taskFactory = new TaskFactory(taskList, aesgcm);
 
-            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastAddress(), serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain());
+            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain(), net);
             RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, serverSettings.getRelayPort(), aesgcm);
             (new Thread(relayManager)).start();
 
