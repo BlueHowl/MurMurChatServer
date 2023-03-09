@@ -51,12 +51,14 @@ public class Executor implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
+       while(true) {
             Task task = taskList.getTask();
             if (task != null) {
                 execute(task);
             }
-        }
+           relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "testmessage test@test"));
+
+       }
     }
 
     /**

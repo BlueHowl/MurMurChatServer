@@ -68,7 +68,7 @@ public class DtoMapper {
             throw new InvalidServerSettingsException("Configuration serveur vide");
         }
 
-        SecretKeySpec keySpec = new SecretKeySpec(Base64.getDecoder().decode(serverDto.getBase64AES().getBytes(UTF_8)), "AES");
+        byte[] aesKey = Base64.getDecoder().decode(serverDto.getBase64AES().getBytes(UTF_8));
 
         Set<User> users = new HashSet<>();
         Set<Tag> tags = new HashSet<>();
@@ -77,11 +77,11 @@ public class DtoMapper {
         for (UserDTO userDto: serverDto.getUsers()) { users.add(dtoToUser(userDto)); }
         for (TagDTO tagDto: serverDto.getTags()) { tags.add(dtoToTag(tagDto)); }
 
-        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), keySpec, serverDto.isTls(), users, tags, null);
+        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), aesKey, serverDto.isTls(), users, tags, null);
     }
 
     public ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {
-        String AESKey = Base64.getEncoder().encodeToString(serverSettings.getAESKey().getEncoded());
+        String AESKey = Base64.getEncoder().encodeToString(serverSettings.getAESKey());
 
         Set<UserDTO> users = new HashSet<>();
         Set<TagDTO> tags = new HashSet<>();

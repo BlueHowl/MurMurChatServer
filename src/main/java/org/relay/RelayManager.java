@@ -31,7 +31,7 @@ public class RelayManager implements Runnable {
             while (true) {
                 if(relay == null) { //tant qu'il n'y a pas un relai
                     final Socket client = server.accept();
-                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface, aesgcm);
+                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface);
                     relay = runnable; //ajoute le nouveau client relai à la liste
                     relayMulticast.toggleMulticast(); //désactive le multicast
                     (new Thread(runnable)).start();
@@ -50,7 +50,7 @@ public class RelayManager implements Runnable {
         if(relay == null)
             return;
 
-        relay.send(command);
+        relay.send(aesgcm.encrypt(command));
     }
 
 }

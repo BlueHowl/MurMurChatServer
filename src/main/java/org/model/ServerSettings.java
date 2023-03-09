@@ -2,7 +2,6 @@ package org.model;
 
 import org.model.exceptions.InvalidUserException;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 
 /**
@@ -17,13 +16,13 @@ public class ServerSettings {
     private final int unicastPort;
     private final int relayPort;
     private final String networkInterface;
-    private final SecretKeySpec AESKey;
+    private final byte[] AESKey;
     private final boolean tls;
     private final Set<User> users;
     private final Set<Tag> tags;
     private final List<String> offlineMessages;
 
-    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, SecretKeySpec AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, byte[] AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -101,7 +100,7 @@ public class ServerSettings {
      * Récupère la clé AES en base 64
      * @return (String)
      */
-    public SecretKeySpec getAESKey() {
+    public byte[] getAESKey() {
         return AESKey;
     }
 

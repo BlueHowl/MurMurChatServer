@@ -25,8 +25,6 @@ public class Regexes {
 
     public static final Pattern SEND = Pattern.compile("^SEND\\x20(?<iddomain>\\d{1,5}@[a-zA-Z\\d.]{5,200})\\x20(?<sendernamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})\\x20((?<destnamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})|(?<desttagdomain>#[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200}))\\x20(?<internalmsg>[\\x20-\\xFF]{1,500})$");
 
-    public static final Pattern RELAYMSG = Pattern.compile("^(?<ivnonce>[\\x20-\\xFF]{1,12})\\x20(?<message>[\\x20-\\xFF]{1,1500})$");
-
     //Decomposers
 
     /**
@@ -169,18 +167,6 @@ public class Regexes {
         }
 
         return hashtag;
-    }
-
-    public Map<String, String> decomposeRelayMsg(String command) {
-        Map<String, String> result = new HashMap<>();
-
-        Matcher m = RELAYMSG.matcher(command);
-        if(m.find()) {
-            result.put("ivnonce", m.group("ivnonce"));
-            result.put("message", m.group("message"));
-        }
-
-        return result;
     }
 
     /**

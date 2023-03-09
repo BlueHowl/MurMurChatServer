@@ -40,8 +40,7 @@ public class TaskFactory implements TaskFactoryInterface {
      */
     @Override
     public void createTask(String command) {
-        Map<String, String> messageInfos = regexes.decomposeRelayMsg(command);
-        String uncryptedText = aesgcm.decrypt(messageInfos.get("message"), messageInfos.get("ivnonce"));
+        String uncryptedText = aesgcm.decrypt(command);
         taskList.addTask(new Task(++idCountTasks, regexes.decomposeCommand(uncryptedText), null, "pending"));
     }
 

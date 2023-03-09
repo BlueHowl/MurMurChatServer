@@ -1,7 +1,6 @@
 package org.relay;
 
 import org.sharedClients.TaskFactoryInterface;
-import org.utils.AESGCM;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,12 +11,10 @@ public class RelayRunnable implements Runnable, Closeable {
     private BufferedReader in;
     private PrintWriter out;
     private final TaskFactoryInterface taskFactoryInterface;
-    private final AESGCM aesgcm;
 
-    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface, AESGCM aesgcm) {
+    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
         this.taskFactoryInterface = taskHandlerInterface;
-        this.aesgcm = aesgcm;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -52,6 +49,7 @@ public class RelayRunnable implements Runnable, Closeable {
      * @param command (String)
      */
     public void send(String command) {
-        out.println(aesgcm.encrypt(command));
+        System.out.println(String.format("Envoi relai : %s", command));
+        out.println(command);
     }
 }
