@@ -42,4 +42,15 @@ public class RelayManager implements Runnable {
         }
     }
 
+    /**
+     * Envoi la commande au relai en passant par le thread relai si il existe
+     * @param command (String)
+     */
+    public void sendToRelay(String command) {
+        if(relay == null)
+            return;
+
+        relay.send(command);
+    }
+
 }

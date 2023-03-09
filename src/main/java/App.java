@@ -16,18 +16,20 @@ public class App {
             setSystemProperty(args);
             ServerSettings serverSettings =  dataInterface.getServerSettings();
 
+            AESGCM aesgcm = new AESGCM(serverSettings.getAESKey());
+
             TaskList taskList = new TaskList();
-            TaskFactory taskFactory = new TaskFactory(taskList, serverSettings);
+            TaskFactory taskFactory = new TaskFactory(taskList, aesgcm);
+
+            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastAddress(), serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain());
+            RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, serverSettings.getRelayPort(), aesgcm);
+            (new Thread(relayManager)).start();
 
             ClientManager clientManager = new ClientManager(taskFactory, serverSettings.getUnicastPort());
             (new Thread(clientManager)).start();
 
-            Executor executor = new Executor(taskList, clientManager, serverSettings, dataInterface);
+            Executor executor = new Executor(taskList, clientManager, relayManager, serverSettings, dataInterface);
             (new Thread(executor)).start();
-
-            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastAddress(), serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain());
-            RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, serverSettings.getRelayPort(), new AESGCM(serverSettings.getAESKey()));
-            (new Thread(relayManager)).start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

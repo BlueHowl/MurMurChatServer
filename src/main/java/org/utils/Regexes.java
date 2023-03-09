@@ -25,6 +25,7 @@ public class Regexes {
 
     public static final Pattern SEND = Pattern.compile("^SEND\\x20(?<iddomain>\\d{1,5}@[a-zA-Z\\d.]{5,200})\\x20(?<sendernamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})\\x20((?<destnamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})|(?<desttagdomain>#[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200}))\\x20(?<internalmsg>[\\x20-\\xFF]{1,500})$");
 
+    public static final Pattern RELAYMSG = Pattern.compile("^(?<ivnonce>[\\x20-\\xFF]{1,12})\\x20(?<message>[\\x20-\\xFF]{1,1500})$");
 
     //Decomposers
 
@@ -125,6 +126,11 @@ public class Regexes {
         return result;
     }
 
+    /**
+     * Décompose la commande SEND et récupère les informations sous la forme d'une map
+     * @param command (String) Commande Send
+     * @return (Map<String, String>) Map des informations de la commande, vide si syntaxe invalide
+     */
     private Map<String, String> decomposeSend(String command) {
         Map<String, String> result = new HashMap<>();
 
@@ -134,7 +140,9 @@ public class Regexes {
             result.put("sender", m.group("sendernamedomain"));
             result.put("destnamedomain", m.group("destnamedomain"));
             result.put("desttagdomain", m.group("desttagdomain"));
-            result.put("msg", m.group("internalmsg"));
+            result.put("internalmsg", m.group("internalmsg"));
+
+            result.putAll(decomposeFollow(m.group("internalmsg")));
 
             System.out.printf("SEND : (Id: %s), (Sender: %s), (Destname: %s), (Desttag: %s), (Msg: %s)\n", m.group("iddomain"), m.group("sendernamedomain"), m.group("destnamedomain"), m.group("desttagdomain"), m.group("internalmsg"));
         }
@@ -161,6 +169,18 @@ public class Regexes {
         }
 
         return hashtag;
+    }
+
+    public Map<String, String> decomposeRelayMsg(String command) {
+        Map<String, String> result = new HashMap<>();
+
+        Matcher m = RELAYMSG.matcher(command);
+        if(m.find()) {
+            result.put("ivnonce", m.group("ivnonce"));
+            result.put("message", m.group("message"));
+        }
+
+        return result;
     }
 
     /**

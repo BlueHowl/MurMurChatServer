@@ -32,12 +32,13 @@ public class RelayRunnable implements Runnable, Closeable {
         try {
             String line = in.readLine();
             while (line != null) {
-                aesgcm.decrypt(line);
-                taskFactoryInterface.createTask(line);
+                //todo nonce
+
+                taskFactoryInterface.createTask(aesgcm.decrypt(line, ""));
                 line = in.readLine();
             }
         } catch (Exception e) {
-
+            //todo relai déconnecté + gèrer cas line == null
         }
     }
 
@@ -48,7 +49,11 @@ public class RelayRunnable implements Runnable, Closeable {
         client.close();
     }
 
+    /**
+     * Envoi la commande au relai
+     * @param command (String)
+     */
     public void send(String command) {
-        out.println(command);
+        out.println(aesgcm.encrypt(command));
     }
 }
