@@ -6,7 +6,7 @@ import org.sharedClients.TaskFactoryInterface;
 import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Set;
 
 public class ClientRunnable implements Runnable, Closeable {
 
@@ -66,11 +66,19 @@ public class ClientRunnable implements Runnable, Closeable {
         return user;
     }
 
+    /**
+     * Récupère le nom d'utilisateur
+     * @return (String) username
+     */
     public String getUsername() {
         return user.getUsername();
     }
 
-    public List<String> getFollowers() {
+    /**
+     * Récupère les followers
+     * @return (Set<String>) followers
+     */
+    public Set<String> getFollowers() {
         return user.getFollowers();
     }
 

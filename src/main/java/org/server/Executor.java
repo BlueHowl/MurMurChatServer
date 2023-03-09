@@ -6,7 +6,6 @@ import org.model.Tag;
 import org.model.Task;
 import org.model.User;
 import org.model.exceptions.InvalidUserException;
-import org.relay.RelayManager;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
 import org.server.exception.CloseClientException;
@@ -39,6 +38,7 @@ public class Executor implements Runnable {
     private final ServerSettings serverSettings;
 
     private final DataInterface dataInterface;
+    private String key;
 
     private String key; //todo prblm synchronisation, si 2 personnes veulent se connecter, la clé risque d'être changée au mauvais moment la clé devrait se trouver dans un espace individualisé (clientRunnable ou User)
 
@@ -68,7 +68,7 @@ public class Executor implements Runnable {
         Map<String, Object> commandMap = task.getCommandMap();
         ClientRunnable client = task.getClient();
 
-        switch((String)commandMap.get("type")) { //todo déplacer les fonctions dans un controller ou autre
+        switch((String)commandMap.get("type")) {
             case "HELLO":
                 hello(client);
                 break;
@@ -105,8 +105,8 @@ public class Executor implements Runnable {
     private void register(Map<String, Object> commandMap, ClientRunnable client) {
         try {
             User user = new User((String)commandMap.get("username"), Integer.parseInt((String)commandMap.get("bcryptround")),
-                    (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new ArrayList<>(),
-                    new ArrayList<>(), 0);
+                    (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new HashSet<>(),
+                    new HashSet<>(), 0, null);
             serverSettings.addUser(user);
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
             client.send(String.format(OK, "Le compte est enregistré"));
@@ -149,16 +149,27 @@ public class Executor implements Runnable {
         }
     }
 
+    /**
+     * Envoyer un message
+     * @param commandMap (Map<String, Object>) contient le message et les hashtags
+     * @param client (ClientRunnable) client qui envoie le message
+     */
     private void msg(Map<String, Object> commandMap, ClientRunnable client) {
         String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
 
         String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
 
-        HashSet<String> destinations = new HashSet<>(); //préviens les envois dupliqués
+        Set<String> destinations = new HashSet<>(); //préviens les envois dupliqués
         destinations.addAll(client.getFollowers());
+        //TODO envoyer a chaque follower du client un message SEND avec comme destination le follower
+        for (String follower : client.getFollowers()) {
+
+        }
         destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
         List<String> noDuplicatesDestinations = new ArrayList<>(destinations);
 
+        //TODO regarder pour remplacer par un Set
+        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
         List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), noDuplicatesDestinations);
         for (ClientRunnable c : clients) {
             c.send(msgs);

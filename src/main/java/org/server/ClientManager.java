@@ -48,7 +48,9 @@ public class ClientManager implements Runnable {
     }
 
     /**
-     * Récupère les clients correspondants à la liste d'utilisateur donnée et efface les followers trouvés de la liste followers
+     * Récupère les clients correspondants à la liste d'utilisateur donnée
+     * @param domain (String) domaine
+     * @param followers (List<String>) liste d'utilisateurs
      * @return (List<ClientRunnable>) liste de clients
      */
     public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {
@@ -58,7 +60,6 @@ public class ClientManager implements Runnable {
             String username = String.format("%s@%s", c.getUsername(), domain);
             if(followers.contains(username)) {
                 clients.add(c);
-                followers.remove(username);
             }
         }
 

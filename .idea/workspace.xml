@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="ajout tls car petit bug avec le git">
+    <list default="true" id="ab850b7d-9958-4306-b322-8904c1cf1411" name="Changes" comment="Changement des List en Set">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/server.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ClientRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/infrastructure/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/infrastructure/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/DtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/infrastructure/json/DtoMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/model/ServerSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/ServerSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/relay/RelayRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/relay/RelayRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/server/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/ClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/server/Executor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +73,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="test" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -84,20 +90,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/alexi/OneDrive/Documents/HELMo/Reseau/Projet/MurMurProject",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alexi/OneDrive/Documents/HELMo/Reseau/Projet/MurMurProject&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alexi\OneDrive\Documents\HELMo\Reseau\Projet" />
@@ -303,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676982061336</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Changement des List en Set">
+      <created>1678272996212</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1678272996212</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,7 +333,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/dev" />
                       </list>
                     </value>
                   </entry>
@@ -349,6 +362,7 @@
     <MESSAGE value="Confirm added" />
     <MESSAGE value="fast push #1" />
     <MESSAGE value="ajout tls car petit bug avec le git" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout tls car petit bug avec le git" />
+    <MESSAGE value="Changement des List en Set" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement des List en Set" />
   </component>
 </project>

@@ -1,8 +1,6 @@
 package org.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Data class de mémorisation des informations utilisateur
@@ -16,11 +14,13 @@ public class User {
 
     private final String bcryptHash;
 
-    private List<String> followers;
+    private Set<String> followers;
 
-    private List<String> userTags;
+    private Set<String> userTags;
 
     private int lockoutCounter;
+
+    private List<String> offlineMessages;
 
     /**
      * Constructeur classe utilisateur
@@ -29,18 +29,20 @@ public class User {
      * @param bcryptRotations (String) rotations bcrypt
      * @param bcryptSalt      (String) salt bcrypt
      * @param bcryptHash      (String) hash bcrypt
-     * @param followers       (List<String>) liste des followers
-     * @param userTags        (List<String>) liste des userTags
-     * @param lockoutCounter  (int) lockoutCounter
+     * @param followers       (Set<String>) liste des followers
+     * @param userTags        (Set<String>) liste des userTags
+     * @param lockoutCounter  (int) lockoutCounter // pas utilisé
+     * @param offlineMessages (List<String>) liste des messages offline
      */
-    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, List<String> followers, List<String> userTags, int lockoutCounter) {
+    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter, List<String> offlineMessages) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
         this.bcryptHash = bcryptHash;
-        this.followers = followers;
-        this.userTags = userTags;
+        this.followers = (followers != null) ? followers : new HashSet<>();
+        this.userTags = (userTags != null) ? userTags : new HashSet<>();
         this.lockoutCounter = lockoutCounter;
+        this.offlineMessages = (offlineMessages != null) ? offlineMessages : new ArrayList<>();
     }
 
 
@@ -80,18 +82,18 @@ public class User {
 
     /**
      * Récupère les followers
-     * @return (List<String>) followers
+     * @return (Set<String>) followers
      */
-    public List<String> getFollowers() {
-        return new ArrayList<>(followers);
+    public Set<String> getFollowers() {
+        return new HashSet<>(followers);
     }
 
     /**
      * Récupère les userTags
-     * @return (List<String>) userTags
+     * @return (Set<String>) userTags
      */
-    public List<String> getUserTags() {
-        return new ArrayList<>(userTags);
+    public Set<String> getUserTags() {
+        return new HashSet<>(userTags);
     }
 
     /**
@@ -100,6 +102,14 @@ public class User {
      */
     public int getLockoutCounter() {
         return lockoutCounter;
+    }
+
+    /**
+     * Récupère la liste des messages offline
+     * @return (List<String>) offlineMessages
+     */
+    public List<String> getOfflineMessages() {
+        return offlineMessages;
     }
 
 
@@ -119,6 +129,14 @@ public class User {
      * */
     public void addUserTag(String tag) {
         userTags.add(tag);
+    }
+
+    /**
+     * Ajoute un message à la liste des messages offline
+     * @param message (String) message
+     */
+    public void addOfflineMessage(String message) {
+        offlineMessages.add(message);
     }
 
     @Override

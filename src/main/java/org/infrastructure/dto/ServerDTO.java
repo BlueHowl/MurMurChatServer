@@ -2,7 +2,7 @@ package org.infrastructure.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Set;
 
 public class ServerDTO {
 
@@ -34,12 +34,12 @@ public class ServerDTO {
     public final boolean tls;
 
     @SerializedName("Users")
-    public final List<UserDTO> users;
+    public final Set<UserDTO> users;
 
     @SerializedName("Tags")
-    public final List<TagDTO> tags;
+    public final Set<TagDTO> tags;
 
-    public ServerDTO(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, String base64AES, boolean tls, List<UserDTO> users, List<TagDTO> tags) {
+    public ServerDTO(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, String base64AES, boolean tls, Set<UserDTO> users, Set<TagDTO> tags) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -129,7 +129,7 @@ public class ServerDTO {
      * Récupère la liste des utilisateurs DTO
      * @return (UserDTO)
      */
-    public List<UserDTO> getUsers() {
+    public Set<UserDTO> getUsers() {
         return users;
     }
 
@@ -137,7 +137,7 @@ public class ServerDTO {
      * Récupère la liste des tags DTO
      * @return (TagDTO)
      */
-    public List<TagDTO> getTags() {
+    public Set<TagDTO> getTags() {
         return tags;
     }
 }
