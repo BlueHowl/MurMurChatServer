@@ -6,6 +6,7 @@ import org.model.Tag;
 import org.model.Task;
 import org.model.User;
 import org.model.exceptions.InvalidUserException;
+import org.relay.RelayManager;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
 import org.server.exception.CloseClientException;
@@ -38,8 +39,6 @@ public class Executor implements Runnable {
     private final ServerSettings serverSettings;
 
     private final DataInterface dataInterface;
-    private String key;
-
     private String key; //todo prblm synchronisation, si 2 personnes veulent se connecter, la clé risque d'être changée au mauvais moment la clé devrait se trouver dans un espace individualisé (clientRunnable ou User)
 
     public Executor(TaskList taskList, ClientManager clientManager, RelayManager relayManager, ServerSettings server, DataInterface dataInterface) {
@@ -169,7 +168,7 @@ public class Executor implements Runnable {
         List<String> noDuplicatesDestinations = new ArrayList<>(destinations);
 
         //TODO regarder pour remplacer par un Set
-        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
+        //List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
         List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), noDuplicatesDestinations);
         for (ClientRunnable c : clients) {
             c.send(msgs);

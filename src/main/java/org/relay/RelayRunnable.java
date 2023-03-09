@@ -32,9 +32,7 @@ public class RelayRunnable implements Runnable, Closeable {
         try {
             String line = in.readLine();
             while (line != null) {
-                //todo nonce
-
-                taskFactoryInterface.createTask(aesgcm.decrypt(line, ""));
+                taskFactoryInterface.createTask(line);
                 line = in.readLine();
             }
         } catch (Exception e) {
