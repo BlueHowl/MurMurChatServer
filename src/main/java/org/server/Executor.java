@@ -56,7 +56,7 @@ public class Executor implements Runnable {
             if (task != null) {
                 execute(task);
             }
-           relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "testmessage test@test"));
+           //todo enlever test relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "testmessage test@test"));
 
        }
     }
@@ -99,7 +99,7 @@ public class Executor implements Runnable {
     }
 
     private void hello(ClientRunnable client) {
-        key = generateRandomString(RANDOM22SIZE);
+        key = generateRandomString(RANDOM22SIZE); //todo stocker dans client ?
         client.send(String.format(HELLO, serverSettings.getCurrentDomain(), key));
     }
 
@@ -160,27 +160,50 @@ public class Executor implements Runnable {
 
         String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
 
-        Set<String> destinations = new HashSet<>(); //préviens les envois dupliqués
-        destinations.addAll(client.getFollowers());
-        //TODO envoyer a chaque follower du client un message SEND avec comme destination le follower
+
+        //envoi aux followers du client
         for (String follower : client.getFollowers()) {
-
-        }
-        destinations.addAll(serverSettings.getTagFollowers((String[])commandMap.get("hashtags")));
-        List<String> noDuplicatesDestinations = new ArrayList<>(destinations);
-
-        //TODO regarder pour remplacer par un Set
-        //List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), new ArrayList<>(destinations));
-        List<ClientRunnable> clients = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), noDuplicatesDestinations);
-        for (ClientRunnable c : clients) {
-            c.send(msgs);
+            sendMessageToFollower(follower, msgs, client.getUsername());
         }
 
-        //send avec les noDuplicatesDestinations restantes
-        //todo prblm si envoi jamais avec tag_domain dans la commande send ? faire différement ?
-        // pr l'instant 1 requete par utilisateur mm si ils sont sur le mm serveur (snn envoyer une seul requete sur l'autre avec un tag)
-        for(String destination : noDuplicatesDestinations) {
-            relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), destination, msgs)); // todo gèrer id
+        //envoi au followers des tags
+        for (String hashtag : (String[])commandMap.get("hashtags")) {
+            if(serverSettings.tagExists(hashtag)) {
+                List<String> followers = serverSettings.getTagFollowers(hashtag);
+                for (String follower : followers) {
+                    sendMessageToFollower(follower, msgs, client.getUsername());
+                }
+            } else {
+                //si le serveur ne contient pas le tag alors chercher le tag complet dans l'utilisateur et envoyer SEND
+                String completeTag = serverSettings.getCompleteTag(hashtag, client.getUsername());
+                if(completeTag != null) {
+                    relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs)); // todo gèrer id
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     * Envoi un msgs au follower
+     * @param follower (String)
+     * @param msgs (String) msgs
+     * @param sender (String)
+     */
+    private void sendMessageToFollower(String follower, String msgs, String sender) {
+        if(follower.contains(serverSettings.getCurrentDomain())) {
+            ClientRunnable dest = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), follower);
+            if(dest != null) {
+                dest.send(msgs);
+            } else {
+                //si destinataire null alors on stocke le message
+                //todo gèrer stockage message offline ?
+                serverSettings.addOfflineMessage(msgs); //todo user dans lequel sauvegarder ?
+            }
+        } else {
+            //si domaine reçu de correspond pas à celui du serveur alors envoi send
+            relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), sender+"@"+serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
         }
     }
 
@@ -188,27 +211,34 @@ public class Executor implements Runnable {
         try {
             String domain = (String)commandMap.get("domain");
 
-            if (commandMap.get("name") != null) {
-                try {
-                    User followedUser = serverSettings.findUser((String)commandMap.get("name"));
-                    serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
-                }catch (InvalidUserException e) {
-                    System.out.println(e.getMessage());
-                    System.out.println("L'user est invalide");
-                }
-            } else {
-                String followedTagString = (String)commandMap.get("tag");
-                Tag tag = serverSettings.findTag(followedTagString);
-                if (tag.getFollowers().isEmpty()) {
-                    tag.addFollower(client.getUsername()+"@"+domain);
-                    serverSettings.addTag(tag);
-                    serverSettings.addUserTagToUser(client.getUser(), tag.getName()+"@"+domain);
+            if(domain.contains(serverSettings.getCurrentDomain())) {
+                if (commandMap.get("name") != null) {
+                    try {
+                        User followedUser = serverSettings.findUser((String) commandMap.get("name"));
+                        serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
+                    } catch (InvalidUserException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("L'user est invalide");
+                    }
                 } else {
-                    serverSettings.addFollowerToTag(tag, client.getUsername()+"@"+domain);
-                    serverSettings.addUserTagToUser(client.getUser(), followedTagString+"@"+domain);
+                    String followedTagString = (String) commandMap.get("tag");
+                    Tag tag = serverSettings.findTag(followedTagString);
+                    if (tag.getFollowers().isEmpty()) {
+                        tag.addFollower(client.getUsername() + "@" + domain);
+                        serverSettings.addTag(tag);
+                        serverSettings.addUserTagToUser(client.getUser(), tag.getName() + "@" + domain);
+                    } else {
+                        serverSettings.addFollowerToTag(tag, client.getUsername() + "@" + domain);
+                        serverSettings.addUserTagToUser(client.getUser(), followedTagString + "@" + domain);
+                    }
                 }
+                dataInterface.saveServerSettings(serverSettings);
+            } else {
+                //si le domaine reçu ne correspond pas à celui du serveur alors send
+                String follow = String.format("%s %s", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
+                relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), domain, String.format(FOLLOW, follow))); // todo gèrer id
             }
-            dataInterface.saveServerSettings(serverSettings);
+
             System.out.println("Follow reçu");
         } catch (NotSavedException e) {
             throw new RuntimeException(e);

@@ -97,6 +97,21 @@ public class User {
     }
 
     /**
+     * Récupère le tag complet (tag@domain)
+     * @param hashtag (String) tag sans @domain
+     * @return String tag complet
+     */
+    public String getCompleteTag(String hashtag) {
+        for (String tag : userTags) {
+            if(tag.contains(hashtag)) {
+                return tag;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Récupère le lockoutCounter
      * @return (int)
      */

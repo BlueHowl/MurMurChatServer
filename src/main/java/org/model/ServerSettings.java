@@ -171,11 +171,12 @@ public class ServerSettings {
         }
     }
 
+    /*
     /**
      * Récupère les followers des tags existants
      * @param hashtags (String[]) tableau de tags
      * @return (List<String>) liste de followers
-     */
+     *//*
     public List<String> getTagFollowers(String[] hashtags) {
         //TODO regarder si il faut changer en Set
         List<String> followers = new ArrayList<>();
@@ -184,8 +185,28 @@ public class ServerSettings {
         }
 
         return followers;
+    }*/
+
+    /**
+     * Récupère les followers du tag existants
+     * @param hashtag (String) tag
+     * @return (List<String>) liste de followers
+     */
+    public List<String> getTagFollowers(String hashtag) {
+        /*if (!tagExists(hashtag))
+            return null;
+        */
+        return new ArrayList<>(findTag(hashtag).getFollowers());
     }
 
+    public String getCompleteTag(String hashtag, String username) {
+        try {
+            User user = findUser(username);
+            return user.getCompleteTag(hashtag);
+        } catch (InvalidUserException e) {
+            return  null;
+        }
+    }
 
     //SETTERS
 
