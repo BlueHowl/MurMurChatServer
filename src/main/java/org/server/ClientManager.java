@@ -47,13 +47,13 @@ public class ClientManager implements Runnable {
         }
     }
 
-    /**
+    /*/** todo remove
      * Récupère les clients correspondants à la liste d'utilisateur donnée
      * et supprime de la liste de followers les utilisateurs ajoutés au resultat
      * @param domain (String) domaine
      * @param followers (List<String>) liste d'utilisateurs
      * @return (List<ClientRunnable>) liste de clients
-     */
+     *//*
     public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {
         List<ClientRunnable> clients = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class ClientManager implements Runnable {
         }
 
         return clients;
-    }
+    }*/
 
     /**
      * Récupère les clients correspondants à la liste d'utilisateur donnée

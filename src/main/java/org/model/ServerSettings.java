@@ -20,7 +20,6 @@ public class ServerSettings {
     private final boolean tls;
     private final Set<User> users;
     private final Set<Tag> tags;
-    private final List<String> offlineMessages;
 
     public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, byte[] AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
         this.currentDomain = currentDomain;
@@ -34,7 +33,6 @@ public class ServerSettings {
         this.tls = tls;
         this.users = users;
         this.tags = tags;
-        this.offlineMessages = (offlineMessages != null) ? offlineMessages : new ArrayList<>();
     }
 
 
@@ -121,13 +119,13 @@ public class ServerSettings {
         return users;
     }
 
-    /**
+    /*/**
      * Récupère la liste des messages offline
      * @return (List<String>)
-     */
-    public List<String> getOfflineMessages() {
+     *//*
+    public List<String> getOfflineMessages(String username) {
         return offlineMessages;
-    }
+    }*/
 
     /**
      * Vérifie si l'utilisateur est déjà un compte connu
@@ -171,7 +169,7 @@ public class ServerSettings {
         }
     }
 
-    /*
+    /* todo remove
     /**
      * Récupère les followers des tags existants
      * @param hashtags (String[]) tableau de tags
@@ -261,7 +259,11 @@ public class ServerSettings {
      * Ajoute un message offline à la liste des messages offline
      * @param message (String) message
      */
-    public void addOfflineMessage(String message) {
-        offlineMessages.add(message);
+    public void addOfflineMessage(String completeUsername, String message) {
+        for (User user: getUsers()) {
+            if(completeUsername.contains(user.getUsername())) {
+                user.addOfflineMessage(message);
+            }
+        }
     }
 }

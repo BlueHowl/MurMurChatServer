@@ -140,6 +140,7 @@ public class Executor implements Runnable {
             String comparable = bytesToHex(hash);
             if (sha3hex.equals(comparable)) {
                 client.send(String.format(OK, "Welcome!"));
+                //todo user.getOfflineMessages() charger les messages et les envoyer
                 System.out.println("Sending +OK");
             } else{
                 client.send(String.format(ERR, "Wrong password"));
@@ -198,8 +199,7 @@ public class Executor implements Runnable {
                 dest.send(msgs);
             } else {
                 //si destinataire null alors on stocke le message
-                //todo gèrer stockage message offline ?
-                serverSettings.addOfflineMessage(msgs); //todo user dans lequel sauvegarder ?
+                serverSettings.addOfflineMessage(follower, msgs); //todo user dans lequel sauvegarder ?
             }
         } else {
             //si domaine reçu de correspond pas à celui du serveur alors envoi send
@@ -235,13 +235,28 @@ public class Executor implements Runnable {
                 dataInterface.saveServerSettings(serverSettings);
             } else {
                 //si le domaine reçu ne correspond pas à celui du serveur alors send
-                String follow = String.format("%s %s", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
-                relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), domain, String.format(FOLLOW, follow))); // todo gèrer id
+                String follow = String.format("%s@dummy", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
+                relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow))); // todo gèrer id
             }
 
             System.out.println("Follow reçu");
         } catch (NotSavedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gère le message SEND reçu
+     * @param commandMap (Map<String, Object>)
+     */
+    private void send(Map<String, Object> commandMap) {
+        if(commandMap.get("name") == null) {
+            //gestion MSGS
+
+            //récupère le client cible dans une liste, vide si non existant
+            ClientRunnable client = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), (String)commandMap.get("destnamedomain"));
+
+            client.send((String)commandMap.get("internalmsg"));
         }
     }
 
@@ -259,17 +274,6 @@ public class Executor implements Runnable {
             System.out.printf("%s : %s\n", e.getMessage(), client.getUsername());
         }
 
-    }
-
-    private void send(Map<String, Object> commandMap) {
-        if(commandMap.get("name") == null) {
-            //gestion MSGS
-
-            //récupère le client cible dans une liste, vide si non existant
-            List<ClientRunnable> client = clientManager.getMatchingClients(serverSettings.getCurrentDomain(), List.of((String)commandMap.get("destnamedomain")));
-
-            client.get(0).send((String)commandMap.get("internalmsg"));
-        }
     }
 
     private String bytesToHex(byte[] hash) {
