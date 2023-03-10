@@ -1,8 +1,7 @@
 package org.relay;
 
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
+import java.net.*;
+import java.util.Enumeration;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,15 +15,16 @@ public class RelayMulticast {
 
     /**
      * Crée un
-     * @param multicastIP
      * @param multicastPort
      * @param relayPort
      * @param domain
+     * @param net
      * @throws Exception
      */
-    public RelayMulticast(String multicastIP, int multicastPort, int relayPort, String domain) throws Exception {
-        multicastRunnable = new MulticastRunnable(new MulticastSocket(), InetAddress.getByName(multicastIP), multicastPort, relayPort, domain);
+    public RelayMulticast(int multicastPort, int relayPort, String domain, NetworkInterface net) throws Exception {
 
+        multicastRunnable = new MulticastRunnable(new MulticastSocket(), multicastPort, relayPort, domain);
+        multicastRunnable.setInet4Address(net);
         executor = Executors.newScheduledThreadPool(1);
         toggleMulticast();
     }
@@ -46,19 +46,30 @@ class MulticastRunnable implements Runnable {
 
     public static final String ECHO = "ECHO %d %s\r\n";
 
-    private final InetAddress multicastIP;
+    private InetAddress multicastIP;
     private final int multicastPort;
 
     private final int relayPort;
     private final MulticastSocket socketEmission;
     private final String domain;
 
-    MulticastRunnable(MulticastSocket socketEmission, InetAddress multicastIP, int multicastPort, int relayPort, String domain) throws Exception {
-        this.multicastIP = multicastIP;
+    MulticastRunnable(MulticastSocket socketEmission, int multicastPort, int relayPort, String domain) throws Exception {
         this.multicastPort = multicastPort;
         this.relayPort = relayPort;
         this.domain = domain;
         this.socketEmission = socketEmission;
+    }
+
+    public void setInet4Address(final NetworkInterface net) {
+        final Enumeration<InetAddress> inetAddresses = net.getInetAddresses();
+        InetAddress inetAddress;
+        while (inetAddresses.hasMoreElements()) {
+            inetAddress = inetAddresses.nextElement();
+            if (inetAddress instanceof Inet4Address) {
+                multicastIP = inetAddress;
+                break;
+            }
+        }
     }
 
     public void run() {
