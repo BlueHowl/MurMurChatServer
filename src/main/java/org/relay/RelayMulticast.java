@@ -31,7 +31,8 @@ public class RelayMulticast {
 
     public void toggleMulticast() {
         if(isActive) {
-            executor.shutdown();
+            //executor.shutdown();
+            executor.shutdownNow();
         } else {
             executor.scheduleAtFixedRate(multicastRunnable, 0, 15, TimeUnit.SECONDS);
         }

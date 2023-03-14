@@ -23,7 +23,7 @@ public class Regexes {
 
     private static final Pattern HASHTAG = Pattern.compile("(#[a-zA-Z\\d]{5,20})");
 
-    public static final Pattern SEND = Pattern.compile("^SEND\\x20(?<iddomain>\\d{1,5}@[a-zA-Z\\d.]{5,200})\\x20(?<sendernamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})\\x20((?<destnamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})|(?<desttagdomain>#[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200}))\\x20(?<internalmsg>[\\x20-\\xFF]{1,500})$");
+    public static final Pattern SEND = Pattern.compile("^SEND\\x20(?<iddomain>\\d{1,5}@[a-zA-Z\\d.]{5,200})\\x20(?<sendernamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})\\x20((?<destnamedomain>[a-zA-Z\\d]{5,20}@[a-zA-Z\\d.]{5,200})|(?<desttag>#[a-zA-Z\\d]{5,20})@(?<destdomain>[a-zA-Z\\d.]{5,200}))\\x20(?<internalmsg>[\\x20-\\xFF]{1,500})$");
 
     //Decomposers
 
@@ -137,12 +137,13 @@ public class Regexes {
             result.put("id", m.group("iddomain"));
             result.put("sender", m.group("sendernamedomain"));
             result.put("destnamedomain", m.group("destnamedomain"));
-            result.put("desttagdomain", m.group("desttagdomain"));
+            result.put("desttag", m.group("desttag"));
+            result.put("destdomain", m.group("destdomain"));
             result.put("internalmsg", m.group("internalmsg"));
 
             result.putAll(decomposeFollow(m.group("internalmsg")));
 
-            System.out.printf("SEND : (Id: %s), (Sender: %s), (Destname: %s), (Desttag: %s), (Msg: %s)\n", m.group("iddomain"), m.group("sendernamedomain"), m.group("destnamedomain"), m.group("desttagdomain"), m.group("internalmsg"));
+            System.out.printf("SEND : (Id: %s), (Sender: %s), (Destname: %s), (Desttag: %s), (Destdomain: %s), (Msg: %s)\n", m.group("iddomain"), m.group("sendernamedomain"), m.group("destnamedomain"), m.group("desttag"), m.group("destdomain"), m.group("internalmsg"));
         }
         return result;
     }

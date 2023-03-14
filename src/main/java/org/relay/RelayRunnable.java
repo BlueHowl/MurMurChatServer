@@ -37,7 +37,8 @@ public class RelayRunnable implements Runnable, Closeable {
             }
         } catch (Exception e) {
             try {
-                relayManager.removeRelay();
+                e.printStackTrace();
+                //relayManager.removeRelay(); todo not working
                 close();  //todo gèrer cas line == null
             } catch (IOException ignored) {}
         }

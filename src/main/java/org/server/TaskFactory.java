@@ -6,10 +6,9 @@ import org.sharedClients.TaskFactoryInterface;
 import org.utils.AESGCM;
 import org.utils.Regexes;
 
-import java.util.Map;
-
 public class TaskFactory implements TaskFactoryInterface {
-    private int idCountTasks = 0;
+    private int idCountTasks = 0; //todo save this id ?
+
     private final TaskList taskList;
 
     private final AESGCM aesgcm;
@@ -29,8 +28,7 @@ public class TaskFactory implements TaskFactoryInterface {
      */
     @Override
     public synchronized void createTask(String command, ClientRunnable user) {
-        Map<String, Object> commandInfos = regexes.decomposeCommand(command);
-        taskList.addTask(new Task(++idCountTasks, commandInfos, user, "pending"));
+        taskList.addTask(new Task(++idCountTasks, regexes.decomposeCommand(command), user, "pending"));
     }
 
     /**
@@ -41,7 +39,7 @@ public class TaskFactory implements TaskFactoryInterface {
     @Override
     public void createTask(String command) {
         String uncryptedText = aesgcm.decrypt(command);
-        taskList.addTask(new Task(++idCountTasks, regexes.decomposeCommand(uncryptedText), null, "pending"));
+        taskList.addTask(new Task(++idCountTasks, regexes.decomposeCommand(uncryptedText.trim()), null, "pending"));
     }
 
 }

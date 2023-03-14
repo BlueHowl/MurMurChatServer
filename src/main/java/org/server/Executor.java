@@ -166,18 +166,23 @@ public class Executor implements Runnable {
             sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
         }
 
-        //envoi aux followers des tags
+        //envoi aux followers des tags todo debug
         for (String hashtag : (String[])commandMap.get("hashtags")) {
+            System.out.println("tag detecté");
             if(serverSettings.tagExists(hashtag)) {
+                System.out.println("tag sur le serveur courant");
                 List<String> followers = serverSettings.getTagFollowers(hashtag);
                 for (String follower : followers) {
                     sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
                 }
             } else {
+
+                System.out.println("tag sur un serveur distant");
                 //si le serveur ne contient pas le tag alors chercher le tag complet dans l'utilisateur et envoyer SEND
                 String completeTag = serverSettings.getCompleteTag(hashtag, client.getUsername());
                 if(completeTag != null) {
-                    relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs)); // todo gèrer id
+                    System.out.printf("envoi msg tag relai : %s", String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs));
+                    relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs));
                 }
             }
 
@@ -213,6 +218,7 @@ public class Executor implements Runnable {
             //si on est dans le nom de domaine courant
             if(domain.contains(serverSettings.getCurrentDomain())) {
                 if (commandMap.get("name") != null) {
+                    //follow utilisateur
                     try {
                         User followedUser = serverSettings.findUser((String) commandMap.get("name"));
                         serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
@@ -221,6 +227,7 @@ public class Executor implements Runnable {
                         System.out.println("L'user est invalide");
                     }
                 } else {
+                    //follow tag
                     String followedTagString = (String) commandMap.get("tag");
                     Tag tag = serverSettings.findTag(followedTagString);
                     if (tag.getFollowers().isEmpty()) {
@@ -237,6 +244,11 @@ public class Executor implements Runnable {
                 //si le domaine reçu ne correspond pas à celui du serveur alors send
                 String follow = String.format("%s@dummy", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
                 relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow))); // todo gèrer id
+
+                if((String)commandMap.get("tag") != null) {
+                    //todo enregistre le follow à l'utilisateur sans garantie de l'enregistrement distant
+                    serverSettings.addUserTagToUser(client.getUser(), (String)commandMap.get("tag") + "@" + domain);
+                }
             }
 
             System.out.println("Follow reçu");
@@ -250,13 +262,60 @@ public class Executor implements Runnable {
      * @param commandMap (Map<String, Object>)
      */
     private void send(Map<String, Object> commandMap) {
-        if(commandMap.get("name") == null) {
+        if(commandMap.get("domain") == null) { //champ domain provient de la décomposition de FOLLOW
             //gestion MSGS
+            String message = (String) commandMap.get("internalmsg");
+            String sender = (String) commandMap.get("sender");
 
-            //récupère le client cible dans une liste, vide si non existant
-            ClientRunnable client = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), (String)commandMap.get("destnamedomain"));
+            if((String)commandMap.get("destnamedomain") != null) {
+                //envoi le message au follower concerné
+                //todo gèrer id
+                sendMessageToFollower((String) commandMap.get("destnamedomain"), message, sender, 0);
+            } else {
+                //envoi le message aux followers du tag
+                String tag = (String) commandMap.get("desttag");
+                if(serverSettings.tagExists(tag)) {
+                    System.out.println("tag sur le serveur courant");
+                    List<String> followers = serverSettings.getTagFollowers(tag);
+                    for (String follower : followers) {
+                        sendMessageToFollower(follower, message, sender, 0); //todo gèrer id
+                    }
+                }
+            }
 
-            client.send((String)commandMap.get("internalmsg"));
+            System.out.println("Message distant reçu");
+
+        } else {
+            //gestion follow
+            try {
+                if (commandMap.get("name") != null) {
+                    //follow utilisateur
+                    try {
+                        User followedUser = serverSettings.findUser((String) commandMap.get("name"));
+                        serverSettings.addFollowerToUser(followedUser, (String) commandMap.get("sender"));
+                    } catch (InvalidUserException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("L'user est invalide");
+                    }
+                } else {
+                    //follow tag
+                    String followedTagString = (String) commandMap.get("tag");
+                    Tag tag = serverSettings.findTag(followedTagString);
+                    if (tag.getFollowers().isEmpty()) {
+                        tag.addFollower((String) commandMap.get("sender"));
+                        serverSettings.addTag(tag);
+                        //déjà ajouté à l'envoi du send serverSettings.addUserTagToUser(client.getUser(), tag.getName() + "@" + domain);
+                    } else {
+                        serverSettings.addFollowerToTag(tag, (String) commandMap.get("sender"));
+                        //déjà ajouté à l'envoi du send serverSettings.addUserTagToUser(client.getUser(), followedTagString + "@" + domain);
+                    }
+                }
+                dataInterface.saveServerSettings(serverSettings);
+
+                System.out.println("Follow distant reçu");
+            } catch (NotSavedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
