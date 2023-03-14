@@ -141,6 +141,12 @@ public class Executor implements Runnable {
                 client.send(String.format(OK, "Welcome!"));
                 //todo user.getOfflineMessages() charger les messages et les envoyer
                 System.out.println("Sending +OK");
+                if (!user.getOfflineMessages().isEmpty()) {
+                    for (String message : user.getOfflineMessages()) {
+                        client.send(String.format(MSGS, message, user.getUsername()));
+                    }
+                    user.resetOfflineMessages();
+                }
             } else{
                 client.send(String.format(ERR, "Wrong password"));
                 System.out.println("Sending -ERR: Wrong password!");

@@ -154,6 +154,10 @@ public class User {
         offlineMessages.add(message);
     }
 
+    public void resetOfflineMessages() {
+        offlineMessages = new ArrayList<>();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

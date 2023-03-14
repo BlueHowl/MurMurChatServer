@@ -15,6 +15,11 @@ public class TagDTO {
     @SerializedName("Followers")
     public final Set<String> followers;
 
+    /**
+     * Constructeur classe tag dto
+     * @param tag (String) nom du tag
+     * @param followers (Set<String>) liste des followers
+     */
     public TagDTO(String tag, Set<String> followers) {
         this.tag = tag;
         this.followers = followers;

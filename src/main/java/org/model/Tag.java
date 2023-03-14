@@ -12,12 +12,22 @@ public class Tag {
     private final String name;
     private final Set<String> followers;
 
-    public Tag(String name) {
-        this(name, null);
-    }
+    /**
+     * Constructeur général classe tag
+     * @param name (String) nom du tag
+     * @param followers (Set<String>) liste des followers
+     */
     public Tag(String name, Set<String> followers) {
         this.name = name;
         this.followers = (followers != null) ? followers : new HashSet<>();
+    }
+
+    /**
+     * Constructeur classe tag
+     * @param name (String) nom du tag
+     */
+    public Tag(String name) {
+        this(name, null);
     }
 
 
