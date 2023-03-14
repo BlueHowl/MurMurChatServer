@@ -26,12 +26,12 @@ public class RelayManager implements Runnable {
     public void run() {
         ServerSocketFactory ssf = ServerSocketFactory.getDefault();
         try (ServerSocket server = ssf.createServerSocket(port)) {
-            System.out.println("Démarrage du serveur relai sur l'adresse " + server.getInetAddress() + " et le port " + port);
+            System.out.println("Démarrage de l'écoute relai sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {
                 if(relay == null) { //tant qu'il n'y a pas un relai
                     final Socket client = server.accept();
-                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface);
+                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface, this);
                     relay = runnable; //ajoute le nouveau client relai à la liste
                     relayMulticast.toggleMulticast(); //désactive le multicast
                     (new Thread(runnable)).start();
@@ -51,6 +51,14 @@ public class RelayManager implements Runnable {
             return;
 
         relay.send(aesgcm.encrypt(command));
+    }
+
+    public void removeRelay() {
+        if(relay == null)
+            return;
+
+        relay = null;
+        relayMulticast.toggleMulticast();
     }
 
 }

@@ -44,4 +44,7 @@ public class Task {
         return status;
     }
 
+    public int getId() {
+        return id;
+    }
 }

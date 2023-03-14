@@ -39,7 +39,7 @@ public class Executor implements Runnable {
     private final ServerSettings serverSettings;
 
     private final DataInterface dataInterface;
-    private String key; //todo prblm synchronisation, si 2 personnes veulent se connecter, la clé risque d'être changée au mauvais moment la clé devrait se trouver dans un espace individualisé (clientRunnable ou User)
+
 
     public Executor(TaskList taskList, ClientManager clientManager, RelayManager relayManager, ServerSettings server, DataInterface dataInterface) {
         this.taskList = taskList;
@@ -56,8 +56,6 @@ public class Executor implements Runnable {
             if (task != null) {
                 execute(task);
             }
-           //todo enlever test relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "dummytest@"+serverSettings.getCurrentDomain(), "testmessage test@test"));
-
        }
     }
 
@@ -83,10 +81,10 @@ public class Executor implements Runnable {
                 confirm(commandMap, client);
                 break;
             case "MSG":
-                msg(commandMap, client);
+                msg(commandMap, client, task.getId());
                 break;
             case "FOLLOW":
-                follow(commandMap, client);
+                follow(commandMap, client, task.getId());
                 break;
             case "DISCONNECT":
                 disconnect(client);
@@ -99,7 +97,8 @@ public class Executor implements Runnable {
     }
 
     private void hello(ClientRunnable client) {
-        key = generateRandomString(RANDOM22SIZE); //todo stocker dans client ?
+        String key = generateRandomString(RANDOM22SIZE);
+        client.setConnectionKey(key);
         client.send(String.format(HELLO, serverSettings.getCurrentDomain(), key));
     }
 
@@ -136,7 +135,7 @@ public class Executor implements Runnable {
             String sha3hex = (String)commandMap.get("sha3hex");
 
             MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-            byte[] hash = digest.digest((key + "$2b$" + user.getBcryptRotations() + "$" + user.getBcryptSalt() + user.getBcryptHash()).getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest((client.getConnectionKey() + "$2b$" + user.getBcryptRotations() + "$" + user.getBcryptSalt() + user.getBcryptHash()).getBytes(StandardCharsets.UTF_8));
             String comparable = bytesToHex(hash);
             if (sha3hex.equals(comparable)) {
                 client.send(String.format(OK, "Welcome!"));
@@ -156,7 +155,7 @@ public class Executor implements Runnable {
      * @param commandMap (Map<String, Object>) contient le message et les hashtags
      * @param client (ClientRunnable) client qui envoie le message
      */
-    private void msg(Map<String, Object> commandMap, ClientRunnable client) {
+    private void msg(Map<String, Object> commandMap, ClientRunnable client, int taskId) {
         String nameDomain = String.format("%s@%s", client.getUsername(), serverSettings.getCurrentDomain());
 
         String msgs = String.format(MSGS, nameDomain, commandMap.get("message"));
@@ -164,21 +163,21 @@ public class Executor implements Runnable {
 
         //envoi aux followers du client
         for (String follower : client.getFollowers()) {
-            sendMessageToFollower(follower, msgs, client.getUsername());
+            sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
         }
 
-        //envoi au followers des tags
+        //envoi aux followers des tags
         for (String hashtag : (String[])commandMap.get("hashtags")) {
             if(serverSettings.tagExists(hashtag)) {
                 List<String> followers = serverSettings.getTagFollowers(hashtag);
                 for (String follower : followers) {
-                    sendMessageToFollower(follower, msgs, client.getUsername());
+                    sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
                 }
             } else {
                 //si le serveur ne contient pas le tag alors chercher le tag complet dans l'utilisateur et envoyer SEND
                 String completeTag = serverSettings.getCompleteTag(hashtag, client.getUsername());
                 if(completeTag != null) {
-                    relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs)); // todo gèrer id
+                    relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), completeTag, msgs)); // todo gèrer id
                 }
             }
 
@@ -192,25 +191,26 @@ public class Executor implements Runnable {
      * @param msgs (String) msgs
      * @param sender (String)
      */
-    private void sendMessageToFollower(String follower, String msgs, String sender) {
+    private void sendMessageToFollower(String follower, String msgs, String sender, int taskId) {
         if(follower.contains(serverSettings.getCurrentDomain())) {
             ClientRunnable dest = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), follower);
             if(dest != null) {
                 dest.send(msgs);
             } else {
                 //si destinataire null alors on stocke le message
-                serverSettings.addOfflineMessage(follower, msgs); //todo user dans lequel sauvegarder ?
+                serverSettings.addOfflineMessage(follower, msgs);
             }
         } else {
-            //si domaine reçu de correspond pas à celui du serveur alors envoi send
-            relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), sender+"@"+serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
+            //si domaine reçu ne correspond pas à celui du serveur alors envoi send
+            relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), sender+"@"+serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
         }
     }
 
-    private void follow(Map<String, Object> commandMap, ClientRunnable client) {
+    private void follow(Map<String, Object> commandMap, ClientRunnable client, int taskId) {
         try {
             String domain = (String)commandMap.get("domain");
 
+            //si on est dans le nom de domaine courant
             if(domain.contains(serverSettings.getCurrentDomain())) {
                 if (commandMap.get("name") != null) {
                     try {
@@ -236,7 +236,7 @@ public class Executor implements Runnable {
             } else {
                 //si le domaine reçu ne correspond pas à celui du serveur alors send
                 String follow = String.format("%s@dummy", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
-                relayManager.sendToRelay(String.format(SEND, 1, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow))); // todo gèrer id
+                relayManager.sendToRelay(String.format(SEND, taskId, serverSettings.getCurrentDomain(), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow))); // todo gèrer id
             }
 
             System.out.println("Follow reçu");

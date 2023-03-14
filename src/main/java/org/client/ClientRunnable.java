@@ -16,6 +16,8 @@ public class ClientRunnable implements Runnable, Closeable {
     private final TaskFactoryInterface taskFactoryInterface;
     private User user = null;
 
+    private String connectionKey;
+
     public ClientRunnable (SSLSocket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
         this.taskFactoryInterface = taskHandlerInterface;
@@ -58,12 +60,36 @@ public class ClientRunnable implements Runnable, Closeable {
         out.println(command);
     }
 
+    /**
+     * Défini l'objet utilisateur correspondant
+     * @param user (User)
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * Récupère l'objet utilisateur correspondant
+     * @return (User)
+     */
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Récupère la clé de connexion random22
+     * @return (String)
+     */
+    public String getConnectionKey() {
+        return connectionKey;
+    }
+
+    /**
+     * Défini la clé de connexion random22
+     * @param connectionKey (String)
+     */
+    public void setConnectionKey(String connectionKey) {
+        this.connectionKey = connectionKey;
     }
 
     /**

@@ -32,7 +32,7 @@ public class ClientManager implements Runnable {
     public void run() {
         SSLServerSocketFactory sslssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
         try (SSLServerSocket server = (SSLServerSocket) sslssf.createServerSocket(port)) {
-            System.out.println("Démarrage du serveur client sur l'adresse " + server.getInetAddress() + " et le port " + port);
+            System.out.println("Démarrage de l'écoute client sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {
                 final SSLSocket client = (SSLSocket) server.accept(); //todo implement auto-closeable ? Comment gèrer la déconnexion timeout

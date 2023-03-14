@@ -12,9 +12,12 @@ public class RelayRunnable implements Runnable, Closeable {
     private PrintWriter out;
     private final TaskFactoryInterface taskFactoryInterface;
 
-    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface) {
+    private final RelayManager relayManager;
+
+    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface, RelayManager relayManager) {
         this.client = client;
         this.taskFactoryInterface = taskHandlerInterface;
+        this.relayManager = relayManager;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -33,7 +36,10 @@ public class RelayRunnable implements Runnable, Closeable {
                 line = in.readLine();
             }
         } catch (Exception e) {
-            //todo relai déconnecté + gèrer cas line == null
+            try {
+                relayManager.removeRelay();
+                close();  //todo gèrer cas line == null
+            } catch (IOException ignored) {}
         }
     }
 
