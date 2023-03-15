@@ -134,7 +134,7 @@ public class Regexes {
 
         Matcher m = SEND.matcher(command);
         if(m.find()) {
-            result.put("id", m.group("iddomain"));
+            result.put("iddomain", m.group("iddomain"));
             result.put("sender", m.group("sendernamedomain"));
             result.put("destnamedomain", m.group("destnamedomain"));
             result.put("desttag", m.group("desttag"));

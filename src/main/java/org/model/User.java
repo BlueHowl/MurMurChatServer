@@ -14,13 +14,15 @@ public class User {
 
     private final String bcryptHash;
 
-    private Set<String> followers;
+    private final Set<String> followers;
 
-    private Set<String> userTags;
+    private final Set<String> userTags;
 
     private int lockoutCounter;
 
     private List<String> offlineMessages;
+
+    private final List<String> taskIds = new ArrayList<>();
 
     /**
      * Constructeur classe utilisateur
@@ -156,6 +158,14 @@ public class User {
 
     public void resetOfflineMessages() {
         offlineMessages = new ArrayList<>();
+    }
+
+    public boolean isTaskIdDifferent(String taskId) {
+        return !taskIds.contains(taskId);
+    }
+
+    public void addTaskId(String taskId) {
+        taskIds.add(taskId);
     }
 
     @Override
