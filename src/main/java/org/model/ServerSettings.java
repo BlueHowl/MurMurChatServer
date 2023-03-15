@@ -265,4 +265,16 @@ public class ServerSettings {
     public Map<String, List<String>> getOfflineMessages () {
         return jsonMessages.getMessages();
     }
+
+    /**
+     * Ajoute un message offline à la liste des messages offline
+     * @param message (String) message
+     */
+    public void addOfflineMessage(String completeUsername, String message) {
+        for (User user: getUsers()) {
+            if(completeUsername.contains(user.getUsername())) {
+
+            }
+        }
+    }
 }
