@@ -25,7 +25,8 @@ public class RelayManager implements Runnable {
     @Override
     public void run() {
         ServerSocketFactory ssf = ServerSocketFactory.getDefault();
-        try (ServerSocket server = ssf.createServerSocket(port)) {
+        try {
+            ServerSocket server = ssf.createServerSocket(port);
             System.out.println("Démarrage de l'écoute relai sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {

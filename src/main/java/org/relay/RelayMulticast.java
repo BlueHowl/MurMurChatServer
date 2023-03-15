@@ -33,9 +33,9 @@ public class RelayMulticast {
 
     public void toggleMulticast() {
         if(isActive) {
-            //executor.shutdown();
-            executor.shutdownNow();
+            executor.isShutdown();
         } else {
+            executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(multicastRunnable, 0, 15, TimeUnit.SECONDS);
         }
 
@@ -62,18 +62,6 @@ class MulticastRunnable implements Runnable {
         this.domain = domain;
         this.socketEmission = socketEmission;
         this.multicastIP = address;
-    }
-
-    public void setInet4Address(final NetworkInterface net) {
-        final Enumeration<InetAddress> inetAddresses = net.getInetAddresses();
-        InetAddress inetAddress;
-        while (inetAddresses.hasMoreElements()) {
-            inetAddress = inetAddresses.nextElement();
-            if (inetAddress instanceof Inet4Address) {
-                multicastIP = inetAddress;
-                break;
-            }
-        }
     }
 
     public void run() {
