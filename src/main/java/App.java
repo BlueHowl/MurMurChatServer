@@ -27,7 +27,7 @@ public class App {
             TaskList taskList = new TaskList();
             TaskFactory taskFactory = new TaskFactory(taskList, aesgcm);
 
-            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain(), net);
+            RelayMulticast relayMulticast = new RelayMulticast(serverSettings.getMulticastPort(), serverSettings.getRelayPort(), serverSettings.getCurrentDomain(), net, serverSettings.getMulticastAddress());
             RelayManager relayManager = new RelayManager(taskFactory, relayMulticast, serverSettings.getRelayPort(), aesgcm);
             (new Thread(relayManager)).start();
 

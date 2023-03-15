@@ -1,5 +1,7 @@
 package org.relay;
 
+import org.model.ServerSettings;
+
 import java.net.*;
 import java.util.Enumeration;
 import java.util.concurrent.Executors;
@@ -21,10 +23,10 @@ public class RelayMulticast {
      * @param net
      * @throws Exception
      */
-    public RelayMulticast(int multicastPort, int relayPort, String domain, NetworkInterface net) throws Exception {
-
-        multicastRunnable = new MulticastRunnable(new MulticastSocket(), multicastPort, relayPort, domain);
-        multicastRunnable.setInet4Address(net);
+    public RelayMulticast(int multicastPort, int relayPort, String domain, NetworkInterface net, String address) throws Exception {
+        MulticastSocket socketEmission = new MulticastSocket();
+        socketEmission.setNetworkInterface(net);
+        multicastRunnable = new MulticastRunnable(socketEmission, multicastPort, relayPort, domain, InetAddress.getByName(address));
         executor = Executors.newScheduledThreadPool(1);
         toggleMulticast();
     }
@@ -54,11 +56,12 @@ class MulticastRunnable implements Runnable {
     private final MulticastSocket socketEmission;
     private final String domain;
 
-    MulticastRunnable(MulticastSocket socketEmission, int multicastPort, int relayPort, String domain) throws Exception {
+    MulticastRunnable(MulticastSocket socketEmission, int multicastPort, int relayPort, String domain, InetAddress address) throws Exception {
         this.multicastPort = multicastPort;
         this.relayPort = relayPort;
         this.domain = domain;
         this.socketEmission = socketEmission;
+        this.multicastIP = address;
     }
 
     public void setInet4Address(final NetworkInterface net) {
