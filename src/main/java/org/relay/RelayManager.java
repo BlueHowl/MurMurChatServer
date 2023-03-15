@@ -34,7 +34,6 @@ public class RelayManager implements Runnable {
                     final Socket client = server.accept();
                     RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface, this);
                     relay = runnable; //ajoute le nouveau client relai à la liste
-                    relayMulticast.toggleMulticast(); //désactive le multicast
                     (new Thread(runnable)).start();
                 }
             }
@@ -52,14 +51,6 @@ public class RelayManager implements Runnable {
             return;
 
         relay.send(aesgcm.encrypt(command));
-    }
-
-    public void removeRelay() {
-        if(relay == null)
-            return;
-
-        relay = null;
-        relayMulticast.toggleMulticast();
     }
 
 }

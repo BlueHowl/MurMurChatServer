@@ -28,18 +28,7 @@ public class RelayMulticast {
         socketEmission.setNetworkInterface(net);
         multicastRunnable = new MulticastRunnable(socketEmission, multicastPort, relayPort, domain, InetAddress.getByName(address));
         executor = Executors.newScheduledThreadPool(1);
-        toggleMulticast();
-    }
-
-    public void toggleMulticast() {
-        if(isActive) {
-            executor.isShutdown();
-        } else {
-            executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(multicastRunnable, 0, 15, TimeUnit.SECONDS);
-        }
-
-        isActive = !isActive;
+        executor.scheduleAtFixedRate(multicastRunnable, 0, 15, TimeUnit.SECONDS);
     }
 
 }
