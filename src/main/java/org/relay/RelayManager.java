@@ -11,13 +11,11 @@ import java.net.Socket;
 public class RelayManager implements Runnable {
     private RelayRunnable relay = null;
     private final TaskFactoryInterface taskHandlerInterface;
-    private final RelayMulticast relayMulticast;
     private final int port;
     private final AESGCM aesgcm;
 
-    public RelayManager(TaskFactoryInterface taskHandlerInterface, RelayMulticast relayMulticast, int port, AESGCM aesgcm) {
+    public RelayManager(TaskFactoryInterface taskHandlerInterface, int port, AESGCM aesgcm) {
         this.taskHandlerInterface = taskHandlerInterface;
-        this.relayMulticast = relayMulticast;
         this.port = port;
         this.aesgcm = aesgcm;
     }
@@ -32,7 +30,7 @@ public class RelayManager implements Runnable {
             while (true) {
                 if(relay == null) { //tant qu'il n'y a pas un relai
                     final Socket client = server.accept();
-                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface, this);
+                    RelayRunnable runnable = new RelayRunnable(client, taskHandlerInterface);
                     relay = runnable; //ajoute le nouveau client relai à la liste
                     (new Thread(runnable)).start();
                 }
