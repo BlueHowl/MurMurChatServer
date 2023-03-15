@@ -23,6 +23,9 @@ public class JsonMessages {
     private final Gson gson = new Gson();
     private final String jsonPath;
 
+    /**
+     * Constructeur de la classe JsonMessages
+     */
     public JsonMessages() {
         Path path = Path.of(Paths.get("").toString(), "data", "messages.json").toAbsolutePath();
 
@@ -38,6 +41,10 @@ public class JsonMessages {
         jsonPath = path.toString();
     }
 
+    /**
+     * Récupère les messages stockés dans le fichier json
+     * @return (Map<String, List<String>>)
+     */
     public Map<String, List<String>> getMessages () {
         try(Reader reader = new BufferedReader(new FileReader(jsonPath))) {
             return gson.fromJson(reader, new TypeToken<Map<String, List<String>>>(){}.getType());
@@ -47,6 +54,10 @@ public class JsonMessages {
         }
     }
 
+    /**
+     * Sauvegarde les messages dans le fichier json
+     * @param messages (Map<String, List<String>>)
+     */
     public void saveMessages (Map<String, List<String>> messages) {
         try(FileWriter fw = new FileWriter(jsonPath, StandardCharsets.UTF_8)) {
             gson.toJson(messages, fw);

@@ -258,22 +258,38 @@ public class ServerSettings {
         tag.addFollower(follower);
     }
 
+    /**
+     * sauvegarde les messages offline
+     * @param messages (Map<String, List<String>>) messages offline
+     */
     public void saveMessages (Map<String, List<String>>messages) {
         jsonMessages.saveMessages(messages);
     }
 
+    /**
+     * Récupère les messages offline
+     * @return (Map<String, List<String>>)
+     */
     public Map<String, List<String>> getOfflineMessages () {
         return jsonMessages.getMessages();
     }
 
     /**
-     * Ajoute un message offline à la liste des messages offline
+     * Ajoute un message à la liste des messages offline
+     * @param completeUsername (String) nom complet de l'utilisateur
      * @param message (String) message
      */
     public void addOfflineMessage(String completeUsername, String message) {
         for (User user: getUsers()) {
             if(completeUsername.contains(user.getUsername())) {
-
+                //TODO Tanguy à vérifier
+                Map<String, List<String>> messages = jsonMessages.getMessages();
+                if (!messages.containsKey(user.getUsername())) {
+                    messages.put(user.getUsername(), new ArrayList<>());
+                }
+                messages.get(user.getUsername()).add(message);
+                saveMessages(messages);
+                return;
             }
         }
     }

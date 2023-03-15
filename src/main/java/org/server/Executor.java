@@ -141,6 +141,7 @@ public class Executor implements Runnable {
                 client.send(String.format(OK, "Welcome!"));
                 System.out.println("Sending +OK");
 
+                //TODO Tanguy à vérifier
                 Map<String, List<String>> messages = serverSettings.getOfflineMessages();
                 String username = user.getUsername();
                 if (messages.containsKey(username) && messages.get(username) != null) {
