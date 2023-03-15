@@ -140,19 +140,24 @@ public class Executor implements Runnable {
             if (sha3hex.equals(comparable)) {
                 client.send(String.format(OK, "Welcome!"));
                 System.out.println("Sending +OK");
-                for (String message : user.getOfflineMessages()) {
-                    client.send(message);
+
+                Map<String, List<String>> messages = serverSettings.getOfflineMessages();
+                String username = user.getUsername();
+                if (messages.containsKey(username) && messages.get(username) != null) {
+                    for (String message : messages.get(username)) {
+                        client.send(message);
+                    }
+
+                    messages.get(username).clear();
+                    serverSettings.saveMessages(messages);
                 }
-                user.resetOfflineMessages();
-                dataInterface.saveServerSettings(serverSettings);
+
             } else{
                 client.send(String.format(ERR, "Wrong password"));
                 System.out.println("Sending -ERR: Wrong password!");
             }
         } catch (NoSuchAlgorithmException ex) {
             client.send(String.format(ERR, ex.getMessage()));
-        } catch (NotSavedException e) {
-            System.out.println("Erreur lors de la sauvegarde du serveur");
         }
     }
 

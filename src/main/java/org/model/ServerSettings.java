@@ -1,5 +1,6 @@
 package org.model;
 
+import org.infrastructure.json.JsonMessages;
 import org.model.exceptions.InvalidUserException;
 
 import java.util.*;
@@ -20,6 +21,8 @@ public class ServerSettings {
     private final boolean tls;
     private final Set<User> users;
     private final Set<Tag> tags;
+
+    JsonMessages jsonMessages = new JsonMessages();
 
     public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, byte[] AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
         this.currentDomain = currentDomain;
@@ -255,15 +258,11 @@ public class ServerSettings {
         tag.addFollower(follower);
     }
 
-    /**
-     * Ajoute un message offline à la liste des messages offline
-     * @param message (String) message
-     */
-    public void addOfflineMessage(String completeUsername, String message) {
-        for (User user: getUsers()) {
-            if(completeUsername.contains(user.getUsername())) {
-                user.addOfflineMessage(message);
-            }
-        }
+    public void saveMessages (Map<String, List<String>>messages) {
+        jsonMessages.saveMessages(messages);
+    }
+
+    public Map<String, List<String>> getOfflineMessages () {
+        return jsonMessages.getMessages();
     }
 }
