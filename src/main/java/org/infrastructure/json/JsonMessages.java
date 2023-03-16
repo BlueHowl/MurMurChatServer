@@ -3,22 +3,17 @@ package org.infrastructure.json;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
-import org.model.exceptions.InvalidServerSettingsException;
-import org.repository.exceptions.NotRetrievedException;
-import org.repository.exceptions.NotSavedException;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonMessages {
+public class JsonMessages implements AutoCloseable{
 
     private final Gson gson = new Gson();
     private final String jsonPath;
@@ -64,5 +59,10 @@ public class JsonMessages {
         } catch (JsonIOException | IOException e) {
             System.out.println("Erreur lors de la sauvegarde des messages");
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

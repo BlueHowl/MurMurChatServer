@@ -20,8 +20,6 @@ public class User {
 
     private int lockoutCounter;
 
-    private List<String> offlineMessages;
-
     /**
      * Constructeur classe utilisateur
      *
@@ -32,9 +30,8 @@ public class User {
      * @param followers       (Set<String>) liste des followers
      * @param userTags        (Set<String>) liste des userTags
      * @param lockoutCounter  (int) lockoutCounter // pas utilisé
-     * @param offlineMessages (List<String>) liste des messages offline
      */
-    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter, List<String> offlineMessages) {
+    public User(String username, int bcryptRotations, String bcryptSalt, String bcryptHash, Set<String> followers, Set<String> userTags, int lockoutCounter) {
         this.username = username;
         this.bcryptRotations = bcryptRotations;
         this.bcryptSalt = bcryptSalt;
@@ -42,7 +39,6 @@ public class User {
         this.followers = (followers != null) ? followers : new HashSet<>();
         this.userTags = (userTags != null) ? userTags : new HashSet<>();
         this.lockoutCounter = lockoutCounter;
-        this.offlineMessages = (offlineMessages != null) ? offlineMessages : new ArrayList<>();
     }
 
 
@@ -119,14 +115,6 @@ public class User {
         return lockoutCounter;
     }
 
-    /**
-     * Récupère la liste des messages offline
-     * @return (List<String>) offlineMessages
-     */
-    public List<String> getOfflineMessages() {
-        return offlineMessages;
-    }
-
 
     //SETTERS
 
@@ -144,18 +132,6 @@ public class User {
      * */
     public void addUserTag(String tag) {
         userTags.add(tag);
-    }
-
-    /**
-     * Ajoute un message à la liste des messages offline
-     * @param message (String) message
-     */
-    public void addOfflineMessage(String message) {
-        offlineMessages.add(message);
-    }
-
-    public void resetOfflineMessages() {
-        offlineMessages = new ArrayList<>();
     }
 
     @Override

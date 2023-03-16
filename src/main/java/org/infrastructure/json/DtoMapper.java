@@ -25,7 +25,7 @@ public class DtoMapper {
      * @return (UserDTO) utilisateur dto
      */
     private UserDTO userToDto(User user) {
-        return new UserDTO(user.getUsername(), user.getBcryptRotations(), user.getBcryptSalt(), user.getBcryptHash(), user.getFollowers(), user.getUserTags(), user.getLockoutCounter(), user.getOfflineMessages());
+        return new UserDTO(user.getUsername(), user.getBcryptRotations(), user.getBcryptSalt(), user.getBcryptHash(), user.getFollowers(), user.getUserTags(), user.getLockoutCounter());
     }
 
     /**
@@ -34,7 +34,7 @@ public class DtoMapper {
      * @return (User) Utilisateur
      */
     private User dtoToUser(UserDTO userDto) {
-        return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash(), userDto.getFollowers(), userDto.getUserTags(), userDto.getLockoutCounter(), userDto.getOfflineMessages());
+        return new User(userDto.getUsername(), userDto.getBcryptRotations(), userDto.getBcryptSalt(), userDto.getBcryptHash(), userDto.getFollowers(), userDto.getUserTags(), userDto.getLockoutCounter());
     }
 
     //Tag

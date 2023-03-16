@@ -122,14 +122,6 @@ public class ServerSettings {
         return users;
     }
 
-    /*/**
-     * Récupère la liste des messages offline
-     * @return (List<String>)
-     *//*
-    public List<String> getOfflineMessages(String username) {
-        return offlineMessages;
-    }*/
-
     /**
      * Vérifie si l'utilisateur est déjà un compte connu
      * @param user le compte
@@ -280,10 +272,12 @@ public class ServerSettings {
      * @param message (String) message
      */
     public void addOfflineMessage(String completeUsername, String message) {
-        for (User user: getUsers()) {
+        for (User user : getUsers()) {
             if(completeUsername.contains(user.getUsername())) {
-                //TODO Tanguy à vérifier
                 Map<String, List<String>> messages = jsonMessages.getMessages();
+                if (messages == null) {
+                    messages = new HashMap<>();
+                }
                 if (!messages.containsKey(user.getUsername())) {
                     messages.put(user.getUsername(), new ArrayList<>());
                 }

@@ -106,7 +106,7 @@ public class Executor implements Runnable {
         try {
             User user = new User((String)commandMap.get("username"), Integer.parseInt((String)commandMap.get("bcryptround")),
                     (String)commandMap.get("bcryptsalt"), (String)commandMap.get("bcrypthash"), new HashSet<>(),
-                    new HashSet<>(), 0, null);
+                    new HashSet<>(), 0);
             serverSettings.addUser(user);
             dataInterface.saveServerSettings(serverSettings); //sauvegarde json
             client.send(String.format(OK, "Le compte est enregistré"));
@@ -141,10 +141,9 @@ public class Executor implements Runnable {
                 client.send(String.format(OK, "Welcome!"));
                 System.out.println("Sending +OK");
 
-                //TODO Tanguy à vérifier
                 Map<String, List<String>> messages = serverSettings.getOfflineMessages();
                 String username = user.getUsername();
-                if (messages.containsKey(username) && messages.get(username) != null) {
+                if (messages != null && messages.containsKey(username) && messages.get(username) != null) {
                     for (String message : messages.get(username)) {
                         client.send(message);
                     }
@@ -174,6 +173,7 @@ public class Executor implements Runnable {
 
 
         //envoi aux followers du client
+        if (client.getFollowers() != null)
         for (String follower : client.getFollowers()) {
             sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
         }
@@ -184,6 +184,7 @@ public class Executor implements Runnable {
             if(serverSettings.tagExists(hashtag)) {
                 System.out.println("tag sur le serveur courant");
                 List<String> followers = serverSettings.getTagFollowers(hashtag);
+                if (followers != null)
                 for (String follower : followers) {
                     sendMessageToFollower(follower, msgs, client.getUsername(), taskId);
                 }
@@ -204,9 +205,10 @@ public class Executor implements Runnable {
 
     /**
      * Envoi un msgs au follower
-     * @param follower (String)
-     * @param msgs (String) msgs
-     * @param sender (String)
+     * @param follower (String) follower
+     * @param msgs (String) message
+     * @param sender (String) nom de l'expéditeur
+     * @param taskId (int) id de la tâche
      */
     private void sendMessageToFollower(String follower, String msgs, String sender, int taskId) {
         if(follower.contains(serverSettings.getCurrentDomain())) {
