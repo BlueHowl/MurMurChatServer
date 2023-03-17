@@ -32,10 +32,10 @@ public class RelayRunnable implements Runnable, Closeable {
             while (line != null) {
                 taskFactoryInterface.createTask(line);
                 line = in.readLine();
-            }
+            } //gèrer cas line == null
         } catch (Exception e) {
             try {
-                close();  //todo gèrer cas line == null
+                close();
             } catch (IOException ignored) {}
         }
     }

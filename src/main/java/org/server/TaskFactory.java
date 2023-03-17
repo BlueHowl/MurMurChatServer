@@ -7,7 +7,7 @@ import org.utils.AESGCM;
 import org.utils.Regexes;
 
 public class TaskFactory implements TaskFactoryInterface {
-    private int idCountTasks = 0; //todo save this id ?
+    private int idCountTasks = 0;
 
     private final TaskList taskList;
 

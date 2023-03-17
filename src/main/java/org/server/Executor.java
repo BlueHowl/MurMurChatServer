@@ -249,19 +249,21 @@ public class Executor implements Runnable {
             }
         } else {
             //si domaine reçu ne correspond pas à celui du serveur alors envoi send
-            relayManager.sendToRelay(String.format(SEND, taskId, sender + "@" + serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
+            relayManager.sendToRelay(String.format(SEND, taskId, sender + "@" + serverSettings.getCurrentDomain(), follower, msgs));
         }
     }
 
     private void follow(Map<String, Object> commandMap, ClientRunnable client, int taskId) {
         String domain = (String)commandMap.get("domain");
+        String followedTagString = (String)commandMap.get("tag");
+        String followedUserString = (String) commandMap.get("name");
 
         //si on est dans le nom de domaine courant
         if(domain.contains(serverSettings.getCurrentDomain())) {
-            if (commandMap.get("name") != null) {
+            if (followedUserString != null) {
                 //follow utilisateur
                 try {
-                    User followedUser = serverSettings.findUser((String) commandMap.get("name"));
+                    User followedUser = serverSettings.findUser(followedUserString);
                     serverSettings.addFollowerToUser(followedUser, String.format("%s@%s", client.getUsername(), domain));
                 } catch (InvalidUserException e) {
                     System.out.println(e.getMessage());
@@ -269,7 +271,6 @@ public class Executor implements Runnable {
                 }
             } else {
                 //follow tag
-                String followedTagString = (String) commandMap.get("tag");
                 Tag tag = serverSettings.findTag(followedTagString);
                 if (tag.getFollowers().isEmpty()) {
                     serverSettings.addTag(tag);
@@ -282,12 +283,12 @@ public class Executor implements Runnable {
 
         } else {
             //si le domaine reçu ne correspond pas à celui du serveur alors send
-            String follow = String.format("%s@dummy", (String) ((String)commandMap.get("tag") != null ? commandMap.get("tag") : commandMap.get("name")));
-            relayManager.sendToRelay(String.format(SEND, String.format("%d@%s", taskId, serverSettings.getCurrentDomain()), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow))); // todo gèrer id
+            String follow = String.format("%s@dummy", (followedTagString != null ? followedTagString : followedUserString));
+            relayManager.sendToRelay(String.format(SEND, String.format("%d@%s", taskId, serverSettings.getCurrentDomain()), client.getUsername()+"@"+serverSettings.getCurrentDomain(), String.format("dummy@%s", domain), String.format(FOLLOW, follow)));
 
-            if((String)commandMap.get("tag") != null) {
-                //todo enregistre le follow à l'utilisateur sans garantie de l'enregistrement distant
-                serverSettings.addUserTagToUser(client.getUser(), (String)commandMap.get("tag") + "@" + domain);
+            if(followedTagString != null) {
+                //enregistre le follow à l'utilisateur sans garantie de l'enregistrement distant
+                serverSettings.addUserTagToUser(client.getUser(), followedTagString + "@" + domain);
             }
         }
         System.out.println("Follow reçu");
@@ -312,7 +313,7 @@ public class Executor implements Runnable {
             String sender = (String) commandMap.get("sender");
             String taskId = (String) commandMap.get("iddomain");
 
-            if((String)commandMap.get("destnamedomain") != null) {
+            if(commandMap.get("destnamedomain") != null) {
                 //envoi le message au follower concerné
                 sendMessageToFollower((String) commandMap.get("destnamedomain"), message, sender, taskId);
             } else {
@@ -366,7 +367,7 @@ public class Executor implements Runnable {
      */
     private void disconnect(ClientRunnable client) {
 
-        try { //todo stop le thread ?
+        try {
             client.send(String.format(OK, "GoodBye!"));
             clientManager.removeClient(client);
             System.out.printf("Déconnexion client : %s\n", client.getUsername());

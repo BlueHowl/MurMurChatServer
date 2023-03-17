@@ -9,7 +9,6 @@ import java.util.*;
  * Classe de stockage des paramètres serveurs et des utilisateurs et tags
  */
 public class ServerSettings {
-    //todo enlever les param serveur si directement assignables  + renommer Server et changer l'ancienne classe serveur ?
     private final String currentDomain;
     private final int saltSizeInBytes;
     private final String multicastAddress;
@@ -24,7 +23,7 @@ public class ServerSettings {
 
     JsonMessages jsonMessages = new JsonMessages();
 
-    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, byte[] AESKey, boolean tls, Set<User> users, Set<Tag> tags, List<String> offlineMessages) {
+    public ServerSettings(String currentDomain, int saltSizeInBytes, String multicastAddress, int multicastPort, int unicastPort, int relayPort, String networkInterface, byte[] AESKey, boolean tls, Set<User> users, Set<Tag> tags) {
         this.currentDomain = currentDomain;
         this.saltSizeInBytes = saltSizeInBytes;
         this.multicastAddress = multicastAddress;
@@ -128,7 +127,7 @@ public class ServerSettings {
      * @return vrai s'il l'utilisateur est existant
      */
     private boolean userExist(User user) {
-        return users.stream().anyMatch(n -> n.equals(user)); //todo contains c'est 10x plus simple xd
+        return users.stream().anyMatch(n -> n.equals(user));
     }
 
     public User findUser(String username) throws InvalidUserException {
@@ -231,15 +230,6 @@ public class ServerSettings {
     public void addTag(Tag tag) {
         tags.add(tag);
     }
-
-    /*/**
-     * Ajoute un follower à un tag du serveur   !peut changer
-     * @param tag (Tag) tag de la liste des tags du serveur
-     * @param follower (String) follower@domaine
-     *//*
-    public void addFollowerToTag(Tag tag, String follower) {
-        tag.addFollower(follower);
-    }*/
 
     /**
      * sauvegarde les messages offline

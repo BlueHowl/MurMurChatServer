@@ -35,19 +35,19 @@ public class ClientRunnable implements Runnable, Closeable {
     public void run() {
         try {
             String line = in.readLine();
-            while (line != null) { //todo gèrer déconnexion quand line == null
+            while (line != null) {
                 taskFactoryInterface.createTask(line, this);
                 line = in.readLine();
             }
         } catch (IOException e) {
             System.out.println("Lost a client connection");
-            taskFactoryInterface.createTask("DISCONNECT", this); //todo meilleur façon ?
+            taskFactoryInterface.createTask("DISCONNECT", this);
         }
     }
 
     @Override
     public void close() throws IOException{
-        out.close(); //todo autocloseable ?
+        out.close();
         in.close();
         client.close();
     }
@@ -97,7 +97,7 @@ public class ClientRunnable implements Runnable, Closeable {
      * @return (String) username
      */
     public String getUsername() {
-        if(user == null) //todo verifier (bug send message après register (user == null !?)
+        if(user == null)
             return "";
 
         return user.getUsername();

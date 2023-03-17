@@ -7,8 +7,6 @@ import org.model.ServerSettings;
 import org.model.Tag;
 import org.model.User;
 import org.model.exceptions.InvalidServerSettingsException;
-
-import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -61,7 +59,7 @@ public class DtoMapper {
      * Conerti l'objet DTO serveur en objet serveur settings
      * @param serverDto (ServerDTO) serveur dto
      * @return (ServerSettings) serveur settings
-     * @throws InvalidServerSettingsException
+     * @throws InvalidServerSettingsException erreur config serveur
      */
     public ServerSettings dtoToServerSettings(ServerDTO serverDto) throws InvalidServerSettingsException {
         if(serverDto == null) {
@@ -72,12 +70,11 @@ public class DtoMapper {
 
         Set<User> users = new HashSet<>();
         Set<Tag> tags = new HashSet<>();
-        List<String> offlineMessages = new ArrayList<>();
 
         for (UserDTO userDto: serverDto.getUsers()) { users.add(dtoToUser(userDto)); }
         for (TagDTO tagDto: serverDto.getTags()) { tags.add(dtoToTag(tagDto)); }
 
-        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), aesKey, serverDto.isTls(), users, tags, null);
+        return new ServerSettings(serverDto.getCurrentDomain(), serverDto.getSaltSizeInBytes(), serverDto.getMulticastAddress(), serverDto.getMulticastPort(), serverDto.getUnicastPort(), serverDto.getRelayPort(), serverDto.getNetworkInterface(), aesKey, serverDto.isTls(), users, tags);
     }
 
     public ServerDTO SeverSettingsToDto(ServerSettings serverSettings) {

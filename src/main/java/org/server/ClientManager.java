@@ -33,7 +33,7 @@ public class ClientManager implements Runnable {
             System.out.println("Démarrage de l'écoute client sur l'adresse " + server.getInetAddress() + " et le port " + port);
 
             while (true) {
-                final SSLSocket client = (SSLSocket) server.accept(); //todo implement auto-closeable ? Comment gèrer la déconnexion timeout
+                final SSLSocket client = (SSLSocket) server.accept();
                 ClientRunnable runnable = new ClientRunnable(client, taskHandlerInterface);
                 clientsList.add(runnable);
                 (new Thread(runnable)).start();
@@ -44,27 +44,6 @@ public class ClientManager implements Runnable {
             exception.printStackTrace();
         }
     }
-
-    /*/** todo remove
-     * Récupère les clients correspondants à la liste d'utilisateur donnée
-     * et supprime de la liste de followers les utilisateurs ajoutés au resultat
-     * @param domain (String) domaine
-     * @param followers (List<String>) liste d'utilisateurs
-     * @return (List<ClientRunnable>) liste de clients
-     *//*
-    public List<ClientRunnable> getMatchingClients(String domain, List<String> followers) {
-        List<ClientRunnable> clients = new ArrayList<>();
-
-        for (ClientRunnable c : clientsList) {
-            String username = String.format("%s@%s", c.getUsername(), domain);
-            if(followers.contains(username)) {
-                clients.add(c);
-                followers.remove(username);
-            }
-        }
-
-        return clients;
-    }*/
 
     /**
      * Récupère le client correspondant au nom d'utilisateur
@@ -89,7 +68,7 @@ public class ClientManager implements Runnable {
      * @param client (ClientRunnable)
      */
     public void removeClient(ClientRunnable client) throws CloseClientException {
-        try { //todo stop le thread ? comment faire quand le client est fermé brutalement (timeout)
+        try {
             client.close();
             clientsList.remove(client);
         } catch (IOException e) {

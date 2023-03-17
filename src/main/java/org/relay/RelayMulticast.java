@@ -51,9 +51,6 @@ class MulticastRunnable implements Runnable {
             byte[] content;
             DatagramPacket msg;
 
-            //ByteArrayOutputStream output = new ByteArrayOutputStream();
-            //(new DataOutputStream(output)).writeUTF(command);
-            //content = output.toByteArray();
             content = String.format(ECHO, relayPort, domain).getBytes();
             msg = new DatagramPacket(content, content.length, multicastIP, multicastPort);
             socketEmission.send(msg);
