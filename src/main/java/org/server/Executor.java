@@ -232,30 +232,31 @@ public class Executor implements Runnable {
         if(follower.contains(serverSettings.getCurrentDomain())) {
             ClientRunnable dest = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), follower);
             //si l'id de tache n'as pas déjà été reçu
-            if(serverSettings.isTaskIdDifferent(follower, taskId)) {
+            if (serverSettings.isTaskIdDifferent(follower, taskId)) {
                 if (dest != null) {
                     dest.send(msgs);
                 } else {
                     //si destinataire null alors on stocke le message
                     serverSettings.addOfflineMessage(follower, msgs);
                 }
-            serverSettings.updateTaskId(follower, taskId);
-            if(dest != null) {
-                dest.send(msgs);
-            } else {
-                //si destinataire null alors on stocke le message
-                try {
-                    User user = serverSettings.findUserOnCompleteName(follower);
-                    aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
-                    serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    System.out.println("Erreur lors de la création de l'objet AESGCM");
+                serverSettings.updateTaskId(follower, taskId);
+                if (dest != null) {
+                    dest.send(msgs);
+                } else {
+                    //si destinataire null alors on stocke le message
+                    try {
+                        User user = serverSettings.findUserOnCompleteName(follower);
+                        aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
+                        serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.out.println("Erreur lors de la création de l'objet AESGCM");
+                    }
                 }
+            } else {
+                //si domaine reçu ne correspond pas à celui du serveur alors envoi send
+                relayManager.sendToRelay(String.format(SEND, taskId, sender + "@" + serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
             }
-        } else {
-            //si domaine reçu ne correspond pas à celui du serveur alors envoi send
-            relayManager.sendToRelay(String.format(SEND, taskId, sender+"@"+serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
         }
     }
 
