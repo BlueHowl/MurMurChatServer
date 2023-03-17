@@ -19,8 +19,6 @@ public class ClientManager implements Runnable {
 
     private final int port;
 
-    private boolean isStarted = false;
-    private boolean isConnected = false;
 
     public ClientManager(TaskFactoryInterface taskHandlerInterface, int port) {
         clientsList = Collections.synchronizedList(new ArrayList<>());
@@ -69,8 +67,7 @@ public class ClientManager implements Runnable {
     }*/
 
     /**
-     * Récupère les clients correspondants à la liste d'utilisateur donnée
-     * et supprime de la liste de followers les utilisateurs ajoutés au resultat
+     * Récupère le client correspondant au nom d'utilisateur
      * @param domain (String) domaine
      * @param name (String) utilisateur
      * @return ClientRunnable client (retourne null si pas trouvé)

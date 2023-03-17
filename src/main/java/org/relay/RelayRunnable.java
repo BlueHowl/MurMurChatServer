@@ -12,12 +12,10 @@ public class RelayRunnable implements Runnable, Closeable {
     private PrintWriter out;
     private final TaskFactoryInterface taskFactoryInterface;
 
-    private final RelayManager relayManager;
 
-    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface, RelayManager relayManager) {
+    public RelayRunnable(Socket client, TaskFactoryInterface taskHandlerInterface) {
         this.client = client;
         this.taskFactoryInterface = taskHandlerInterface;
-        this.relayManager = relayManager;
 
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -54,7 +52,7 @@ public class RelayRunnable implements Runnable, Closeable {
      * @param command (String)
      */
     public void send(String command) {
-        System.out.println(String.format("Envoi relai : %s", command));
+        System.out.printf("Envoi relai : %s\n", command);
         out.println(command);
     }
 }

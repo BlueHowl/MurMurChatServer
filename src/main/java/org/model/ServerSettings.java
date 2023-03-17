@@ -51,7 +51,7 @@ public class ServerSettings {
 
     /**
      * Récupère la taille de Salt
-     * @return
+     * @return int
      */
     public int getSaltSizeInBytes() {
         return saltSizeInBytes;
@@ -59,7 +59,7 @@ public class ServerSettings {
 
     /**
      * Récupère l'adresse de multicast
-     * @return
+     * @return String
      */
     public String getMulticastAddress() {
         return multicastAddress;
@@ -154,8 +154,10 @@ public class ServerSettings {
 
     public boolean tagExists(String tagString) {
        for (Tag tag : tags) {
-            return tag.getName().equals(tagString);
-        }
+            if(tag.getName().equals(tagString)) {
+                return true;
+            }
+       }
        return false;
     }
 
@@ -168,22 +170,6 @@ public class ServerSettings {
             return new Tag(tag);
         }
     }
-
-    /* todo remove
-    /**
-     * Récupère les followers des tags existants
-     * @param hashtags (String[]) tableau de tags
-     * @return (List<String>) liste de followers
-     *//*
-    public List<String> getTagFollowers(String[] hashtags) {
-        //TODO regarder si il faut changer en Set
-        List<String> followers = new ArrayList<>();
-        for (String hashtag : hashtags) {
-            followers.addAll(findTag(hashtag).getFollowers());
-        }
-
-        return followers;
-    }*/
 
     /**
      * Récupère les followers du tag existants
@@ -246,14 +232,14 @@ public class ServerSettings {
         tags.add(tag);
     }
 
-    /**
+    /*/**
      * Ajoute un follower à un tag du serveur   !peut changer
      * @param tag (Tag) tag de la liste des tags du serveur
      * @param follower (String) follower@domaine
-     */
+     *//*
     public void addFollowerToTag(Tag tag, String follower) {
         tag.addFollower(follower);
-    }
+    }*/
 
     /**
      * sauvegarde les messages offline
@@ -289,6 +275,25 @@ public class ServerSettings {
                 messages.get(user.getUsername()).add(message);
                 saveMessages(messages);
                 return;
+            }
+        }
+    }
+
+
+    public boolean isTaskIdDifferent(String follower, String taskId) {
+        for (User user: getUsers()) {
+            if(follower.contains(user.getUsername())) {
+                return user.isTaskIdDifferent(taskId);
+            }
+        }
+        //si utilisateur n'existe alors false
+        return false;
+    }
+
+    public void updateTaskId(String follower, String taskId) {
+        for (User user: getUsers()) {
+            if(follower.contains(user.getUsername())) {
+                user.addTaskId(taskId);
             }
         }
     }

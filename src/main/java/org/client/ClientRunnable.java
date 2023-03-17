@@ -97,6 +97,9 @@ public class ClientRunnable implements Runnable, Closeable {
      * @return (String) username
      */
     public String getUsername() {
+        if(user == null) //todo verifier (bug send message après register (user == null !?)
+            return "";
+
         return user.getUsername();
     }
 
