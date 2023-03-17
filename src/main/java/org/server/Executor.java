@@ -226,20 +226,13 @@ public class Executor implements Runnable {
      * @param taskId (int) id de la tâche
      */
     private void sendMessageToFollower(String follower, String msgs, String sender, String taskId) {
-        if(follower.contains(sender)) //si le follower à le même nom que le sender alors on annule (cas msg avec tag)
+        if (follower.contains(sender)) //si le follower à le même nom que le sender alors on annule (cas msg avec tag)
             return;
 
-        if(follower.contains(serverSettings.getCurrentDomain())) {
+        if (follower.contains(serverSettings.getCurrentDomain())) {
             ClientRunnable dest = clientManager.getMatchingClient(serverSettings.getCurrentDomain(), follower);
             //si l'id de tache n'as pas déjà été reçu
             if (serverSettings.isTaskIdDifferent(follower, taskId)) {
-                if (dest != null) {
-                    dest.send(msgs);
-                } else {
-                    //si destinataire null alors on stocke le message
-                    serverSettings.addOfflineMessage(follower, msgs);
-                }
-                serverSettings.updateTaskId(follower, taskId);
                 if (dest != null) {
                     dest.send(msgs);
                 } else {
@@ -249,14 +242,14 @@ public class Executor implements Runnable {
                         aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
                         serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                         System.out.println("Erreur lors de la création de l'objet AESGCM");
                     }
                 }
-            } else {
-                //si domaine reçu ne correspond pas à celui du serveur alors envoi send
-                relayManager.sendToRelay(String.format(SEND, taskId, sender + "@" + serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
+                serverSettings.updateTaskId(follower, taskId);
             }
+        } else {
+            //si domaine reçu ne correspond pas à celui du serveur alors envoi send
+            relayManager.sendToRelay(String.format(SEND, taskId, sender + "@" + serverSettings.getCurrentDomain(), follower, msgs)); // todo gèrer id
         }
     }
 
