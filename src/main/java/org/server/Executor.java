@@ -186,11 +186,11 @@ public class Executor implements Runnable {
 
 
         //envoi aux followers du client
-        if (client.getFollowers() != null)
-        for (String follower : client.getFollowers()) {
-            sendMessageToFollower(follower, msgs, client.getUsername(), taskId_domain);
+        if (client.getFollowers() != null){
+            for (String follower : client.getFollowers()) {
+                sendMessageToFollower(follower, msgs, client.getUsername(), taskId_domain);
+            }
         }
-
         //envoi aux followers des tags
         for (String hashtag : (String[])commandMap.get("hashtags")) {
             System.out.printf("tag : %s\n", hashtag);
@@ -412,3 +412,4 @@ public class Executor implements Runnable {
         return sb.toString();
     }
 }
+
