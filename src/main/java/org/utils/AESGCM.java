@@ -2,20 +2,40 @@ package org.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 public class AESGCM {
     public static final int GCM_IV_LENGTH = 12;
     public static final int GCM_TAG_LENGTH = 16;
 
+    private String cipher = "AES";
+
     private final byte[] aeskey;
 
     public AESGCM (byte[] aeskey) {
         this.aeskey = aeskey;
+    }
+
+    public AESGCM(String password, String salt) throws Exception {
+        this.aeskey = getPasswordBasedKey(cipher, password.toCharArray(), salt).getEncoded();
+    }
+
+    private static Key getPasswordBasedKey(String cipher, char[] password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] s = salt.getBytes(StandardCharsets.UTF_8);
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(s);
+        PBEKeySpec pbeKeySpec = new PBEKeySpec(password, s, 1000, 256);
+        SecretKey pbeKey = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(pbeKeySpec);
+        return new SecretKeySpec(pbeKey.getEncoded(), cipher);
     }
 
     public String encrypt(String plaintext) {

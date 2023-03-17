@@ -10,6 +10,7 @@ import org.relay.RelayManager;
 import org.repository.DataInterface;
 import org.repository.exceptions.NotSavedException;
 import org.server.exception.CloseClientException;
+import org.utils.AESGCM;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -39,6 +40,8 @@ public class Executor implements Runnable {
     private final ServerSettings serverSettings;
 
     private final DataInterface dataInterface;
+
+    private AESGCM aesgcm;
 
 
     public Executor(TaskList taskList, ClientManager clientManager, RelayManager relayManager, ServerSettings server, DataInterface dataInterface) {
@@ -143,9 +146,15 @@ public class Executor implements Runnable {
 
                 Map<String, List<String>> messages = serverSettings.getOfflineMessages();
                 String username = user.getUsername();
+
+                try {
+                    aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
+                } catch (Exception ex) {
+                    System.out.println("Erreur lors de la création de l'objet AESGCM");
+                }
                 if (messages != null && messages.containsKey(username) && messages.get(username) != null) {
                     for (String message : messages.get(username)) {
-                        client.send(message);
+                        client.send(aesgcm.decrypt(message));
                     }
 
                     messages.get(username).clear();
@@ -156,8 +165,8 @@ public class Executor implements Runnable {
                 client.send(String.format(ERR, "Wrong password"));
                 System.out.println("Sending -ERR: Wrong password!");
             }
-        } catch (NoSuchAlgorithmException ex) {
-            client.send(String.format(ERR, ex.getMessage()));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -217,7 +226,13 @@ public class Executor implements Runnable {
                 dest.send(msgs);
             } else {
                 //si destinataire null alors on stocke le message
-                serverSettings.addOfflineMessage(follower, msgs);
+                User user = dest.getUser();
+                try {
+                    aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
+                } catch (Exception ex) {
+                    System.out.println("Erreur lors de la création de l'objet AESGCM");
+                }
+                serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
             }
         } else {
             //si domaine reçu ne correspond pas à celui du serveur alors envoi send
