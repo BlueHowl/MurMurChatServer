@@ -226,13 +226,14 @@ public class Executor implements Runnable {
                 dest.send(msgs);
             } else {
                 //si destinataire null alors on stocke le message
-                User user = dest.getUser();
                 try {
+                    User user = serverSettings.findUserOnCompleteName(follower);
                     aesgcm = new AESGCM(user.getBcryptHash(), user.getBcryptSalt());
+                    serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     System.out.println("Erreur lors de la création de l'objet AESGCM");
                 }
-                serverSettings.addOfflineMessage(follower, aesgcm.encrypt(msgs));
             }
         } else {
             //si domaine reçu ne correspond pas à celui du serveur alors envoi send

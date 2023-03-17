@@ -17,8 +17,6 @@ public class AESGCM {
     public static final int GCM_IV_LENGTH = 12;
     public static final int GCM_TAG_LENGTH = 16;
 
-    private String cipher = "AES";
-
     private final byte[] aeskey;
 
     public AESGCM (byte[] aeskey) {
@@ -26,13 +24,12 @@ public class AESGCM {
     }
 
     public AESGCM(String password, String salt) throws Exception {
+        String cipher = "AES";
         this.aeskey = getPasswordBasedKey(cipher, password.toCharArray(), salt).getEncoded();
     }
 
     private static Key getPasswordBasedKey(String cipher, char[] password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] s = salt.getBytes(StandardCharsets.UTF_8);
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(s);
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password, s, 1000, 256);
         SecretKey pbeKey = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(pbeKeySpec);
         return new SecretKeySpec(pbeKey.getEncoded(), cipher);
@@ -95,6 +92,7 @@ public class AESGCM {
             // Convert the decrypted bytes to a string
             return new String(plaintext, StandardCharsets.UTF_8);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Failed to decrypt text " + e.getMessage());
             return  null;
         }

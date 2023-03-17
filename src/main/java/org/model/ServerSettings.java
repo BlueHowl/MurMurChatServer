@@ -138,6 +138,11 @@ public class ServerSettings {
         else throw new InvalidUserException("Le compte n'existe pas");
     }
 
+    public User findUserOnCompleteName(String follower) throws InvalidUserException {
+        String username = follower.split("@")[0];
+        return findUser(username);
+    }
+
     //TAGS
     /**
      * Récupère la liste des tags DTO
